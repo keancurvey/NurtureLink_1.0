@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import LogoTile from '../ui/LogoTile.jsx';
 import SoftArt from '../ui/SoftArt.jsx';
+import { usePresenterActions } from '../presenter/presenterRegistry.jsx';
 
 // AUTH-01: 5 seconds. Keep in step with --splash-duration in tokens.css.
 const SPLASH_MS = 5000;
@@ -10,6 +11,8 @@ const SPLASH_MS = 5000;
 export default function Splash() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+
+  usePresenterActions([{ id: 'skip-splash', labelKey: 'presenter:action.skipSplash', onSelect: () => navigate('/sign-in', { replace: true }) }]);
 
   useEffect(() => {
     // Goes to sign-in; the saved-session check arrives with the guards in Prompt 3.

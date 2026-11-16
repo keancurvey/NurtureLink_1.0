@@ -7,10 +7,11 @@ const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 /**
- * Bottom sheet on phones, centred dialog on large screens.
+ * Bottom sheet on phones, centred dialog on large screens (variant "popover": anchored to the gear instead).
  * Focus moves in and is trapped; Esc, an outside tap or the close button closes it; focus returns afterwards.
+ * Pass an onClose that keeps its identity between renders, or focus is moved again on every render.
  */
-export default function Sheet({ open, onClose, title, footer, children }) {
+export default function Sheet({ open, onClose, title, footer, variant = 'sheet', children }) {
   const { t } = useTranslation();
   const titleId = useId();
   const panelRef = useRef(null);
@@ -57,12 +58,12 @@ export default function Sheet({ open, onClose, title, footer, children }) {
 
   return createPortal(
     <div
-      className="sheet-scrim"
+      className={variant === 'popover' ? 'sheet-scrim sheet-scrim--popover' : 'sheet-scrim'}
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) onClose();
       }}
     >
-      <div ref={panelRef} className="sheet" role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex={-1}>
+      <div ref={panelRef} className={variant === 'popover' ? 'sheet sheet--popover' : 'sheet'} role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex={-1}>
         <div className="sheet__header">
           <h2 id={titleId}>{title}</h2>
           <button type="button" className="icon-btn" onClick={onClose} aria-label={t('ui.close')}>

@@ -1,4 +1,6 @@
+import { useEffect, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
+import { useGearOffset } from '../presenter/useGearOffset.js';
 import TopBar from './TopBar.jsx';
 import BottomTabs from './BottomTabs.jsx';
 import SideNav from './SideNav.jsx';
@@ -11,6 +13,19 @@ import { NAV } from './navItems.js';
 export default function AppShell({ role }) {
   const items = NAV[role];
   const isSuper = role === 'super';
+  const tabsRef = useRef(null);
+
+  // The shell tells the gear what is anchored to the bottom (the tab bar) and which layout is showing, so the gear
+  // sits above the tabs on phones and at the foot of the side navigation on the super account's desktop layout.
+  useGearOffset(tabsRef);
+  useEffect(() => {
+    const root = document.documentElement;
+    root.dataset.shell = isSuper ? 'super' : 'phone';
+    return () => {
+      delete root.dataset.shell;
+    };
+  }, [isSuper]);
+
   return (
     <div className={`shell ${isSuper ? 'shell--super' : 'shell--phone'}`}>
       {isSuper ? <SideNav role={role} items={items} /> : null}
@@ -19,7 +34,7 @@ export default function AppShell({ role }) {
         <main className="shell__main">
           <Outlet />
         </main>
-        <BottomTabs role={role} items={items} />
+        <BottomTabs ref={tabsRef} role={role} items={items} />
       </div>
     </div>
   );
