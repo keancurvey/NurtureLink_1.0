@@ -1,0 +1,145 @@
+/* ---------- Presenter gear (CLAUDE.md Section 5, point 3) ----------
+   A quiet button at the bottom of every screen. The shell publishes --gear-offset (the height of what is anchored to
+   the bottom) and sets data-shell on the root element: "phone" (patient and barangay, and the super account under
+   1024 px) or "super" (side navigation from 1024 px). Nothing here uses a literal size: tokens only. */
+:root {
+  /* Left edge of the gear: the right edge of the phone-width column, or of the screen where that is narrower. */
+  --gear-left: min(
+    calc(100% - var(--gear-size) - max(var(--gear-gap), env(safe-area-inset-right))),
+    calc(50% + var(--column-width) / 2 - var(--gear-size) - var(--gear-gap))
+  );
+  --gear-bottom: calc(max(var(--gear-offset), env(safe-area-inset-bottom)) + var(--gear-gap));
+  --popover-width: min(24rem, calc(100% - var(--space-4) * 2));
+}
+/* Signed-out screens have no column: the bottom right corner of the screen. */
+html:not([data-shell]) {
+  --gear-left: calc(100% - var(--gear-size) - max(var(--gear-gap), env(safe-area-inset-right)));
+}
+/* The super account under 1024 px has bottom tabs and no centred column. */
+html[data-shell='super'] {
+  --gear-left: calc(100% - var(--gear-size) - max(var(--gear-gap), env(safe-area-inset-right)));
+}
+@media (min-width: 1024px) {
+  /* The foot of the side navigation. */
+  html[data-shell='super'] {
+    --gear-left: var(--space-4);
+    --gear-bottom: calc(var(--space-4) + env(safe-area-inset-bottom));
+  }
+}
+
+.gear {
+  position: fixed;
+  z-index: 90; /* above the page, below the sheet (100) and the toasts (110) */
+  left: var(--gear-left);
+  bottom: var(--gear-bottom);
+  display: grid;
+  place-items: center;
+  width: var(--gear-size);
+  height: var(--gear-size);
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-round);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  color: var(--ink-400);
+  opacity: 0.7;
+  cursor: pointer;
+  transition:
+    opacity 0.15s ease,
+    color 0.15s ease,
+    background-color 0.15s ease;
+}
+/* Low contrast until hovered, focused or tapped; clearly visible once it is. */
+.gear:hover,
+.gear:active,
+.gear:focus-visible,
+.gear[aria-expanded='true'] {
+  opacity: 1;
+  color: var(--primary-700);
+  background: var(--surface);
+  border-color: var(--ink-300);
+}
+@media (min-width: 1024px) {
+  html[data-shell='super'] .gear {
+    color: var(--on-dark-muted);
+    background: color-mix(in srgb, var(--on-primary) 10%, transparent);
+  }
+  html[data-shell='super'] .gear:hover,
+  html[data-shell='super'] .gear:active,
+  html[data-shell='super'] .gear:focus-visible,
+  html[data-shell='super'] .gear[aria-expanded='true'] {
+    color: var(--primary-700);
+    background: var(--on-primary);
+    border-color: transparent;
+  }
+}
+
+/* The panel: a bottom sheet on phones (the Sheet's own rules), a popover anchored to the gear from 640 px. */
+@media (min-width: 640px) {
+  .sheet-scrim--popover {
+    background: transparent;
+  }
+  .sheet--popover {
+    position: fixed;
+    left: calc(var(--gear-left) + var(--gear-size) - var(--popover-width));
+    bottom: calc(var(--gear-bottom) + var(--gear-size) + var(--gear-gap));
+    width: var(--popover-width);
+    max-width: none;
+    max-height: min(70dvh, 40rem);
+    padding-bottom: var(--space-5);
+    border: 1px solid var(--ink-300);
+    border-radius: var(--radius-xl);
+  }
+}
+@media (min-width: 1024px) {
+  html[data-shell='super'] .sheet--popover {
+    left: var(--gear-left);
+  }
+}
+
+.gear-panel,
+.gear-confirm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.gear-section,
+.gear-group,
+.gear-device {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.gear-section__title {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: var(--text-label);
+  font-weight: 700;
+  color: var(--ink-600);
+}
+.gear-group__title {
+  margin: var(--space-2) 0 0;
+  font-family: var(--font-ui);
+  font-size: var(--text-caption);
+  font-weight: 500;
+  color: var(--ink-600);
+}
+.gear-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.btn.gear-action {
+  width: 100%;
+  justify-content: flex-start;
+  text-align: left;
+}
+.gear-note {
+  margin: 0;
+  color: var(--ink-600);
+}
+
+/* While the gear panel is open, toasts move to the top so they never cover what the panel says. */
+body:has(.sheet-scrim--popover) .toast-region {
+  bottom: auto;
+  top: calc(env(safe-area-inset-top) + var(--space-3));
+}

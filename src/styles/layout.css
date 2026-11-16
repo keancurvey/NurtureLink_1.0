@@ -335,7 +335,7 @@
   justify-content: center;
   gap: var(--space-5);
   padding: calc(var(--space-5) + env(safe-area-inset-top)) max(var(--space-4), env(safe-area-inset-right))
-    calc(var(--space-5) + env(safe-area-inset-bottom)) max(var(--space-4), env(safe-area-inset-left));
+    calc(var(--space-5) + env(safe-area-inset-bottom) + var(--gear-size) + var(--gear-gap)) max(var(--space-4), env(safe-area-inset-left));
 }
 .auth__card {
   width: 100%;
