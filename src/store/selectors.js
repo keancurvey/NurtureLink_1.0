@@ -1,7 +1,9 @@
 // Selectors enforce the access rules of spec 6.2, so a patient can never select another patient's data and a barangay
 // account never sees another barangay. Screens read the store only through these. Each takes the state and the viewer
 // (a profile) and returns an empty list or null when the viewer may not see the data.
-import { buildThresholds } from '../config/thresholds.js';
+import { AUTH, buildThresholds } from '../config/thresholds.js';
+import { identifierKey, isMinor } from '../lib/authRules.js';
+import { manilaDate } from '../lib/dates.js';
 import * as access from '../lib/permissions.js';
 import { byId } from './ops.js';
 
@@ -147,4 +149,68 @@ export function focusPatientId(state, viewer) {
   if (viewer?.role === 'patient') return candidates.length ? viewer.id : null;
   if (candidates.some((p) => p.id === state.meta.focus_patient_id)) return state.meta.focus_patient_id;
   return candidates[0]?.id ?? null;
+}
+
+// ---------- Signing in, consent and the steps before the app opens (AUTH-03 to AUTH-06) ----------
+
+/** The 15 barangays, for the sign-up form: readable before anyone is signed in. */
+export const barangayChoices = (state) => state.db.barangays;
+
+/** The account a contact number or an email belongs to, or null. */
+export function profileByIdentifier(state, identifier) {
+  const key = identifierKey(identifier);
+  if (!key) return null;
+  return state.db.profiles.find((p) => (p.email && p.email.toLowerCase() === key) || (p.contact_no && identifierKey(p.contact_no) === key)) ?? null;
+}
+
+const credentialOf = (state, profileId) => byId(state.db.credentials).get(profileId) ?? null;
+
+export const hasAcceptedTerms = (state, profileId) =>
+  state.db.consents.some((c) => c.profile_id === profileId && c.document === 'terms_privacy' && c.version === AUTH.termsVersion);
+
+/**
+ * What a signed-in person must finish before the app opens: { viewer, step } with step one of 'change-password',
+ * 'consent', 'guardian-consent' or null. No viewer (nobody signed in, or the account was deactivated) means nothing.
+ */
+export function accessGate(state, now = Date.now()) {
+  const viewer = viewerOf(state);
+  if (!viewer?.active) return { viewer: null, step: null };
+  const patient = viewer.role === 'patient' ? byId(state.db.patients).get(viewer.id) : null;
+  const step = access.gateStep({
+    role: viewer.role,
+    mustChangePassword: credentialOf(state, viewer.id)?.must_change_password === true,
+    hasConsent: hasAcceptedTerms(state, viewer.id),
+    minor: patient ? isMinor(patient.birthdate, manilaDate(now)) : false,
+    hasGuardianConsent: state.db.guardian_consents.some((g) => g.profile_id === viewer.id),
+  });
+  return { viewer, step };
+}
+
+/** Where the signed-in person belongs now: the step they must finish, their landing screen, or the sign-in screen. */
+export function accessTarget(state, now = Date.now()) {
+  const { viewer, step } = accessGate(state, now);
+  if (!viewer) return '/sign-in';
+  return step ? access.GATE_PATHS[step] : access.landingPath(viewer.role);
+}
+
+// ---------- What the gear fills in (presenter only; nothing here reaches a screen's own text) ----------
+
+/** The contact (an email for providers, a number for patients) and password of an account, for the gear's fill. */
+export function signInFillFor(state, profileId) {
+  const profile = profileOf(state, profileId);
+  const credential = credentialOf(state, profileId);
+  if (!profile || !credential) return null;
+  return { identifier: profile.email ?? profile.contact_no, password: credential.password };
+}
+
+/** The most recent account a super account created (never a seeded one), or null. */
+export function newestCreatedProvider(state) {
+  return newestFirst(state.db.profiles.filter((p) => p.role !== 'patient' && p.created_by && p.created_at > state.seededAt), 'created_at')[0] ?? null;
+}
+
+/** The reset code "sent" to a patient, while it is still valid. */
+export function pendingResetCode(state, identifier, now = Date.now()) {
+  const profile = profileByIdentifier(state, identifier);
+  const credential = profile ? credentialOf(state, profile.id) : null;
+  return credential?.reset_code && credential.reset_expires_at > now ? credential.reset_code : null;
 }

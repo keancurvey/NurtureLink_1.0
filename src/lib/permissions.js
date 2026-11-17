@@ -1,7 +1,40 @@
-// Roles and what they may do. This is the one place that maps roles to access (spec 6.2) and to the presenter
-// gear's actions (CLAUDE.md Section 5, point 3). Prompt 3 adds navigation and landing screens here.
+// Roles and what they may do. This is the one place that maps roles to access (spec 6.2), to their tabs and landing
+// screen (spec Appendix A, AUTH-04) and to the presenter gear's actions (CLAUDE.md Section 5, point 3).
 
 export const ROLES = ['patient', 'barangay', 'super'];
+
+// ---------- Tabs and landing (spec Appendix A, AUTH-04) ----------
+
+/** The tabs of each role, in order. The first is where the role lands after sign-in. */
+export const TABS = {
+  patient: ['home', 'schedule', 'consult', 'hele', 'profile'],
+  barangay: ['monitor', 'chat', 'calendar', 'profile'],
+  super: ['tracker', 'consult', 'schedule', 'profile'],
+};
+
+/** Where a signed-in role lands. (Patients land on the pairing wizard once Prompt 4 adds it, for a first sign-in.) */
+export const landingPath = (role) => (TABS[role] ? `/${role}/${TABS[role][0]}` : '/sign-in');
+
+export const isProviderRole = (role) => role === 'barangay' || role === 'super';
+
+/** The screens a signed-in person must finish before the app opens, and their addresses. */
+export const GATE_PATHS = {
+  'change-password': '/change-password',
+  consent: '/consent',
+  'guardian-consent': '/guardian-consent',
+};
+
+/**
+ * The next step before the app opens, or null when the person may go in: a provider's first sign-in forces a new
+ * password (AUTH-03), then the terms and consent must be accepted (AUTH-05), then a patient under 18 needs her
+ * parent's or guardian's consent (AUTH-06).
+ */
+export function gateStep({ role, mustChangePassword, hasConsent, minor, hasGuardianConsent }) {
+  if (isProviderRole(role) && mustChangePassword) return 'change-password';
+  if (!hasConsent) return 'consent';
+  if (role === 'patient' && minor && !hasGuardianConsent) return 'guardian-consent';
+  return null;
+}
 
 // ---------- Access rules of spec 6.2 ----------
 // A viewer is a profile: { id, role, barangay_id, active }. Every function answers false for no viewer.
@@ -80,20 +113,23 @@ const SOS = ['sos-pressed', 'sos-cancelled', 'sos-band-out-of-range'];
 const APPOINTMENTS = ['appointment-now', 'appointment-end', 'followup-close', 'event-reminder'];
 const SWITCHABLE = ['scenarios', 'devices', 'timing', 'connection', 'switch', 'reset'];
 
+// expireSession: provider accounts get the gear action that shows the session-expired sheet (AUTH-08).
 const GEAR_BY_ROLE = {
   // splash and sign-in: nothing is signed in
-  none: { sections: ['reset'], groups: {}, devices: false, patientChooser: false },
+  none: { sections: ['reset'], groups: {}, devices: false, patientChooser: false, expireSession: false },
   patient: {
     sections: SWITCHABLE,
     groups: { checks: CHECKS, alerts: [...SOS, 'missed-check'], consult: APPOINTMENTS },
     devices: true,
     patientChooser: false,
+    expireSession: false,
   },
   barangay: {
     sections: SWITCHABLE,
     groups: { checks: CHECKS, alerts: [...SOS, 'alert-unacknowledged'], consult: ['incoming-message'] },
     devices: true,
     patientChooser: true,
+    expireSession: true,
   },
   super: {
     sections: SWITCHABLE,
@@ -103,6 +139,7 @@ const GEAR_BY_ROLE = {
     },
     devices: false,
     patientChooser: true,
+    expireSession: true,
   },
 };
 
@@ -111,7 +148,7 @@ export function gearConfigFor(role) {
   return GEAR_BY_ROLE[role] ?? GEAR_BY_ROLE.none;
 }
 
-/** The accounts the gear can switch to once sign-in exists (PLAN.md Section 7, Sign in). */
+/** The accounts the gear can fill on the sign-in screen and switch to (PLAN.md Section 7, Sign in). */
 export const PRESENTER_ACCOUNTS = [
   { id: 'maricel-dimaculangan', role: 'patient' },
   { id: 'shiela-marie-aguila', role: 'patient' },

@@ -1,22 +1,32 @@
 // The runtime: the store, the server core, the simulated devices, the check bridge and the scenario engine, wired
 // together. The React provider builds one; tests build their own with a clock and timers they control.
-import { TIMING } from '../config/thresholds.js';
+import { TIMING, buildThresholds } from '../config/thresholds.js';
+import { MS_MINUTE } from '../lib/dates.js';
+import { isProviderRole } from '../lib/permissions.js';
 import { createDeviceSim } from '../sim/deviceSim.js';
 import { createEngine } from '../sim/engine.js';
 import { createSeed } from '../sim/seed.js';
 import { SCENARIOS } from '../sim/scenarios.js';
 import { createScheduler } from '../sim/scheduler.js';
+import { createAuth } from './auth.js';
 import { createCheckBridge } from './checkBridge.js';
 import { createCore } from './core.js';
 import { createStore } from './store.js';
 
-export const initialLive = () => ({ check: null, sos: null });
+// notice: why the sign-in screen has something to say ('session_expired'); it is never stored.
+export const initialLive = () => ({ check: null, sos: null, notice: null });
 
-/** A complete state from a stored copy (or a fresh seed) and the saved session. */
+/**
+ * A complete state from a stored copy (or a fresh seed) and the saved session. A provider's saved session that has been
+ * idle for longer than the timeout is not restored (AUTH-08): the sign-in screen says the session ended.
+ */
 export function buildState({ snapshot = null, session = null, now = Date.now() } = {}) {
   const base = snapshot ?? createSeed({ now });
-  const known = session && base.db.profiles.some((p) => p.id === session.profile_id);
-  return { ...base, session: known ? session : null, live: initialLive() };
+  const profile = session ? base.db.profiles.find((p) => p.id === session.profile_id) : null;
+  const timeoutMs = buildThresholds(base.db.thresholds).providerSession.timeoutMinutes * MS_MINUTE;
+  const idleSince = session?.last_active_at ?? session?.signed_in_at ?? now;
+  const expired = Boolean(profile) && isProviderRole(profile.role) && now - idleSince >= timeoutMs;
+  return { ...base, session: profile && !expired ? session : null, live: { ...initialLive(), notice: expired ? 'session_expired' : null } };
 }
 
 export function createRuntime({
@@ -43,6 +53,12 @@ export function createRuntime({
   };
   const { link, control } = createDeviceSim({ world, sched, now });
   const bridge = createCheckBridge({ store, core, link, sched, now });
+  /** Who is signed in. The session is kept in its own small localStorage key, not in the stored data. */
+  const setSession = (session) => {
+    persistence?.saveSession(session);
+    store.dispatch({ type: 'session', session });
+  };
+  const auth = createAuth({ store, core, setSession, now });
   const engine = createEngine({ store, core, sched, bridge, link, control, scenarios: SCENARIOS, now });
   let heartbeat = null;
 
@@ -54,12 +70,15 @@ export function createRuntime({
     control,
     bridge,
     engine,
+    auth,
 
     /**
      * Start up: finish a run a reload cut short, upload what is still queued (when online), keep devices' last-seen
      * time fresh. Returns a function that stops the heartbeat.
      */
     start() {
+      // A session that was not restored (it timed out) must not come back on the next reload either.
+      if (!store.getState().session) persistence?.saveSession(null);
       engine.resume();
       if (core.isOnline()) core.flushQueue();
       if (!heartbeat) heartbeat = setRepeat(() => control.heartbeat(), heartbeatMs);
@@ -73,11 +92,7 @@ export function createRuntime({
     setFocusPatient: (patientId) => core.commit([{ op: 'meta', patch: { focus_patient_id: patientId } }]),
     setConnection: (connection) => core.setConnection(connection),
 
-    /** Who is signed in. The session is kept in its own small localStorage key, not in the stored data. */
-    setSession(session) {
-      persistence?.saveSession(session);
-      store.dispatch({ type: 'session', session });
-    },
+    setSession,
 
     /** Reset data: stop the run, build the seed again from now, sign out. */
     reset() {
