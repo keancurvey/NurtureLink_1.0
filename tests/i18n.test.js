@@ -4,6 +4,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { SCENARIOS } from '../src/sim/scenarios.js';
 import { ALERT_TYPES } from '../src/lib/alertRules.js';
 import { RESULT_NAMES } from '../src/lib/packets.js';
+import { validateGuardian, validateNewPassword, validateSignIn, validateSignUp } from '../src/lib/authRules.js';
 
 const ROOT = new URL('../src/i18n/locales/', import.meta.url);
 const load = (lang, file) => JSON.parse(readFileSync(new URL(`${lang}/${file}`, ROOT), 'utf8'));
@@ -80,4 +81,70 @@ test('every finishing line a scenario can produce has a text', () => {
   for (const key of new Set(used)) assert.ok(texts.has(`done.${key}`), `done.${key}`);
   const reasons = [...source.matchAll(/presenter:reason\.(\w+)/g)].map((m) => m[1]);
   for (const key of new Set(reasons)) assert.ok(texts.has(`reason.${key}`), `reason.${key}`);
+});
+
+// ---------- The sign-in, consent and guardian screens (Prompt 3) ----------
+
+test('every text key the auth screens ask for exists in English and Filipino', () => {
+  const dir = new URL('../src/features/auth/', import.meta.url);
+  const files = readdirSync(dir).filter((f) => f.endsWith('.jsx'));
+  assert.ok(files.length >= 8);
+  let checked = 0;
+  for (const file of files) {
+    const source = readFileSync(new URL(file, dir), 'utf8');
+    const ns = /useTranslation\('(\w+)'\)/.exec(source)?.[1] ?? 'common';
+    const has = (lang, space, key) => new Map(flatten(load(lang, `${space}.json`))).has(key) || new Map(flatten(load(lang, `${space}.json`))).has(`${key}_other`);
+    for (const [, key, tail] of source.matchAll(/\bt\(\s*'([\w.]+)'([^)]*)\)/g)) {
+      const space = /ns:\s*'(\w+)'/.exec(tail)?.[1] ?? ns;
+      for (const lang of ['en', 'fil']) assert.ok(has(lang, space, key), `${lang} ${space}:${key} (${file})`);
+      checked += 1;
+    }
+    for (const [, space, key] of source.matchAll(/labelKey:\s*'(\w+):([\w.]+)'/g)) {
+      for (const lang of ['en', 'fil']) assert.ok(has(lang, space, key), `${lang} ${space}:${key} (${file})`);
+      checked += 1;
+    }
+  }
+  assert.ok(checked > 60, `checked ${checked}`);
+});
+
+test('every error a form rule can give has a text, and every password rule and relationship too', () => {
+  const codes = new Set();
+  const collect = (errors) => Object.values(errors).forEach((code) => codes.add(code));
+  collect(validateSignIn({ identifier: '', password: '' }));
+  collect(validateSignIn({ identifier: 'x', password: 'x' }));
+  const ctx = { today: '2026-11-08', barangayIds: ['papaya'] };
+  collect(validateSignUp({}, ctx));
+  for (const bad of [{ full_name: 'A', birthdate: '2027-01-01', contact_no: '1', barangay_id: 'x', password: 'a', language: 'x' }, { birthdate: '2002-02-31' }]) collect(validateSignUp(bad, ctx));
+  collect(validateGuardian({}));
+  collect(validateGuardian({ guardian_name: 'A', contact: '1' }));
+  collect(validateNewPassword({ password: 'abc' }));
+  collect(validateNewPassword({ password: 'Abcdefg1' }, { current: 'Abcdefg1' }));
+  codes.add('taken'); // given by the service when the number already has an account
+  assert.ok(codes.size >= 10);
+  for (const lang of ['en', 'fil']) {
+    const auth = new Map(flatten(load(lang, 'auth.json')));
+    const consent = new Map(flatten(load(lang, 'consent.json')));
+    for (const code of codes) assert.ok(auth.has(`error.${code}`), `${lang} error.${code}`);
+    for (const rule of ['length', 'upper', 'lower', 'number']) assert.ok(auth.has(`password.rules.${rule}`), `${lang} rule ${rule}`);
+    for (const key of ['mother', 'father', 'grandmother', 'grandfather', 'aunt', 'uncle', 'legal_guardian']) assert.ok(consent.has(`guardian.relationships.${key}`), `${lang} ${key}`);
+  }
+});
+
+test('the consent document has every section the screen lists, and covers what AUTH-05 and spec 10 require', () => {
+  const source = readFileSync(new URL('../src/features/auth/Consent.jsx', import.meta.url), 'utf8');
+  const listed = [...(/const SECTIONS = \[([^\]]+)\]/.exec(source)[1].matchAll(/'(\w+)'/g))].map((m) => m[1]);
+  for (const lang of ['en', 'fil']) {
+    const texts = new Map(flatten(load(lang, 'consent.json')));
+    for (const id of listed) {
+      assert.ok(texts.get(`sections.${id}.title`)?.length > 3, `${lang} ${id} title`);
+      assert.ok(texts.get(`sections.${id}.body`)?.length > 60, `${lang} ${id} body`);
+    }
+    const sectionIds = [...new Set([...texts.keys()].filter((k) => k.startsWith('sections.')).map((k) => k.split('.')[1]))];
+    assert.deepEqual(sectionIds.sort(), [...listed].sort(), `${lang}: no section is left out of the screen`);
+  }
+  // Hele, readings, who can view records, the third-party video service, retention (spec section 10), in both languages.
+  for (const [lang, words] of [['en', ['Hele', 'readings', 'can see', 'third-party', 'kept']], ['fil', ['Hele', 'sukat', 'makakakita', 'third-party', 'iniingatan']]]) {
+    const all = [...new Map(flatten(load(lang, 'consent.json'))).values()].join(' ');
+    for (const word of words) assert.match(all, new RegExp(word, 'i'), `${lang}: ${word}`);
+  }
 });
