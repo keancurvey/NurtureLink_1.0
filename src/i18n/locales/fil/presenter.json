@@ -1,1 +1,148 @@
-{}
+{
+  "gear": {
+    "label": "Mga opsyon",
+    "title": "Mga opsyon"
+  },
+  "running": "Tumatakbo: {{name}}",
+  "section": {
+    "screen": "Ang screen na ito",
+    "scenarios": "Mga senaryo",
+    "devices": "Mga device",
+    "timing": "Bilis",
+    "connection": "Koneksyon",
+    "switchAccount": "Magpalit ng account",
+    "reset": "I-reset ang data"
+  },
+  "group": {
+    "checks": "Mga pagsusuri",
+    "alerts": "Mga alerto at SOS",
+    "consult": "Iskedyul at konsulta"
+  },
+  "patient": {
+    "label": "Pasyente",
+    "none": "Walang pasyenteng may belt at band dito"
+  },
+  "scenario": {
+    "checkNormal": "Pagsusuri: normal",
+    "checkAdjustBelt": "Pagsusuri: ayusin ang belt",
+    "checkRest": "Pagsusuri: magpahinga",
+    "checkNoBand": "Pagsusuri: walang band",
+    "checkMaternalSignal": "Pagsusuri: signal ng ina",
+    "checkFhrOutOfRange": "Pagsusuri: FHR sa labas ng saklaw",
+    "checkSignalLoss": "Pagsusuri: paulit-ulit na pagkawala ng signal",
+    "checkMaternalVitals": "Pagsusuri: vitals ng ina",
+    "sosPressed": "Napindot ang SOS (bukas ang app)",
+    "sosCancelled": "Kinansela ang SOS",
+    "sosBandOutOfRange": "SOS: wala sa saklaw ang band",
+    "alertUnacknowledged": "Alertong hindi pa kinikilala",
+    "missedCheck": "Nalagpasang pagsusuri",
+    "deviceConnection": "Ikonekta o idiskonekta ang device",
+    "deviceBattery": "Antas ng baterya",
+    "deviceCharging": "Nagcha-charge",
+    "exposureCap": "Naabot ang limitasyon ng exposure",
+    "checksWhileApart": "Mga pagsusuring ginawa habang magkalayo",
+    "bookingRequest": "Bagong hiling na booking",
+    "appointmentNow": "Gawing ngayon ang susunod na appointment",
+    "appointmentEnd": "Tapusin ang appointment",
+    "followupClose": "Isara ang follow-up window",
+    "eventReminder": "Oras na ng paalala sa event",
+    "incomingMessage": "Bagong mensahe",
+    "referral": "Referral mula sa BHW",
+    "videoUsage80": "Gawing 80% ang gamit sa video"
+  },
+  "devices": {
+    "belt": "Belt",
+    "band": "Wrist band",
+    "connected": "Nakakonekta",
+    "charging": "Nagcha-charge",
+    "battery": "Baterya",
+    "level": {
+      "normal": "80% (normal)",
+      "low": "18% (mababa)",
+      "critical": "8% (kritikal)",
+      "cutoff": "4% (cutoff)"
+    }
+  },
+  "timing": {
+    "quick": "Mabilis",
+    "realistic": "Karaniwan"
+  },
+  "connection": {
+    "online": "Online",
+    "offline": "Offline"
+  },
+  "account": {
+    "label": "Account",
+    "patient": "Pasyente",
+    "barangay": "Barangay",
+    "super": "Super"
+  },
+  "confirm": {
+    "startTitle": "Magsimula ng isa pa?",
+    "startBody": "Tumatakbo pa ang “{{current}}”. Tatapusin ito ngayon at sisimulan ang “{{next}}”.",
+    "resetTitle": "I-reset ang data?",
+    "resetBody": "Babalik ang mga panimulang record, mabubura ang mga binago mo at masa-sign out ka.",
+    "confirm": "Kumpirmahin",
+    "cancel": "Kanselahin"
+  },
+  "action": {
+    "skipSplash": "Laktawan ang splash"
+  },
+  "toast": {
+    "started": "Sinimulan: {{name}}",
+    "failed": "Hindi naisagawa: {{name}}"
+  },
+  "reason": {
+    "exposure_cap": "naubos na ang exposure allowance",
+    "charging": "nagcha-charge ang belt",
+    "low_battery": "masyadong mababa ang baterya",
+    "busy": "abala ang belt",
+    "no_contact": "walang kontak sa balat",
+    "fault": "may iniulat na problema ang belt",
+    "no_belt": "walang naka-pair na belt",
+    "disconnected": "nadiskonekta ang belt",
+    "stopped": "itinigil ang pagsusuri",
+    "no_reading": "walang nakuhang reading"
+  },
+  "alertType": {
+    "fhr_out_of_range": "FHR sa labas ng saklaw",
+    "signal_loss": "paulit-ulit na pagkawala ng signal",
+    "maternal_vitals": "vitals ng ina",
+    "sos": "SOS",
+    "battery_critical": "kritikal na baterya",
+    "missed_check": "nalagpasang pagsusuri"
+  },
+  "done": {
+    "check": "Nai-save ang pagsusuri ni {{name}}: FHR {{fhr}} bpm, {{valid}} sa {{total}} reading ang binilang.",
+    "checkUnverified": "Nai-save ang pagsusuri ni {{name}}: FHR {{fhr}} bpm, hindi na-verify sa band.",
+    "checkAlert": "Nai-save ang pagsusuri ni {{name}}. Alerto: {{type}}. Mga account na naabisuhan: {{count}}.",
+    "checkRefused": "Hindi masimulan ang pagsusuri ni {{name}}: {{reason}}.",
+    "checkNoReading": "Natapos nang walang reading ang pagsusuri ni {{name}}: {{reason}}.",
+    "sos": "Naipadala ang SOS ni {{name}}. Mga account na naabisuhan: {{count}}.",
+    "sosUndelivered": "Hindi maihatid ang SOS ni {{name}}. Patuloy na sumusubok ang band.",
+    "sosCancelled": "Kinansela ni {{name}} ang SOS.",
+    "escalated": "Hindi kinilala ang alerto ni {{name}} at umabot ito sa lahat ng super account ({{count}}).",
+    "notEscalated": "Nakilala sa tamang oras ang alerto ni {{name}}. Hindi na-escalate.",
+    "missedCheck": "Walang pagsusuri si {{name}} sa loob ng 24 oras. May alertong ginawa. Mga account na naabisuhan: {{count}}.",
+    "nothingRaised": "Walang alertong kailangan para kay {{name}}.",
+    "deviceConnected": "Nakakonekta ang {{device}}.",
+    "deviceDisconnected": "Nadiskonekta ang {{device}}.",
+    "battery": "Naitakda sa {{pct}}% ang baterya ng {{device}}.",
+    "chargingOn": "Nagcha-charge ang {{device}}.",
+    "chargingOff": "Hindi na nagcha-charge ang {{device}}.",
+    "exposureCap": "Naubos ang exposure allowance ni {{name}}. Mananatiling naka-off ang Check now hanggang bumalik ito.",
+    "apart": "{{count}} pagsusuring ginawa habang magkalayo ang na-sync para kay {{name}}.",
+    "bookingRequest": "Naidagdag ang hiling na booking ni {{name}}. Mga account na naabisuhan: {{count}}.",
+    "appointmentNow": "Magsisimula na ngayon ang appointment ni {{name}}. Bukas na ang thread ng midwife.",
+    "noAppointment": "Walang aprubadong teleconsultation na babaguhin para kay {{name}}.",
+    "appointmentEnd": "Natapos ang appointment ni {{name}}. Bukas ang follow-up chat sa loob ng 24 oras.",
+    "followupClose": "Sarado na ang follow-up window ni {{name}}. Naka-lock ang thread ng midwife.",
+    "nothingToClose": "Walang isasara: naka-lock na ang thread ng midwife ni {{name}}.",
+    "eventReminder": "Naipadala ang paalala para sa “{{title}}”. Mga account na naabisuhan: {{count}}.",
+    "noEvent": "Walang paparating na event na paaalalahanan.",
+    "incomingMessage": "May mensaheng natanggap mula kay {{name}}.",
+    "referral": "Naipadala ang referral ni {{name}} sa lahat ng super account ({{count}}).",
+    "videoUsage": "Naging 80% ang gamit sa video. Nabigyan ng babala ang mga super account.",
+    "videoUsageAlready": "80% o higit pa na ang gamit sa video."
+  }
+}

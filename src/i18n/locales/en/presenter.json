@@ -1,1 +1,148 @@
-{}
+{
+  "gear": {
+    "label": "Options",
+    "title": "Options"
+  },
+  "running": "Running: {{name}}",
+  "section": {
+    "screen": "This screen",
+    "scenarios": "Scenarios",
+    "devices": "Devices",
+    "timing": "Timing",
+    "connection": "Connection",
+    "switchAccount": "Switch account",
+    "reset": "Reset data"
+  },
+  "group": {
+    "checks": "Checks",
+    "alerts": "Alerts and SOS",
+    "consult": "Schedule and consult"
+  },
+  "patient": {
+    "label": "Patient",
+    "none": "No patient with both devices here"
+  },
+  "scenario": {
+    "checkNormal": "Check: normal",
+    "checkAdjustBelt": "Check: adjust belt",
+    "checkRest": "Check: rest",
+    "checkNoBand": "Check: no band",
+    "checkMaternalSignal": "Check: maternal signal",
+    "checkFhrOutOfRange": "Check: FHR out of range",
+    "checkSignalLoss": "Check: repeated signal loss",
+    "checkMaternalVitals": "Check: maternal vitals",
+    "sosPressed": "SOS pressed (app open)",
+    "sosCancelled": "SOS cancelled",
+    "sosBandOutOfRange": "SOS: band out of range",
+    "alertUnacknowledged": "Alert left unacknowledged",
+    "missedCheck": "Missed check",
+    "deviceConnection": "Connect or disconnect a device",
+    "deviceBattery": "Battery level",
+    "deviceCharging": "Charging",
+    "exposureCap": "Exposure cap reached",
+    "checksWhileApart": "Checks while apart",
+    "bookingRequest": "Incoming booking request",
+    "appointmentNow": "Bring next appointment to now",
+    "appointmentEnd": "End appointment",
+    "followupClose": "Close follow-up window",
+    "eventReminder": "Event reminder due",
+    "incomingMessage": "Incoming message",
+    "referral": "Referral from BHW",
+    "videoUsage80": "Raise video usage to 80%"
+  },
+  "devices": {
+    "belt": "Belt",
+    "band": "Wrist band",
+    "connected": "Connected",
+    "charging": "Charging",
+    "battery": "Battery",
+    "level": {
+      "normal": "80% (normal)",
+      "low": "18% (low)",
+      "critical": "8% (critical)",
+      "cutoff": "4% (cutoff)"
+    }
+  },
+  "timing": {
+    "quick": "Quick",
+    "realistic": "Realistic"
+  },
+  "connection": {
+    "online": "Online",
+    "offline": "Offline"
+  },
+  "account": {
+    "label": "Account",
+    "patient": "Patient",
+    "barangay": "Barangay",
+    "super": "Super"
+  },
+  "confirm": {
+    "startTitle": "Start another run?",
+    "startBody": "“{{current}}” is still running. It will be finished now and “{{next}}” will start.",
+    "resetTitle": "Reset data?",
+    "resetBody": "The starting records come back, anything you changed is removed and you are signed out.",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
+  "action": {
+    "skipSplash": "Skip splash"
+  },
+  "toast": {
+    "started": "Started: {{name}}",
+    "failed": "Could not run: {{name}}"
+  },
+  "reason": {
+    "exposure_cap": "the exposure allowance is used up",
+    "charging": "the belt is charging",
+    "low_battery": "the battery is too low",
+    "busy": "the belt is busy",
+    "no_contact": "no contact with the skin",
+    "fault": "the belt reported a fault",
+    "no_belt": "no belt is paired",
+    "disconnected": "the belt disconnected",
+    "stopped": "the check was stopped",
+    "no_reading": "no reading was made"
+  },
+  "alertType": {
+    "fhr_out_of_range": "FHR out of range",
+    "signal_loss": "repeated signal loss",
+    "maternal_vitals": "maternal vitals",
+    "sos": "SOS",
+    "battery_critical": "battery critical",
+    "missed_check": "missed check"
+  },
+  "done": {
+    "check": "Check saved for {{name}}: FHR {{fhr}} bpm, {{valid}} of {{total}} readings counted.",
+    "checkUnverified": "Check saved for {{name}}: FHR {{fhr}} bpm, not verified against the band.",
+    "checkAlert": "Check saved for {{name}}. Alert raised: {{type}}. Accounts notified: {{count}}.",
+    "checkRefused": "Check for {{name}} could not start: {{reason}}.",
+    "checkNoReading": "Check for {{name}} ended without a reading: {{reason}}.",
+    "sos": "SOS from {{name}} sent. Accounts notified: {{count}}.",
+    "sosUndelivered": "SOS from {{name}} could not be delivered. The band keeps trying.",
+    "sosCancelled": "SOS cancelled by {{name}}.",
+    "escalated": "Alert for {{name}} was not acknowledged and reached all super accounts ({{count}}).",
+    "notEscalated": "Alert for {{name}} was acknowledged in time. Not escalated.",
+    "missedCheck": "No check in 24 hours for {{name}}. Alert raised. Accounts notified: {{count}}.",
+    "nothingRaised": "No alert was needed for {{name}}.",
+    "deviceConnected": "{{device}} connected.",
+    "deviceDisconnected": "{{device}} disconnected.",
+    "battery": "{{device}} battery set to {{pct}}%.",
+    "chargingOn": "{{device}} is charging.",
+    "chargingOff": "{{device}} is off the charger.",
+    "exposureCap": "Exposure allowance used up for {{name}}. Check now stays off until it recovers.",
+    "apart": "{{count}} checks made while apart were synced for {{name}}.",
+    "bookingRequest": "Booking request from {{name}} added. Accounts notified: {{count}}.",
+    "appointmentNow": "The appointment of {{name}} starts now. The midwife thread is open.",
+    "noAppointment": "No approved teleconsultation to change for {{name}}.",
+    "appointmentEnd": "The appointment of {{name}} ended. Follow-up chat is open for 24 hours.",
+    "followupClose": "Follow-up window closed for {{name}}. The midwife thread is locked.",
+    "nothingToClose": "Nothing to close: the midwife thread for {{name}} is already locked.",
+    "eventReminder": "Reminder for “{{title}}” sent. Accounts notified: {{count}}.",
+    "noEvent": "No upcoming event to remind about.",
+    "incomingMessage": "Message received from {{name}}.",
+    "referral": "Referral for {{name}} sent to all super accounts ({{count}}).",
+    "videoUsage": "Video usage raised to 80%. Super accounts warned.",
+    "videoUsageAlready": "Video usage is already at 80% or more."
+  }
+}
