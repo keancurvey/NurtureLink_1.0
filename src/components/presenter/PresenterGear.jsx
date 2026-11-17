@@ -17,7 +17,7 @@ export default function PresenterGear() {
   const wasOpen = useRef(false);
   const { pathname } = useLocation();
   const routeRole = ROLES.find((role) => pathname === `/${role}` || pathname.startsWith(`/${role}/`)) ?? null;
-  const viewer = useViewer(routeRole);
+  const viewer = useViewer();
   // The splash and the sign-in screen are signed out whatever was saved: the panel is chosen by screen and role.
   const role = routeRole ? (viewer?.role ?? null) : null;
   const close = useCallback(() => setOpen(false), []);

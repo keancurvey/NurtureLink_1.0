@@ -3,7 +3,7 @@ import { Bell } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import Logo from '../ui/Logo.jsx';
 import { formatManilaNow } from '../../lib/time.js';
-import { setLanguage } from '../../i18n/index.js';
+import LanguageToggle from './LanguageToggle.jsx';
 
 const MAX_COUNT_SHOWN = 99;
 
@@ -30,21 +30,7 @@ export default function TopBar({ unreadCount = 0 }) {
           <Logo size="sm" />
           <span className="topbar__name">{t('app.name')}</span>
         </div>
-        <div className="lang" role="group" aria-label={t('language.label')}>
-          {['en', 'fil'].map((code) => (
-            <button
-              key={code}
-              type="button"
-              className="lang__btn"
-              lang={code}
-              aria-pressed={lang === code}
-              aria-label={t(`language.${code}`)}
-              onClick={() => setLanguage(code)}
-            >
-              {t(`language.${code}Short`)}
-            </button>
-          ))}
-        </div>
+        <LanguageToggle />
         {/* TEMP: the bell opens the notification center in Prompt 5; the count stays at 0 until then. */}
         <button type="button" className="bell" aria-label={bellLabel}>
           <Bell size={24} aria-hidden="true" />

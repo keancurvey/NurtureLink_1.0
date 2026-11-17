@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
+import ProviderSession from '../../features/auth/ProviderSession.jsx';
+import { isProviderRole } from '../../lib/permissions.js';
 import { useGearOffset } from '../presenter/useGearOffset.js';
 import TopBar from './TopBar.jsx';
 import BottomTabs from './BottomTabs.jsx';
@@ -35,6 +37,7 @@ export default function AppShell({ role }) {
           <Outlet />
         </main>
         <BottomTabs ref={tabsRef} role={role} items={items} />
+        {isProviderRole(role) ? <ProviderSession role={role} /> : null}
       </div>
     </div>
   );

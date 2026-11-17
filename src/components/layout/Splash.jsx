@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import LogoTile from '../ui/LogoTile.jsx';
 import SoftArt from '../ui/SoftArt.jsx';
 import { usePresenterActions } from '../presenter/presenterRegistry.jsx';
+import { accessTarget } from '../../store/selectors.js';
+import { useRuntime } from '../../store/hooks.js';
 
 // AUTH-01: 5 seconds. Keep in step with --splash-duration in tokens.css.
 const SPLASH_MS = 5000;
@@ -11,14 +13,16 @@ const SPLASH_MS = 5000;
 export default function Splash() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const runtime = useRuntime();
+  // AUTH-01: on to the saved session's app (or the step it still has to finish), or to sign-in.
+  const leave = () => navigate(accessTarget(runtime.store.getState()), { replace: true });
 
-  usePresenterActions([{ id: 'skip-splash', labelKey: 'presenter:action.skipSplash', onSelect: () => navigate('/sign-in', { replace: true }) }]);
+  usePresenterActions([{ id: 'skip-splash', labelKey: 'presenter:action.skipSplash', onSelect: leave }]);
 
   useEffect(() => {
-    // Goes to sign-in; the saved-session check arrives with the guards in Prompt 3.
-    const timer = window.setTimeout(() => navigate('/sign-in', { replace: true }), SPLASH_MS);
+    const timer = window.setTimeout(leave, SPLASH_MS);
     return () => window.clearTimeout(timer);
-  }, [navigate]);
+  }, [navigate, runtime]);
 
   return (
     <main className="splash" aria-busy="true">

@@ -9,7 +9,7 @@ import Tabs from '../ui/Tabs.jsx';
 import { useToast } from '../ui/Toast.jsx';
 import Toggle from '../ui/Toggle.jsx';
 import { PRESENTER_ACCOUNTS, gearConfigFor } from '../../lib/permissions.js';
-import { focusCandidates, focusPatientId, profileOf } from '../../store/selectors.js';
+import { accessTarget, focusCandidates, focusPatientId, profileOf } from '../../store/selectors.js';
 import { useActions, useRuntime, useStoreState } from '../../store/hooks.js';
 import { useRegisteredActions } from './presenterRegistry.jsx';
 
@@ -160,6 +160,14 @@ function GearPanelBody({ onClose, viewer, role }) {
     );
   }
 
+  /** Switch account: signs out and signs in as the chosen account; a run that is going carries on. */
+  function switchTo(profileId) {
+    if (!profileId || profileId === viewer?.id) return;
+    if (!runtime.auth.signInAs(profileId).ok) return;
+    onClose();
+    navigate(accessTarget(runtime.store.getState()), { replace: true });
+  }
+
   const groupTitles = { checks: t('group.checks'), alerts: t('group.alerts'), consult: t('group.consult') };
   const switchOptions = PRESENTER_ACCOUNTS.map(({ id, role: accountRole }) => ({
     value: id,
@@ -254,8 +262,12 @@ function GearPanelBody({ onClose, viewer, role }) {
 
           {config.sections.includes('switch') ? (
             <Section title={t('section.switchAccount')}>
-              {/* Inactive until sign-in exists (Prompt 3). */}
-              <Select label={t('account.label')} value={switchOptions[0].value} options={switchOptions} disabled onChange={() => {}} />
+              <Select
+                label={t('account.label')}
+                value={switchOptions.some((option) => option.value === viewer?.id) ? viewer.id : ''}
+                options={switchOptions.some((option) => option.value === viewer?.id) ? switchOptions : [{ value: '', label: viewer?.full_name ?? '' }, ...switchOptions]}
+                onChange={(event) => switchTo(event.target.value)}
+              />
             </Section>
           ) : null}
 
