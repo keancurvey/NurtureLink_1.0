@@ -608,3 +608,90 @@
   font-weight: 400;
   color: var(--ink-600);
 }
+
+/* ---------- Checkbox ---------- */
+.check {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.check__row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-height: var(--tap);
+  padding: var(--space-2) 0;
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  line-height: var(--leading);
+  color: var(--ink-900);
+  cursor: pointer;
+}
+.check__input {
+  flex: none;
+  width: var(--space-5);
+  height: var(--space-5);
+  margin: 0;
+  accent-color: var(--primary-600);
+}
+.check__input:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+.check--error .check__input {
+  outline: 2px solid var(--alert-600);
+  outline-offset: 2px;
+}
+
+/* ---------- Password field: show and hide, and the rules ---------- */
+.field--password .field__input {
+  padding-right: calc(var(--tap) + var(--space-2));
+}
+.field__toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: grid;
+  place-items: center;
+  width: var(--tap);
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--ink-600);
+}
+.field__toggle:hover {
+  color: var(--primary-600);
+}
+.pw-rules {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-caption);
+  color: var(--ink-600);
+}
+.pw-rules__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.pw-rules__item--met {
+  color: var(--ink-900);
+}
+.pw-rules__item--met svg {
+  color: var(--normal-600);
+}
+
+/* ---------- Text link ---------- */
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  color: var(--primary-600);
+  font-family: var(--font-ui);
+  font-weight: 500;
+  text-decoration: underline;
+}

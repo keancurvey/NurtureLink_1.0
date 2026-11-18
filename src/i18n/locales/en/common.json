@@ -29,13 +29,6 @@
     "title": "Nothing to show here yet",
     "body": "Your information will appear on this screen."
   },
-  "signIn": {
-    "title": "Sign in",
-    "welcome": "Welcome to NurtureLink.",
-    "identifier": "Contact number or email",
-    "password": "Password",
-    "submit": "Sign in"
-  },
   "splash": {
     "loading": "Loading NurtureLink"
   },
@@ -43,5 +36,6 @@
     "close": "Close",
     "dismiss": "Dismiss",
     "loading": "Loading"
-  }
+  },
+  "signOut": "Sign out"
 }

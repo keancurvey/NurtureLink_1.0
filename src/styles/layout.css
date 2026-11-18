@@ -326,8 +326,9 @@
   animation-delay: -2.6s;
 }
 
-/* ---------- Sign-in page ---------- */
+/* ---------- Sign-in, sign-up, consent and the other pages before the app ---------- */
 .auth {
+  position: relative;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -353,4 +354,37 @@
 }
 .auth__intro p {
   color: var(--ink-600);
+}
+.auth__lang {
+  align-self: flex-end;
+}
+.auth__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.auth__links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  text-align: center;
+  color: var(--ink-600);
+}
+.auth__card--doc {
+  max-width: 40rem;
+}
+.consent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.consent__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.consent__title {
+  font-size: var(--text-h3);
+  color: var(--primary-600);
 }

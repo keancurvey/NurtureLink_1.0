@@ -1,8 +1,8 @@
 // The scenarios of PLAN.md Section 6, as data plus steps. Each step writes records, status changes and notifications
 // through the same paths the live product uses (the device link, the check bridge, the server core), so the screens
 // react exactly as they would to real events. Not here, because they act on screens that come later:
-// attaching a photo (fills the chat composer), the video call events (the call room, Prompt 10) and expiring a provider
-// session (the session guard, Prompt 3).
+// attaching a photo (fills the chat composer) and the video call events (the call room, Prompt 10). Expiring a provider
+// session is a gear action of the provider shell (features/auth/ProviderSession.jsx), not a scenario.
 import { DEVICE_DEFAULTS, THRESHOLDS } from '../config/thresholds.js';
 import { MS_HOUR, MS_MINUTE, addDays, manilaDate, manilaTime } from '../lib/dates.js';
 import * as data from './seedData.js';

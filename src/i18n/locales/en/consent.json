@@ -1,1 +1,71 @@
-{}
+{
+  "title": "Terms of Service and data privacy consent",
+  "version": "Version {{version}}",
+  "intro": "Please read this before you continue. You need to accept it to use NurtureLink.",
+  "agree": "I have read and I agree to the Terms of Service and the data privacy consent.",
+  "agreeRequired": "Please tick the box to accept and continue.",
+  "accept": "Accept and continue",
+  "decline": "Decline and sign out",
+  "guardian": {
+    "title": "Parent or guardian consent",
+    "intro": "Because you are under 18, a parent or guardian needs to complete this form before you can use NurtureLink.",
+    "name": "Parent or guardian full name",
+    "relationship": "Relationship to you",
+    "chooseRelationship": "Choose one",
+    "relationships": {
+      "mother": "Mother",
+      "father": "Father",
+      "grandmother": "Grandmother",
+      "grandfather": "Grandfather",
+      "aunt": "Aunt",
+      "uncle": "Uncle",
+      "legal_guardian": "Legal guardian"
+    },
+    "contact": "Contact number of the parent or guardian",
+    "acknowledge": "I am the parent or guardian of {{name}}. I have read the Terms of Service and the data privacy consent (version {{version}}), and I agree that she may use NurtureLink and that her records are handled as described.",
+    "submit": "Save and continue",
+    "signOut": "Sign out"
+  },
+  "sections": {
+    "about": {
+      "title": "About NurtureLink",
+      "body": "NurtureLink connects pregnant women, their barangay health workers and the Tingloy Municipal Health Office. A smart belt and a wrist band send measurements to the NurtureLink app so that your health workers can follow your pregnancy.\n\nNurtureLink is a monitoring and screening prototype. It is not a certified diagnostic medical device. It does not diagnose or treat anything and it does not replace a check-up. It is not for emergencies. If you feel unwell, or you are worried about yourself or your baby, contact your barangay health worker or the Municipal Health Office, or go to the nearest health facility."
+    },
+    "using": {
+      "title": "Using the app",
+      "body": "Give true information when you sign up and keep it up to date. Every account belongs to one person. Keep your password private and do not share your account. Your belt and wrist band are linked to you alone."
+    },
+    "readings": {
+      "title": "Your readings",
+      "body": "The belt measures your baby's heart rate. The wrist band measures your heart rate, an indicative blood oxygen level and your skin temperature. These are screening information only. When a reading is outside the set ranges, NurtureLink asks you to contact your health worker. It never tells you what condition you have."
+    },
+    "hele": {
+      "title": "Hele AI",
+      "body": "Hele is an assistant that answers general questions about pregnancy and about using the app. Hele does not diagnose, does not give medicine advice and does not replace your health worker. If you describe a danger sign, Hele tells you to get help right away. Only the part of your message needed for the answer is used. Your questions are not kept for review unless you agree to it, and then without your name."
+    },
+    "access": {
+      "title": "Who can see your records",
+      "body": "You can see all of your own records. The barangay health workers of your barangay can see your records and readings. The midwife and staff of the Tingloy Municipal Health Office can see the records of all patients. Nobody else can. Each time a health worker opens your record, it is written in an access log. When records are exported to a file, that is logged too."
+    },
+    "video": {
+      "title": "Video consultations",
+      "body": "Video consultations with the midwife go through a third-party video service. The service carries the audio and video of the call. Calls are not recorded unless you clearly agree and a provider starts the recording."
+    },
+    "retention": {
+      "title": "How long your data is kept",
+      "body": "Your records are kept only as long as they are needed for your care and for the work of the Tingloy Municipal Health Office. The retention period and how records are deleted are agreed with the Municipal Health Office. You can ask the office about deleting your records."
+    },
+    "rights": {
+      "title": "Your rights",
+      "body": "Under the Data Privacy Act of 2012 (RA 10173) you have the right to be told how your data is used, to see it, to correct it, to object, and to withdraw your consent. If you withdraw your consent you can no longer use NurtureLink. Only the data needed for your care is collected, and the belt and wrist band hold no names or personal details."
+    },
+    "providers": {
+      "title": "For health workers and midwives",
+      "body": "If you use a barangay or super account, you agree to open only the records you need for your work, to keep your login private, to handle exported files with care, and to sign out when you finish. Your session ends after {{minutes}} minutes without activity."
+    },
+    "contact": {
+      "title": "Questions",
+      "body": "For questions about these terms or about your data, contact the Tingloy Municipal Health Office."
+    }
+  }
+}

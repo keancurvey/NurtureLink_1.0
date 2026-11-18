@@ -63,3 +63,13 @@ export function buildThresholds(rows = []) {
   }
   return tree;
 }
+
+// Sign-in rules (AUTH-05, AUTH-08, spec 10). The terms version is what a consent record must match to count; the seed's
+// consent records carry the same version. Throttling and the reset code are proposed values, like the other rules.
+export const AUTH = {
+  termsVersion: '1.0',
+  maxFailedSignIns: 5,
+  lockSeconds: 30,
+  resetCodeMinutes: 10,
+  minPasswordLength: 8,
+};

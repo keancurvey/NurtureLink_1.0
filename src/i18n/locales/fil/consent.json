@@ -1,1 +1,71 @@
-{}
+{
+  "title": "Mga Tuntunin ng Serbisyo at pahintulot sa data privacy",
+  "version": "Bersyon {{version}}",
+  "intro": "Pakibasa ito bago magpatuloy. Kailangan mo itong tanggapin para magamit ang NurtureLink.",
+  "agree": "Nabasa ko at sumasang-ayon ako sa Mga Tuntunin ng Serbisyo at sa pahintulot sa data privacy.",
+  "agreeRequired": "I-tick ang kahon para tanggapin at magpatuloy.",
+  "accept": "Tanggapin at magpatuloy",
+  "decline": "Tanggihan at mag-sign out",
+  "guardian": {
+    "title": "Pahintulot ng magulang o tagapag-alaga",
+    "intro": "Dahil wala ka pang 18 taong gulang, kailangang punan ng magulang o tagapag-alaga ang form na ito bago mo magamit ang NurtureLink.",
+    "name": "Buong pangalan ng magulang o tagapag-alaga",
+    "relationship": "Relasyon sa iyo",
+    "chooseRelationship": "Pumili ng isa",
+    "relationships": {
+      "mother": "Ina",
+      "father": "Ama",
+      "grandmother": "Lola",
+      "grandfather": "Lolo",
+      "aunt": "Tiya",
+      "uncle": "Tiyo",
+      "legal_guardian": "Legal na tagapag-alaga"
+    },
+    "contact": "Numero ng telepono ng magulang o tagapag-alaga",
+    "acknowledge": "Ako ang magulang o tagapag-alaga ni {{name}}. Nabasa ko ang Mga Tuntunin ng Serbisyo at ang pahintulot sa data privacy (bersyon {{version}}), at sumasang-ayon ako na magagamit niya ang NurtureLink at na ang kanyang mga record ay hahawakan ayon sa nakasaad.",
+    "submit": "I-save at magpatuloy",
+    "signOut": "Mag-sign out"
+  },
+  "sections": {
+    "about": {
+      "title": "Tungkol sa NurtureLink",
+      "body": "Pinag-uugnay ng NurtureLink ang mga buntis, ang kanilang barangay health worker at ang Tingloy Municipal Health Office. Ang smart belt at wrist band ay nagpapadala ng mga sukat sa NurtureLink app para masubaybayan ng iyong mga health worker ang iyong pagbubuntis.\n\nAng NurtureLink ay prototype para sa pagsubaybay at screening. Hindi ito sertipikadong medical device na pang-diagnose. Hindi ito nagdi-diagnose o gumagamot, at hindi ito pamalit sa check-up. Hindi rin ito para sa emergency. Kung masama ang pakiramdam mo, o nag-aalala ka para sa iyo o sa iyong sanggol, makipag-ugnayan sa iyong barangay health worker o sa Municipal Health Office, o pumunta sa pinakamalapit na health facility."
+    },
+    "using": {
+      "title": "Paggamit ng app",
+      "body": "Magbigay ng totoong impormasyon sa pag-sign up at panatilihin itong napapanahon. Ang bawat account ay para sa isang tao lamang. Ilihim ang iyong password at huwag ipagamit ang iyong account. Ang iyong belt at wrist band ay nakatali sa iyo lamang."
+    },
+    "readings": {
+      "title": "Ang iyong mga sukat",
+      "body": "Sinusukat ng belt ang heart rate ng iyong sanggol. Sinusukat ng wrist band ang iyong heart rate, isang indicative na antas ng oxygen sa dugo at ang temperatura ng iyong balat. Impormasyon lamang ito para sa screening. Kapag lampas sa itinakdang saklaw ang isang sukat, hihilingin ng NurtureLink na makipag-ugnayan ka sa iyong health worker. Hindi nito sinasabi kung anong kondisyon mayroon ka."
+    },
+    "hele": {
+      "title": "Hele AI",
+      "body": "Ang Hele ay assistant na sumasagot sa mga pangkalahatang tanong tungkol sa pagbubuntis at sa paggamit ng app. Hindi nagdi-diagnose ang Hele, hindi nagbibigay ng payo tungkol sa gamot at hindi pamalit sa iyong health worker. Kapag inilarawan mo ang isang danger sign, sasabihin ng Hele na humingi ka ng tulong agad. Ang bahagi lamang ng iyong mensahe na kailangan sa sagot ang ginagamit. Hindi iniimbak ang iyong mga tanong para suriin maliban kung pumayag ka, at kung gayon ay walang pangalan mo."
+    },
+    "access": {
+      "title": "Sino ang makakakita ng iyong mga record",
+      "body": "Makikita mo ang lahat ng sarili mong record. Makikita ng mga barangay health worker ng iyong barangay ang iyong mga record at sukat. Makikita ng midwife at ng mga kawani ng Tingloy Municipal Health Office ang mga record ng lahat ng pasyente. Walang ibang makakakita. Sa bawat pagbukas ng health worker sa iyong record, isinusulat ito sa access log. Kapag ine-export ang mga record sa isang file, nakatala rin ito."
+    },
+    "video": {
+      "title": "Mga video consultation",
+      "body": "Ang mga video consultation sa midwife ay dumadaan sa isang third-party na video service. Dala ng serbisyong ito ang audio at video ng tawag. Hindi nire-record ang mga tawag maliban kung malinaw kang pumayag at sinimulan ito ng isang provider."
+    },
+    "retention": {
+      "title": "Gaano katagal iniingatan ang iyong data",
+      "body": "Iniingatan ang iyong mga record hangga't kailangan lamang ito para sa iyong pangangalaga at sa gawain ng Tingloy Municipal Health Office. Ang haba ng pag-iingat at ang paraan ng pagbura ng mga record ay napagkasunduan ng Municipal Health Office. Maaari kang magtanong sa opisina tungkol sa pagbura ng iyong mga record."
+    },
+    "rights": {
+      "title": "Ang iyong mga karapatan",
+      "body": "Ayon sa Data Privacy Act of 2012 (RA 10173), may karapatan kang malaman kung paano ginagamit ang iyong data, makita ito, ituwid ito, tumutol, at bawiin ang iyong pahintulot. Kung babawiin mo ang iyong pahintulot, hindi mo na magagamit ang NurtureLink. Ang data lamang na kailangan sa iyong pangangalaga ang kinokolekta, at walang pangalan o personal na detalye ang belt at wrist band."
+    },
+    "providers": {
+      "title": "Para sa mga health worker at midwife",
+      "body": "Kung gumagamit ka ng barangay o super account, sumasang-ayon kang buksan lamang ang mga record na kailangan sa iyong trabaho, ilihim ang iyong login, pag-ingatan ang mga na-export na file, at mag-sign out kapag tapos ka na. Natatapos ang iyong session matapos ang {{minutes}} minutong walang ginagawa."
+    },
+    "contact": {
+      "title": "Mga tanong",
+      "body": "Para sa mga tanong tungkol sa mga tuntuning ito o sa iyong data, makipag-ugnayan sa Tingloy Municipal Health Office."
+    }
+  }
+}

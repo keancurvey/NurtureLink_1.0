@@ -86,7 +86,8 @@
     "cancel": "Kanselahin"
   },
   "action": {
-    "skipSplash": "Laktawan ang splash"
+    "skipSplash": "Laktawan ang splash",
+    "expireSession": "Tapusin ang session"
   },
   "toast": {
     "started": "Sinimulan: {{name}}",
@@ -144,5 +145,23 @@
     "referral": "Naipadala ang referral ni {{name}} sa lahat ng super account ({{count}}).",
     "videoUsage": "Naging 80% ang gamit sa video. Nabigyan ng babala ang mga super account.",
     "videoUsageAlready": "80% o higit pa na ang gamit sa video."
+  },
+  "fill": {
+    "patientMaricel": "Ilagay ang account: Pasyente (Maricel)",
+    "patientShiela": "Ilagay ang account: Pasyenteng walang device (Shiela Marie)",
+    "patientCherry": "Ilagay ang account: Pasyenteng wala pang 18 (Cherry Mae)",
+    "barangayLourdes": "Ilagay ang account: Barangay account (Lourdes)",
+    "barangayJocelyn": "Ilagay ang account: Pangalawang barangay account (Jocelyn)",
+    "barangayNora": "Ilagay ang account: Barangay account ng ibang barangay (Nora)",
+    "superRowena": "Ilagay ang account: Super account (Rowena)",
+    "superCynthia": "Ilagay ang account: Pangalawang super account (Cynthia)",
+    "created": "Ilagay ang account: Pinakabagong account na ginawa ng opisina",
+    "signUpAdult": "Ilagay ang bagong pasyente (Angelica Panganiban)",
+    "signUpMinor": "Ilagay ang bagong pasyenteng wala pang 18 (Kristine Joy Ilagan)",
+    "guardian": "Ilagay ang detalye ng tagapag-alaga (Teresita Ilagan)",
+    "accept": "Tanggapin",
+    "forgotContact": "Ilagay ang numero ng telepono",
+    "forgotCode": "Ilagay ang natanggap na code",
+    "password": "Ilagay ang matibay na password"
   }
 }

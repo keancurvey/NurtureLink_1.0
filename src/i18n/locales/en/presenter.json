@@ -86,7 +86,8 @@
     "cancel": "Cancel"
   },
   "action": {
-    "skipSplash": "Skip splash"
+    "skipSplash": "Skip splash",
+    "expireSession": "Expire session"
   },
   "toast": {
     "started": "Started: {{name}}",
@@ -144,5 +145,23 @@
     "referral": "Referral for {{name}} sent to all super accounts ({{count}}).",
     "videoUsage": "Video usage raised to 80%. Super accounts warned.",
     "videoUsageAlready": "Video usage is already at 80% or more."
+  },
+  "fill": {
+    "patientMaricel": "Fill account: Patient (Maricel)",
+    "patientShiela": "Fill account: Patient without devices (Shiela Marie)",
+    "patientCherry": "Fill account: Patient under 18 (Cherry Mae)",
+    "barangayLourdes": "Fill account: Barangay account (Lourdes)",
+    "barangayJocelyn": "Fill account: Second barangay account (Jocelyn)",
+    "barangayNora": "Fill account: Barangay account of another barangay (Nora)",
+    "superRowena": "Fill account: Super account (Rowena)",
+    "superCynthia": "Fill account: Second super account (Cynthia)",
+    "created": "Fill account: Newest account made by the office",
+    "signUpAdult": "Fill new patient (Angelica Panganiban)",
+    "signUpMinor": "Fill new patient under 18 (Kristine Joy Ilagan)",
+    "guardian": "Fill guardian details (Teresita Ilagan)",
+    "accept": "Accept",
+    "forgotContact": "Fill contact number",
+    "forgotCode": "Fill the received code",
+    "password": "Fill a strong password"
   }
 }
