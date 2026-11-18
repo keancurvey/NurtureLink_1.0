@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import ProviderSession from '../../features/auth/ProviderSession.jsx';
 import { isProviderRole } from '../../lib/permissions.js';
 import { useGearOffset } from '../presenter/useGearOffset.js';
+import ConnectionBanner from './ConnectionBanner.jsx';
 import TopBar from './TopBar.jsx';
 import BottomTabs from './BottomTabs.jsx';
 import SideNav from './SideNav.jsx';
@@ -33,6 +34,7 @@ export default function AppShell({ role }) {
       {isSuper ? <SideNav role={role} items={items} /> : null}
       <div className="shell__column">
         <TopBar unreadCount={0 /* TEMP: real unread count in Prompt 5 */} />
+        <ConnectionBanner />
         <main className="shell__main">
           <Outlet />
         </main>
