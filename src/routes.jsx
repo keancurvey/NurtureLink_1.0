@@ -10,6 +10,9 @@ import GuardianConsent from './features/auth/GuardianConsent.jsx';
 import { RoleRoute, SignedOutOnly, StepRoute } from './features/auth/Guards.jsx';
 import SignIn from './features/auth/SignIn.jsx';
 import SignUp from './features/auth/SignUp.jsx';
+import PairingWizard from './features/devices/PairingWizard.jsx';
+import CheckScreen from './features/home/CheckScreen.jsx';
+import Home from './features/home/Home.jsx';
 
 export default function AppRoutes() {
   return (
@@ -33,9 +36,16 @@ export default function AppRoutes() {
         <Route key={role} path={`/${role}`} element={<RoleRoute role={role} />}>
           <Route index element={<Navigate to={items[0].path} replace />} />
           {items.map((item) => {
+            if (role === 'patient' && item.path === 'home') return <Route key={item.path} path={item.path} element={<Home />} />;
             const Screen = item.path === 'profile' ? TempProfile : TempPage;
             return <Route key={item.path} path={item.path} element={<Screen titleKey={`nav.${item.key}`} art={item.art} />} />;
           })}
+          {role === 'patient' ? (
+            <>
+              <Route path="home/check" element={<CheckScreen />} />
+              <Route path="pair" element={<PairingWizard />} />
+            </>
+          ) : null}
         </Route>
       ))}
       <Route path="*" element={<Navigate to="/" replace />} />
