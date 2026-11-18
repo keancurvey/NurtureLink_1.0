@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
 import { SCENARIOS } from '../src/sim/scenarios.js';
 import { ALERT_TYPES } from '../src/lib/alertRules.js';
-import { RESULT_NAMES } from '../src/lib/packets.js';
+import { RESULT, RESULT_NAMES } from '../src/lib/packets.js';
 import { validateGuardian, validateNewPassword, validateSignIn, validateSignUp } from '../src/lib/authRules.js';
 
 const ROOT = new URL('../src/i18n/locales/', import.meta.url);
@@ -146,5 +146,55 @@ test('the consent document has every section the screen lists, and covers what A
   for (const [lang, words] of [['en', ['Hele', 'readings', 'can see', 'third-party', 'kept']], ['fil', ['Hele', 'sukat', 'makakakita', 'third-party', 'iniingatan']]]) {
     const all = [...new Map(flatten(load(lang, 'consent.json'))).values()].join(' ');
     for (const word of words) assert.match(all, new RegExp(word, 'i'), `${lang}: ${word}`);
+  }
+});
+
+// ---------- Home, the check screen, the pairing wizard and the offline banner (Prompt 4) ----------
+
+const PROMPT4_SOURCES = ['../src/features/home/', '../src/features/devices/'];
+const PROMPT4_FILES = ['../src/components/ui/StatusBadge.jsx', '../src/components/layout/ConnectionBanner.jsx'];
+
+test('every text key the Home, check and pairing screens ask for exists in English and Filipino', () => {
+  const sources = [];
+  for (const dir of PROMPT4_SOURCES) {
+    const url = new URL(dir, import.meta.url);
+    for (const file of readdirSync(url).filter((f) => f.endsWith('.jsx') || f === 'reasons.js')) sources.push([file, readFileSync(new URL(file, url), 'utf8')]);
+  }
+  for (const file of PROMPT4_FILES) sources.push([file, readFileSync(new URL(file, import.meta.url), 'utf8')]);
+  const tables = { en: {}, fil: {} };
+  const has = (lang, space, key) => {
+    tables[lang][space] ??= new Map(flatten(load(lang, `${space}.json`)));
+    return tables[lang][space].has(key);
+  };
+  let checked = 0;
+  for (const [file, source] of sources) {
+    const defaultSpace = /useTranslation\('(\w+)'\)/.exec(source)?.[1] ?? 'common';
+    for (const [, key] of source.matchAll(/\bt\(\s*'([\w:.]+)'/g)) {
+      const [space, name] = key.includes(':') ? key.split(':') : [defaultSpace, key];
+      for (const lang of ['en', 'fil']) assert.ok(has(lang, space, name), `${lang} ${space}:${name} (${file})`);
+      checked += 1;
+    }
+    for (const [, space, key] of source.matchAll(/labelKey:\s*'(\w+):([\w.]+)'/g)) {
+      for (const lang of ['en', 'fil']) assert.ok(has(lang, space, key), `${lang} ${space}:${key} (${file})`);
+      checked += 1;
+    }
+  }
+  assert.ok(checked > 50, `checked ${checked}`);
+});
+
+test('the texts chosen by a code (reasons, phases, statuses, battery levels, pairing errors) all exist', () => {
+  const reasons = ['no_belt', 'busy', 'disconnected', 'link_lost', 'charging', 'cutoff', 'exposure_cap', 'low_battery', 'no_contact', 'fault', 'stopped', 'no_reading', 'not_allowed', 'clock_not_synced'];
+  // Every refusal the belt can give comes back as its lower-case name; each needs a text.
+  for (const name of Object.keys(RESULT).filter((n) => n !== 'OK')) assert.ok(reasons.includes(name.toLowerCase()), `belt result ${name}`);
+  const wanted = {
+    home: [...reasons.map((r) => `check.reason.${r}`), ...['starting', 'contact', 'acquiring', 'finishing', 'complete', 'failed'].map((p) => `check.phase.${p}`), ...['contact', 'measuring', 'saving'].map((s) => `check.steps.${s}`), ...['fhr', 'hr', 'spo2', 'temp'].map((r) => `reading.${r}`)],
+    devices: [...['belt', 'band'].flatMap((d) => [`name.${d}`, `row.${d}`, `pairing.stage.${d}`]), ...['low', 'critical', 'cutoff'].map((l) => `level.${l}`), ...['already_bound', 'not_found', 'type_taken', 'match'].map((e) => `pairing.error.${e}`), ...['connected', 'connecting', 'notConnected', 'notPaired'].map((s) => `state.${s}`)],
+    common: ['normal', 'attention', 'alert'].map((s) => `status.${s}`),
+  };
+  for (const lang of ['en', 'fil']) {
+    for (const [space, keys] of Object.entries(wanted)) {
+      const table = new Map(flatten(load(lang, `${space}.json`)));
+      for (const key of keys) assert.ok(table.has(key), `${lang} ${space}:${key}`);
+    }
   }
 });

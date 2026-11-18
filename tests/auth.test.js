@@ -279,7 +279,8 @@ test('accepting the terms records the document version and the time, and lets an
   const record = rt.db().consents.find((c) => c.profile_id === id);
   assert.deepEqual([record.document, record.version, record.accepted_at], ['terms_privacy', AUTH.termsVersion, NOW + 60000]);
   assert.equal(sel.accessGate(rt.state(), NOW).step, null);
-  assert.equal(sel.accessTarget(rt.state(), NOW), '/patient/home');
+  // A new patient has no devices and has not seen the pairing wizard: she lands on it (AUTH-07, Prompt 4).
+  assert.equal(sel.accessTarget(rt.state(), NOW), '/patient/pair');
 });
 
 test('a patient under 18 cannot go on without the guardian consent (AUTH-06)', () => {
