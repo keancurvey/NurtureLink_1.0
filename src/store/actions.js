@@ -4,7 +4,7 @@
 import { latency } from '../lib/latency.js';
 
 export function createActions(runtime, { delay = latency } = {}) {
-  const { core, auth } = runtime;
+  const { core, auth, devices } = runtime;
   const slow = (fn) => async (...args) => {
     await delay();
     return fn(...args);
@@ -29,6 +29,21 @@ export function createActions(runtime, { delay = latency } = {}) {
     /** Signing out and changing language answer at once, like a page that does not wait for the network. */
     sign_out: () => auth.signOut(),
     save_language: (language) => auth.saveLanguage(language),
+    // Devices (spec 3.2, AUTH-07, PAT-H-02, PAT-H-03). Connecting and binding take a moment, like a real link and server;
+    // starting a check and closing its result work on the phone and answer at once.
+    /** Pairing wizard: connect to the chosen device and read its serial, model and firmware. */
+    read_device: slow((serial) => devices.readInfo(serial)),
+    /** Pairing wizard: bind the serial to the signed-in patient. Answers { ok, device } or { ok: false, error }. */
+    pair_device: slow((serial) => devices.pair(serial)),
+    /** Pairing wizard: let go of a device that was connected but not paired. */
+    release_device: (serial) => devices.release(serial),
+    /** The Connect button of a device row. */
+    connect_device: slow((serial) => devices.connect(serial)),
+    mark_pairing_seen: () => devices.markPairingSeen(),
+    /** Check now: answers { started } or { started: false, reason, device? }. */
+    start_check: () => devices.startCheck(),
+    stop_check: () => devices.stopCheck(),
+    dismiss_check: () => devices.dismissCheck(),
     /** Gear: back to the starting records, signed out. */
     reset_data: slow(() => runtime.reset()),
   };

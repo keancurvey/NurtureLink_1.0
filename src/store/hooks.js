@@ -36,12 +36,12 @@ export function useStoreValue(select) {
 /** Who is signed in and what stands between her and the app: { viewer: { id, role } | null, step, target }. */
 export function useAccess() {
   const key = useStoreValue((state) => {
-    const { viewer, step } = accessGate(state);
-    return viewer ? `${viewer.id}|${viewer.role}|${step ?? ''}` : '';
+    const { viewer, step, pairing } = accessGate(state);
+    return viewer ? `${viewer.id}|${viewer.role}|${step ?? ''}|${pairing ? 'pair' : ''}` : '';
   });
   return useMemo(() => {
     if (!key) return { viewer: null, step: null, target: '/sign-in' };
-    const [id, role, step] = key.split('|');
-    return { viewer: { id, role }, step: step || null, target: step ? GATE_PATHS[step] : landingPath(role) };
+    const [id, role, step, pairing] = key.split('|');
+    return { viewer: { id, role }, step: step || null, target: step ? GATE_PATHS[step] : landingPath(role, { pairing: pairing === 'pair' }) };
   }, [key]);
 }

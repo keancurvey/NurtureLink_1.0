@@ -11,6 +11,7 @@ import { createScheduler } from '../sim/scheduler.js';
 import { createAuth } from './auth.js';
 import { createCheckBridge } from './checkBridge.js';
 import { createCore } from './core.js';
+import { createDevices } from './devices.js';
 import { createStore } from './store.js';
 
 // notice: why the sign-in screen has something to say ('session_expired'); it is never stored.
@@ -59,6 +60,7 @@ export function createRuntime({
     store.dispatch({ type: 'session', session });
   };
   const auth = createAuth({ store, core, setSession, now });
+  const devices = createDevices({ store, core, link, bridge, now });
   const engine = createEngine({ store, core, sched, bridge, link, control, scenarios: SCENARIOS, now });
   let heartbeat = null;
 
@@ -71,6 +73,7 @@ export function createRuntime({
     bridge,
     engine,
     auth,
+    devices,
 
     /**
      * Start up: finish a run a reload cut short, upload what is still queued (when online), keep devices' last-seen

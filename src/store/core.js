@@ -196,13 +196,15 @@ export function createCore({ store, now = Date.now }) {
    * change, tells the patient at Low and raises the battery alert at Critical and Cutoff (spec 9.5). The messages go
    * out only while online.
    */
-  function recordDeviceStatus(serial, { battery, charging }) {
+  function recordDeviceStatus(serial, { battery, charging, exposureLeft }) {
     const device = state().db.devices.find((d) => d.serial === serial);
     if (!device) return null;
     const th = thresholds();
     const at = now();
     const changed = battery !== device.battery_pct || charging !== device.charging;
     const patch = { last_seen_at: at, link_state: 'connected' };
+    // The belt reports how many transmit seconds are left in the rolling hour; Check now reads it from the record.
+    if (exposureLeft !== undefined) patch.exposure_left_s = exposureLeft;
     const ops = [];
     if (changed) {
       Object.assign(patch, { battery_pct: battery, charging, battery_updated_at: at });

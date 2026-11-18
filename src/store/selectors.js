@@ -183,14 +183,37 @@ export function accessGate(state, now = Date.now()) {
     minor: patient ? isMinor(patient.birthdate, manilaDate(now)) : false,
     hasGuardianConsent: state.db.guardian_consents.some((g) => g.profile_id === viewer.id),
   });
-  return { viewer, step };
+  return { viewer, step, pairing: step === null && viewer.role === 'patient' && needsPairing(state, viewer.id) };
 }
 
 /** Where the signed-in person belongs now: the step they must finish, their landing screen, or the sign-in screen. */
 export function accessTarget(state, now = Date.now()) {
-  const { viewer, step } = accessGate(state, now);
+  const { viewer, step, pairing } = accessGate(state, now);
   if (!viewer) return '/sign-in';
-  return step ? access.GATE_PATHS[step] : access.landingPath(viewer.role);
+  return step ? access.GATE_PATHS[step] : access.landingPath(viewer.role, { pairing });
+}
+
+// ---------- Devices and Home (Prompt 4) ----------
+
+/** A patient with no devices who has not opened the pairing wizard yet (AUTH-07). */
+export function needsPairing(state, patientId) {
+  const row = byId(state.db.patients).get(patientId);
+  return Boolean(row) && !row.pairing_prompted_at && !state.db.devices.some((d) => d.patient_id === patientId);
+}
+
+/** The patient's newest completed check, or null. Providers see it only once it has reached the server. */
+export const latestCheck = (state, viewer, patientId) => checkSessions(state, viewer, patientId).find((s) => s.status === 'completed') ?? null;
+
+/** How many of the viewer's own checks still wait to be uploaded. */
+export const waitingToSync = (state, viewer, patientId) =>
+  viewer?.role === 'patient' && viewer.id === patientId ? state.db.check_sessions.filter((s) => s.patient_id === patientId && s.syncState === 'queued').length : 0;
+
+/** The check in progress or just finished on this patient's phone, or null. */
+export const liveCheckOf = (state, viewer) => (viewer?.role === 'patient' && state.live.check?.patient_id === viewer.id ? state.live.check : null);
+
+/** The free device of a type that the pairing chooser lists (presenter only: the gear's fill of the wizard's first step). */
+export function freeNearbyDevice(state, type) {
+  return Object.values(state.hardware).find((h) => h.type === type && h.bound_patient_id === null && (h.advertising || h.connected)) ?? null;
 }
 
 // ---------- What the gear fills in (presenter only; nothing here reaches a screen's own text) ----------

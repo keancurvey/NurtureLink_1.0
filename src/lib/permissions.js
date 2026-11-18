@@ -12,8 +12,16 @@ export const TABS = {
   super: ['tracker', 'consult', 'schedule', 'profile'],
 };
 
-/** Where a signed-in role lands. (Patients land on the pairing wizard once Prompt 4 adds it, for a first sign-in.) */
-export const landingPath = (role) => (TABS[role] ? `/${role}/${TABS[role][0]}` : '/sign-in');
+/**
+ * Where a signed-in role lands. A patient who has no devices and has not seen the pairing wizard yet lands on the
+ * wizard (AUTH-07); everyone else on the first tab of their role.
+ */
+export function landingPath(role, { pairing = false } = {}) {
+  if (!TABS[role]) return '/sign-in';
+  if (role === 'patient' && pairing) return PAIRING_PATH;
+  return `/${role}/${TABS[role][0]}`;
+}
+export const PAIRING_PATH = '/patient/pair';
 
 export const isProviderRole = (role) => role === 'barangay' || role === 'super';
 

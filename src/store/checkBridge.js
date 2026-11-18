@@ -189,7 +189,7 @@ export function createCheckBridge({ store, core, link, sched, now = Date.now }) 
   function onStatus(device, bytes) {
     const isBelt = device.type === 'belt';
     const status = isBelt ? decodeBeltStatus(bytes) : decodeBandStatus(bytes);
-    core.recordDeviceStatus(device.serial, { battery: status.battery, charging: status.charging });
+    core.recordDeviceStatus(device.serial, { battery: status.battery, charging: status.charging, exposureLeft: isBelt ? status.exposureLeft : undefined });
     const run = active.get(device.patient_id);
     if (!run) return;
     if (!isBelt) {
