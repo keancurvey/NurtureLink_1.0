@@ -37,5 +37,14 @@
     "dismiss": "Alisin",
     "loading": "Nilo-load"
   },
-  "signOut": "Mag-sign out"
+  "signOut": "Mag-sign out",
+  "status": {
+    "normal": "Normal",
+    "attention": "Kailangan ng pansin",
+    "alert": "Alerto"
+  },
+  "connection": {
+    "offlineTitle": "Offline ka ngayon",
+    "offlineBody": "Ang mga sine-save mo ay maghihintay sa phone na ito at ipapadala kapag online ka na ulit. Huling na-sync: {{time}}."
+  }
 }

@@ -162,6 +162,7 @@
     "accept": "Accept",
     "forgotContact": "Fill contact number",
     "forgotCode": "Fill the received code",
-    "password": "Fill a strong password"
+    "password": "Fill a strong password",
+    "pairingStep": "Fill this step"
   }
 }

@@ -1,1 +1,90 @@
-{}
+{
+  "title": "Home",
+  "pairPrompt": {
+    "title": "Pair your devices",
+    "body": "Connect your belt and wrist band to start your checks.",
+    "action": "Pair devices"
+  },
+  "checkNow": {
+    "button": "Check now",
+    "starting": "Starting",
+    "hint": "A check takes about two minutes. Keep still and keep this screen open."
+  },
+  "last": {
+    "title": "Last check",
+    "emptyTitle": "No checks yet",
+    "emptyBody": "Your first check will show here.",
+    "when": "{{date}} ({{relative}})",
+    "worried": "If you are worried, contact your barangay health worker or midwife.",
+    "sync": {
+      "waiting": "Waiting to sync",
+      "synced": "Last synced {{time}}"
+    }
+  },
+  "reading": {
+    "fhr": "Baby’s heart rate",
+    "hr": "Your heart rate",
+    "spo2": "Oxygen level (SpO2)",
+    "temp": "Skin temperature",
+    "unit": {
+      "bpm": "bpm",
+      "spo2": "%",
+      "temp": "°C"
+    },
+    "confidence": "Confidence {{value}}%",
+    "unverified": "Unverified",
+    "unverifiedBody": "There was no wrist band reading to compare with.",
+    "noReading": "No clear reading this time.",
+    "notMeasured": "Not measured",
+    "none": "–"
+  },
+  "check": {
+    "title": "Check",
+    "keepOpen": "Keep this screen open while the check runs.",
+    "steps": {
+      "label": "Steps",
+      "contact": "Contact test",
+      "measuring": "Measuring",
+      "saving": "Saving"
+    },
+    "phase": {
+      "starting": "Getting ready",
+      "contact": "Checking that the belt touches your skin",
+      "acquiring": "Measuring: {{done}} of {{total}}",
+      "finishing": "Saving your result",
+      "complete": "Check complete",
+      "failed": "Check not completed"
+    },
+    "progress": "Check progress",
+    "prompt": {
+      "adjustBeltTitle": "Adjust the belt",
+      "adjustBelt": "Move the belt so it sits snugly on your belly, then keep still.",
+      "restTitle": "Please rest",
+      "rest": "Sit or lie still for a moment. The belt waits until you stop moving."
+    },
+    "stop": "Stop check",
+    "retry": "Try again",
+    "done": "Done",
+    "back": "Back to Home",
+    "view": "View progress",
+    "running": "Check in progress",
+    "failedTitle": "The check did not finish",
+    "result": "Result",
+    "reason": {
+      "no_belt": "No belt is paired yet. Pair your belt to start a check.",
+      "busy": "A check is already running.",
+      "disconnected": "The {{device}} is not connected. Connect it below to start a check.",
+      "charging": "The {{device}} is charging. Check now is off until it is unplugged.",
+      "cutoff": "The {{device}} battery is too low. Charge it to start a check.",
+      "exposure_cap": "The belt has reached its limit for this hour. Please try again a little later.",
+      "low_battery": "The battery is too low for a check. Charge the device and try again.",
+      "no_contact": "The belt could not make good contact with your skin. Adjust it and try again.",
+      "fault": "The belt reported a problem. Please try again, or contact your barangay health worker.",
+      "stopped": "The check was stopped.",
+      "no_reading": "No reading could be made. Please try again.",
+      "not_allowed": "This check cannot be started right now.",
+      "link_lost": "A device lost its connection. Connect it below and try again.",
+      "clock_not_synced": "The belt has not set its clock yet. Connect it again and try once more."
+    }
+  }
+}

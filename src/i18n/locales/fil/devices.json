@@ -1,1 +1,75 @@
-{}
+{
+  "name": {
+    "belt": "belt",
+    "band": "wrist band"
+  },
+  "title": "Mga device",
+  "row": {
+    "belt": "Belt",
+    "band": "Wrist band"
+  },
+  "state": {
+    "connected": "Nakakonekta",
+    "connecting": "Kumokonekta",
+    "notConnected": "Hindi nakakonekta",
+    "notPaired": "Hindi pa na-pair"
+  },
+  "connect": "Ikonekta",
+  "pair": "I-pair",
+  "battery": "Baterya",
+  "charging": "Nagcha-charge",
+  "level": {
+    "low": "Mahina na ang baterya",
+    "critical": "Kritikal ang baterya",
+    "cutoff": "I-charge na ngayon"
+  },
+  "lastSeen": "Huling nakita {{time}}",
+  "pairing": {
+    "title": "I-pair ang mga device mo",
+    "intro": "I-pair ang belt at wrist band mo sa phone na ito. Mga isang minuto lang.",
+    "progress": "Hakbang {{current}} sa {{total}}",
+    "stage": {
+      "belt": "Belt",
+      "band": "Wrist band"
+    },
+    "justPaired": "Na-pair na ang {{device}} mo.",
+    "choose": {
+      "title": "Piliin ang {{device}} mo",
+      "body": "I-on ang {{device}} at ilapit ito sa phone na ito. Piliin ang pangalang nakasulat sa label nito.",
+      "scanning": "Naghahanap ng mga device sa malapit",
+      "nearby": "Malapit",
+      "none": "Walang {{device}} na nakita sa malapit. Tiyaking naka-on ito, tapos maghanap ulit.",
+      "again": "Maghanap ulit",
+      "list": "Mga device sa malapit",
+      "connect": "Ikonekta"
+    },
+    "connecting": "Kumokonekta",
+    "confirm": {
+      "title": "Ito ba ang {{device}} mo?",
+      "body": "Tingnan kung kapareho ng pangalan sa label ng {{device}} mo.",
+      "name": "Pangalan",
+      "serial": "Serial number",
+      "model": "Modelo",
+      "firmware": "Firmware",
+      "battery": "Baterya",
+      "match": "Kapareho ng pangalan sa label ng {{device}} ko",
+      "pair": "I-pair ang {{device}}",
+      "pairing": "Nagpa-pair",
+      "other": "Pumili ng ibang device"
+    },
+    "error": {
+      "already_bound": "Naka-link na ang {{device}} na ito sa ibang account, kaya hindi ito mai-pair dito. Pumili ng iba, o humingi ng tulong sa barangay health worker mo.",
+      "not_found": "Nawala ang koneksyon sa {{device}}. Maghanap ulit, pakiusap.",
+      "type_taken": "May {{device}} na naka-pair na sa account mo.",
+      "match": "Lagyan ng tsek ang kahon para kumpirmahing kapareho ang pangalan."
+    },
+    "done": {
+      "title": "Handa na",
+      "bothBody": "Na-pair na ang belt at wrist band mo. Maaari ka nang magsimula ng unang check sa Home.",
+      "finish": "Pumunta sa Home"
+    },
+    "skip": "Laktawan muna",
+    "skipNote": "Maaari mong i-pair ang mga device mamaya sa Home.",
+    "back": "Bumalik"
+  }
+}

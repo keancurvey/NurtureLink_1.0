@@ -37,5 +37,14 @@
     "dismiss": "Dismiss",
     "loading": "Loading"
   },
-  "signOut": "Sign out"
+  "signOut": "Sign out",
+  "status": {
+    "normal": "Normal",
+    "attention": "Needs attention",
+    "alert": "Alert"
+  },
+  "connection": {
+    "offlineTitle": "You are offline",
+    "offlineBody": "Anything you save waits on this phone and is sent when you are back online. Last synced: {{time}}."
+  }
 }

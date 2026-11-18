@@ -1,1 +1,75 @@
-{}
+{
+  "name": {
+    "belt": "belt",
+    "band": "wrist band"
+  },
+  "title": "Devices",
+  "row": {
+    "belt": "Belt",
+    "band": "Wrist band"
+  },
+  "state": {
+    "connected": "Connected",
+    "connecting": "Connecting",
+    "notConnected": "Not connected",
+    "notPaired": "Not paired"
+  },
+  "connect": "Connect",
+  "pair": "Pair",
+  "battery": "Battery",
+  "charging": "Charging",
+  "level": {
+    "low": "Low battery",
+    "critical": "Battery critical",
+    "cutoff": "Charge now"
+  },
+  "lastSeen": "Last seen {{time}}",
+  "pairing": {
+    "title": "Pair your devices",
+    "intro": "Pair your belt and your wrist band with this phone. It takes about a minute.",
+    "progress": "Step {{current}} of {{total}}",
+    "stage": {
+      "belt": "Belt",
+      "band": "Wrist band"
+    },
+    "justPaired": "Your {{device}} is paired.",
+    "choose": {
+      "title": "Choose your {{device}}",
+      "body": "Turn the {{device}} on and keep it close to this phone. Pick the name printed on its label.",
+      "scanning": "Looking for devices nearby",
+      "nearby": "Nearby",
+      "none": "No {{device}} found nearby. Check that it is turned on, then look again.",
+      "again": "Look again",
+      "list": "Devices nearby",
+      "connect": "Connect"
+    },
+    "connecting": "Connecting",
+    "confirm": {
+      "title": "Is this your {{device}}?",
+      "body": "Check that the name matches the label on your {{device}}.",
+      "name": "Name",
+      "serial": "Serial number",
+      "model": "Model",
+      "firmware": "Firmware",
+      "battery": "Battery",
+      "match": "The name matches the label on my {{device}}",
+      "pair": "Pair {{device}}",
+      "pairing": "Pairing",
+      "other": "Choose a different device"
+    },
+    "error": {
+      "already_bound": "This {{device}} is already linked to another account, so it cannot be paired here. Choose a different one, or ask your barangay health worker for help.",
+      "not_found": "We lost contact with the {{device}}. Please look again.",
+      "type_taken": "A {{device}} is already paired to your account.",
+      "match": "Tick the box to confirm the name matches."
+    },
+    "done": {
+      "title": "All set",
+      "bothBody": "Your belt and wrist band are paired. You can start your first check from Home.",
+      "finish": "Go to Home"
+    },
+    "skip": "Skip for now",
+    "skipNote": "You can pair your devices later from Home.",
+    "back": "Back"
+  }
+}

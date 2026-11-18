@@ -162,6 +162,7 @@
     "accept": "Tanggapin",
     "forgotContact": "Ilagay ang numero ng telepono",
     "forgotCode": "Ilagay ang natanggap na code",
-    "password": "Ilagay ang matibay na password"
+    "password": "Ilagay ang matibay na password",
+    "pairingStep": "Punan ang hakbang na ito"
   }
 }

@@ -1,1 +1,90 @@
-{}
+{
+  "title": "Home",
+  "pairPrompt": {
+    "title": "I-pair ang mga device mo",
+    "body": "Ikonekta ang belt at wrist band mo para makapagsimula ng mga check.",
+    "action": "I-pair ang mga device"
+  },
+  "checkNow": {
+    "button": "Check now",
+    "starting": "Nagsisimula",
+    "hint": "Mga dalawang minuto ang isang check. Huwag gumalaw at panatilihing bukas ang screen na ito."
+  },
+  "last": {
+    "title": "Huling check",
+    "emptyTitle": "Wala pang check",
+    "emptyBody": "Dito lalabas ang unang check mo.",
+    "when": "{{date}} ({{relative}})",
+    "worried": "Kung nag-aalala ka, makipag-ugnayan sa barangay health worker o midwife mo.",
+    "sync": {
+      "waiting": "Naghihintay ma-sync",
+      "synced": "Huling na-sync {{time}}"
+    }
+  },
+  "reading": {
+    "fhr": "Tibok ng puso ni baby",
+    "hr": "Tibok ng puso mo",
+    "spo2": "Oxygen level (SpO2)",
+    "temp": "Temperatura ng balat",
+    "unit": {
+      "bpm": "bpm",
+      "spo2": "%",
+      "temp": "°C"
+    },
+    "confidence": "Kumpiyansa {{value}}%",
+    "unverified": "Hindi pa napatunayan",
+    "unverifiedBody": "Walang sukat mula sa wrist band na mapagkukumparahan.",
+    "noReading": "Walang malinaw na sukat sa pagkakataong ito.",
+    "notMeasured": "Hindi nasukat",
+    "none": "–"
+  },
+  "check": {
+    "title": "Check",
+    "keepOpen": "Panatilihing bukas ang screen na ito habang tumatakbo ang check.",
+    "steps": {
+      "label": "Mga hakbang",
+      "contact": "Pagsubok sa dikit",
+      "measuring": "Pagsusukat",
+      "saving": "Pagse-save"
+    },
+    "phase": {
+      "starting": "Naghahanda",
+      "contact": "Sinusuri kung dumidikit ang belt sa balat mo",
+      "acquiring": "Sumusukat: {{done}} sa {{total}}",
+      "finishing": "Sine-save ang resulta mo",
+      "complete": "Tapos na ang check",
+      "failed": "Hindi natapos ang check"
+    },
+    "progress": "Progreso ng check",
+    "prompt": {
+      "adjustBeltTitle": "Ayusin ang belt",
+      "adjustBelt": "Ayusin ang belt para komportable itong nakadikit sa tiyan mo, tapos huwag gumalaw.",
+      "restTitle": "Magpahinga muna",
+      "rest": "Umupo o humiga nang hindi gumagalaw sandali. Maghihintay ang belt hanggang tumigil ka sa paggalaw."
+    },
+    "stop": "Itigil ang check",
+    "retry": "Subukan ulit",
+    "done": "Tapos na",
+    "back": "Bumalik sa Home",
+    "view": "Tingnan ang progreso",
+    "running": "Tumatakbo ang check",
+    "failedTitle": "Hindi natapos ang check",
+    "result": "Resulta",
+    "reason": {
+      "no_belt": "Wala pang naka-pair na belt. I-pair ang belt mo para makapagsimula ng check.",
+      "busy": "May check na tumatakbo na.",
+      "disconnected": "Hindi nakakonekta ang {{device}}. Ikonekta ito sa ibaba para makapagsimula ng check.",
+      "charging": "Nagcha-charge ang {{device}}. Hindi muna magagamit ang Check now hanggang matanggal ito sa charger.",
+      "cutoff": "Masyadong mahina ang baterya ng {{device}}. I-charge ito para makapagsimula ng check.",
+      "exposure_cap": "Naabot na ng belt ang limitasyon nito para sa oras na ito. Subukan ulit mamaya.",
+      "low_battery": "Masyadong mahina ang baterya para sa check. I-charge ang device at subukan ulit.",
+      "no_contact": "Hindi maayos na dumikit ang belt sa balat mo. Ayusin ito at subukan ulit.",
+      "fault": "May problemang iniulat ang belt. Subukan ulit, o makipag-ugnayan sa barangay health worker mo.",
+      "stopped": "Itinigil ang check.",
+      "no_reading": "Walang nakuhang sukat. Subukan ulit, pakiusap.",
+      "not_allowed": "Hindi maaaring simulan ang check na ito ngayon.",
+      "link_lost": "Nawalan ng koneksyon ang isang device. Ikonekta ito sa ibaba at subukan ulit.",
+      "clock_not_synced": "Hindi pa naitatakda ng belt ang oras nito. Ikonekta ulit ito at subukan muli."
+    }
+  }
+}
