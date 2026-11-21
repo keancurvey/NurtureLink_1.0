@@ -4,7 +4,7 @@
 import { latency } from '../lib/latency.js';
 
 export function createActions(runtime, { delay = latency } = {}) {
-  const { core, auth, devices } = runtime;
+  const { core, auth, devices, alerts } = runtime;
   const slow = (fn) => async (...args) => {
     await delay();
     return fn(...args);
@@ -44,6 +44,20 @@ export function createActions(runtime, { delay = latency } = {}) {
     start_check: () => devices.startCheck(),
     stop_check: () => devices.stopCheck(),
     dismiss_check: () => devices.dismissCheck(),
+    // Alerts and notifications (spec 4.6, COM-03, COM-04). Acknowledging, resolving and referring reach the server, so they
+    // take a moment; reading a notification and the push choice answer at once on the phone.
+    /** The first account to acknowledge claims the alert: answers { ok, alert } or { ok: false, error, byName? }. */
+    acknowledge_alert: slow((alertId) => alerts.acknowledge(alertId)),
+    /** Resolve with an outcome note: { outcome }. */
+    resolve_alert: slow((alertId, values) => alerts.resolve(alertId, values)),
+    /** A barangay account refers the patient to the midwife: { reason }. */
+    refer_alert: slow((alertId, values) => alerts.refer(alertId, values)),
+    mark_read: (notificationId) => alerts.markRead(notificationId),
+    mark_all_read: () => alerts.markAllRead(),
+    allow_push: slow(() => alerts.allowPush()),
+    decline_push: () => alerts.declinePush(),
+    /** The patient's in-app SOS (after the 2 second hold): answers { ok, state: 'sent' | 'undelivered' }. */
+    send_sos: slow(() => alerts.sendSos()),
     /** Gear: back to the starting records, signed out. */
     reset_data: slow(() => runtime.reset()),
   };

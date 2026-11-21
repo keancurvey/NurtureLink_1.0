@@ -30,17 +30,19 @@ export const GATE_PATHS = {
   'change-password': '/change-password',
   consent: '/consent',
   'guardian-consent': '/guardian-consent',
+  push: '/push-permission',
 };
 
 /**
  * The next step before the app opens, or null when the person may go in: a provider's first sign-in forces a new
  * password (AUTH-03), then the terms and consent must be accepted (AUTH-05), then a patient under 18 needs her
- * parent's or guardian's consent (AUTH-06).
+ * parent's or guardian's consent (AUTH-06), then the account chooses push notifications (COM-04).
  */
-export function gateStep({ role, mustChangePassword, hasConsent, minor, hasGuardianConsent }) {
+export function gateStep({ role, mustChangePassword, hasConsent, minor, hasGuardianConsent, needsPush = false }) {
   if (isProviderRole(role) && mustChangePassword) return 'change-password';
   if (!hasConsent) return 'consent';
   if (role === 'patient' && minor && !hasGuardianConsent) return 'guardian-consent';
+  if (needsPush) return 'push'; // COM-04: the account has not yet chosen push notifications on this phone
   return null;
 }
 

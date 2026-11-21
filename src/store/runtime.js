@@ -8,6 +8,7 @@ import { createEngine } from '../sim/engine.js';
 import { createSeed } from '../sim/seed.js';
 import { SCENARIOS } from '../sim/scenarios.js';
 import { createScheduler } from '../sim/scheduler.js';
+import { createAlerts } from './alerts.js';
 import { createAuth } from './auth.js';
 import { createCheckBridge } from './checkBridge.js';
 import { createCore } from './core.js';
@@ -39,6 +40,7 @@ export function createRuntime({
   setRepeat = (fn, ms) => setInterval(fn, ms),
   clearRepeat = (handle) => clearInterval(handle),
   heartbeatMs = 30000,
+  sweepMs = 1000,
   onError = (error) => {
     console.error(error);
   },
@@ -61,8 +63,10 @@ export function createRuntime({
   };
   const auth = createAuth({ store, core, setSession, now });
   const devices = createDevices({ store, core, link, bridge, now });
+  const alerts = createAlerts({ store, core, now });
   const engine = createEngine({ store, core, sched, bridge, link, control, scenarios: SCENARIOS, now });
   let heartbeat = null;
+  let sweeper = null;
 
   return {
     store,
@@ -74,6 +78,7 @@ export function createRuntime({
     engine,
     auth,
     devices,
+    alerts,
 
     /**
      * Start up: finish a run a reload cut short, upload what is still queued (when online), keep devices' last-seen
@@ -85,15 +90,25 @@ export function createRuntime({
       engine.resume();
       if (core.isOnline()) core.flushQueue();
       if (!heartbeat) heartbeat = setRepeat(() => control.heartbeat(), heartbeatMs);
+      // The escalation sweep (ALR-05) looks every second for an alert nobody acknowledged in time.
+      core.sweepEscalations();
+      if (!sweeper) sweeper = setRepeat(() => core.sweepEscalations(), sweepMs);
       return () => {
         if (heartbeat) clearRepeat(heartbeat);
+        if (sweeper) clearRepeat(sweeper);
         heartbeat = null;
+        sweeper = null;
       };
     },
 
     setTiming: (timing) => core.commit([{ op: 'meta', patch: { timing } }]),
     setFocusPatient: (patientId) => core.commit([{ op: 'meta', patch: { focus_patient_id: patientId } }]),
-    setConnection: (connection) => core.setConnection(connection),
+    /** Online brings the queue up to date and sends an SOS that waited on the phone. */
+    setConnection(connection) {
+      const result = core.setConnection(connection);
+      if (connection === 'online') alerts.relayPending();
+      return result;
+    },
 
     setSession,
 

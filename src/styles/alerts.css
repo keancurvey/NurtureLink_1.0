@@ -1,0 +1,334 @@
+/* Alerts, notifications and escalation (Prompt 5): push banners, the notification center, the alert screen, the emergency
+   banner and the SOS shortcut. Tokens only. */
+
+/* ---------- Push banners (ALR-03): slide from the top, inside the app column, above the page, below the sheets ---------- */
+.push-layer {
+  position: fixed;
+  z-index: 95; /* above the page and the gear (90), below the sheets (100) and the toasts (110) */
+  top: calc(env(safe-area-inset-top) + var(--space-2));
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: min(calc(100% - var(--space-4) * 2), var(--column-width));
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+@media (min-width: 1024px) {
+  html[data-shell='super'] .push-layer {
+    left: calc(50% + var(--sidenav-width) / 2);
+  }
+}
+.push {
+  display: flex;
+  align-items: stretch;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-lift), inset 0 0 0 2px var(--push-edge);
+  color: var(--ink-900);
+  pointer-events: auto;
+  animation: push-in var(--push-slide) ease-out;
+}
+@keyframes push-in {
+  from {
+    transform: translateY(-1.5rem);
+    opacity: 0;
+  }
+}
+.push--alert {
+  --push-edge: var(--alert-600);
+}
+.push--attention {
+  --push-edge: var(--attention-500);
+}
+.push--info,
+.push--neutral {
+  --push-edge: var(--primary-600);
+}
+.push__open {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--tap);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-2) var(--space-3) var(--space-4);
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: transparent;
+  color: inherit;
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  text-align: left;
+  cursor: pointer;
+}
+.push__icon {
+  flex: none;
+  margin-top: var(--space-1);
+}
+.push--alert .push__icon {
+  color: var(--alert-600);
+}
+.push--attention .push__icon {
+  color: var(--attention-700);
+}
+.push--info .push__icon,
+.push--neutral .push__icon {
+  color: var(--primary-600);
+}
+.push__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.push__title {
+  font-weight: 500;
+}
+.push__body {
+  font-size: var(--text-label);
+  color: var(--ink-600);
+}
+.push__close {
+  flex: none;
+  align-self: flex-start;
+}
+
+/* ---------- Notification center (COM-03) ---------- */
+.notif-list,
+.alert-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.notif {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+}
+.notif--unread {
+  background: var(--surface-strong);
+  box-shadow: var(--shadow-soft), inset 0.25rem 0 0 var(--primary-600);
+}
+.notif__open {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-height: var(--tap);
+  padding: var(--space-4);
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: transparent;
+  color: var(--ink-900);
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  text-align: left;
+  cursor: pointer;
+}
+.notif__icon {
+  flex: none;
+  margin-top: var(--space-1);
+  color: var(--primary-600);
+}
+.notif__icon--alert {
+  color: var(--alert-600);
+}
+.notif__icon--attention {
+  color: var(--attention-700);
+}
+.notif__text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.notif--unread .notif__title {
+  font-weight: 500;
+}
+.notif__body {
+  color: var(--ink-600);
+}
+.notif__mark {
+  align-self: flex-end;
+  margin: 0 var(--space-2) var(--space-2);
+}
+
+/* ---------- Alert history and the alert screen (ALR-04, ALR-07) ---------- */
+.alert-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--tap);
+  padding: var(--space-3) var(--space-1);
+  border-bottom: 1px solid var(--ink-300);
+  color: var(--ink-900);
+  text-decoration: none;
+}
+.alert-row__text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.alert-row__title {
+  font-weight: 600;
+}
+.plain-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding-left: var(--space-5);
+}
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.timeline__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-left: var(--space-3);
+  border-left: 3px solid var(--primary-100);
+}
+.card__label {
+  font-size: var(--text-caption);
+  font-weight: 600;
+  color: var(--ink-600);
+}
+.alert-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.alert-claim {
+  font-weight: 600;
+}
+.field__input--multi {
+  resize: vertical;
+  line-height: var(--leading);
+}
+
+/* ---------- Emergency banner (BRG-M-03): pinned until acknowledged ---------- */
+.emergency {
+  position: sticky;
+  top: var(--topbar-min);
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--alert-tint);
+  box-shadow: inset 0 0 0 2px var(--alert-600);
+  color: var(--ink-900);
+}
+.emergency__ring {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--tap);
+  height: var(--tap);
+  border-radius: var(--radius-round);
+  color: var(--alert-600);
+  animation: ring 1.6s ease-out infinite;
+}
+@keyframes ring {
+  from {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--alert-600) 45%, transparent);
+  }
+  to {
+    box-shadow: 0 0 0 0.75rem transparent;
+  }
+}
+.emergency__text {
+  flex: 1;
+  min-width: 0;
+}
+.emergency__title {
+  font-weight: 700;
+}
+.emergency__link {
+  color: var(--ink-900);
+}
+
+/* ---------- The patient's help request status and the SOS shortcut (Section 6, assumption 9) ---------- */
+.sos-status {
+  margin-bottom: var(--space-4);
+}
+.sos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+.sos__button {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--tap);
+  padding: var(--space-3) var(--space-4);
+  border: 2px solid var(--alert-600);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--ink-900);
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  font-weight: 500;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.sos__button > svg {
+  color: var(--alert-600);
+}
+.sos__button > span:not(.sos__fill) {
+  position: relative;
+}
+.sos__fill {
+  position: absolute;
+  inset: 0;
+  background: var(--alert-tint);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.sos__button--holding .sos__fill {
+  animation: sos-fill var(--sos-hold) linear forwards;
+}
+.sos__button--sending .sos__fill,
+.sos__button--sent .sos__fill {
+  transform: scaleX(1);
+}
+.sos__button:disabled {
+  cursor: default;
+}
+@keyframes sos-fill {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* A link that looks like a button keeps no underline. */
+a.btn {
+  text-decoration: none;
+}
+
+.alert-back {
+  align-self: flex-start;
+}

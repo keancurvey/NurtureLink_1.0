@@ -13,6 +13,7 @@ import {
   findDuplicate,
   mergePatch,
 } from '../lib/alertRules.js';
+import { escalationMs, shouldEscalate } from '../lib/alertRules.js';
 import { batteryLevel, voltageForPct } from '../lib/battery.js';
 import { dedupeKey, queuedInOrder, splitDuplicates } from '../lib/offlineQueue.js';
 import { byId } from './ops.js';
@@ -59,6 +60,18 @@ export function createCore({ store, now = Date.now }) {
     return rows;
   }
 
+  /** A notice the patient's phone showed from its own rules that no alert is attached to yet. */
+  const phoneNotice = (patientId, type, sessionId = null) =>
+    state().db.notifications.find(
+      (n) =>
+        n.profile_id === patientId &&
+        n.type === 'alert_notice' &&
+        n.payload.local === true &&
+        !n.payload.alert_id &&
+        n.payload.alert_type === type &&
+        (sessionId === null || n.payload.session_id === sessionId),
+    ) ?? null;
+
   /**
    * Create an alert from a rule's candidate, or merge it into the open alert of the same kind (ALR-04). A new alert
    * goes to the barangay accounts (and to the super accounts where ALR-03 says so) and the patient gets her own notice.
@@ -93,7 +106,10 @@ export function createCore({ store, now = Date.now }) {
     };
     commit([{ op: 'insert', table: 'alerts', row: alert }]);
     sendPush(alertRecipients(alert), 'alert', { alert_id: alert.id, alert_type: alert.type, patient_id: patientId });
-    sendPush([patientId], 'alert_notice', { alert_id: alert.id, alert_type: alert.type });
+    // The phone may have shown her notice already (evaluateOnPhone): the alert is attached to it, so she gets one notice.
+    const shown = readingRef ? phoneNotice(patientId, candidate.type, readingRef) : null;
+    if (shown) commit([{ op: 'update', table: 'notifications', id: shown.id, patch: { payload: { ...shown.payload, alert_id: alert.id } } }]);
+    else sendPush([patientId], 'alert_notice', { alert_id: alert.id, alert_type: alert.type });
     return { alert, created: true };
   }
 
@@ -109,6 +125,41 @@ export function createCore({ store, now = Date.now }) {
       escalated: true,
     });
     return true;
+  }
+
+  /**
+   * The escalation sweep (ALR-05): every alert nobody acknowledged within the escalation time (5 minutes, 60 seconds in
+   * Quick timing) reaches all super accounts. It covers the alerts raised since the records were built: the ones the
+   * seed made to look like history are not escalated when the app opens. Answers how many it escalated.
+   */
+  function sweepEscalations() {
+    const { alerts } = state().db;
+    const ms = escalationMs(thresholds(), state().meta.timing);
+    const at = now();
+    const since = state().seededAt ?? 0;
+    const due = alerts.filter((alert) => alert.created_at >= since && shouldEscalate(alert, at, ms));
+    return due.filter((alert) => escalateAlert(alert.id)).length;
+  }
+
+  /**
+   * The phone runs the rules the moment a check is saved (ALR-02), so the patient has her notice at once, even offline.
+   * Only her own notice is made here: the alert, the barangay's and the midwife's notifications come from the server
+   * path (ingestReadings), which stays the authority and attaches the alert to this notice. A kind she already has open,
+   * or already has a notice for, makes no second one.
+   */
+  function evaluateOnPhone(patientId, { session, fetal = [], maternal = [] }) {
+    const th = thresholds();
+    const db = state().db;
+    const windows = [...fetal].sort((a, b) => a.taken_at - b.taken_at);
+    const vitals = [...maternal].sort((a, b) => a.taken_at - b.taken_at);
+    const summaries = db.check_sessions.filter((s) => s.patient_id === patientId).sort((a, b) => a.started_at - b.started_at).map((s) => s.summary);
+    const candidates = [evaluateFhr(windows, th), vitals.length ? evaluateMaternalVitals(vitals[vitals.length - 1], th) : null, evaluateSignalLoss(summaries, th)];
+    const made = [];
+    for (const candidate of candidates.filter(Boolean)) {
+      if (findDuplicate(db.alerts, patientId, candidate) || phoneNotice(patientId, candidate.type)) continue;
+      made.push(...sendPush([patientId], 'alert_notice', { alert_type: candidate.type, session_id: session.id, local: true }));
+    }
+    return made;
   }
 
   /**
@@ -306,6 +357,8 @@ export function createCore({ store, now = Date.now }) {
     sendPush,
     raiseAlert,
     escalateAlert,
+    sweepEscalations,
+    evaluateOnPhone,
     relaySos,
     ingestReadings,
     recordDeviceStatus,

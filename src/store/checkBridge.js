@@ -168,6 +168,7 @@ export function createCheckBridge({ store, core, link, sched, now = Date.now }) 
       { op: 'insertMany', table: 'maternal_readings', rows: maternal },
     ];
     core.commit(ops);
+    core.evaluateOnPhone(patientId, { session, fetal, maternal }); // ALR-02: the patient's notice at once, even offline
     raiseHighestSeq(beltSerial, summaryPacket.seq);
     for (const v of band) raiseHighestSeq(v.serial, v.device_seq);
 
@@ -352,6 +353,10 @@ export function createCheckBridge({ store, core, link, sched, now = Date.now }) 
       fail(run, 'stopped');
     },
 
+    /** The band was pressed while it was out of reach: the app tells the patient it could not be delivered (until it is relayed). */
+    markSosUndelivered(patientId) {
+      store.dispatch({ type: 'live', patch: { sos: { patient_id: patientId, state: 'undelivered', seq: null } } });
+    },
     isChecking: (patientId) => active.has(patientId),
     isBusy: () => active.size > 0,
     onEvent(listener) {

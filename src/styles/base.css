@@ -101,6 +101,9 @@ a {
   }
   .card--interactive,
   .btn,
+  .push,
+  .sos__fill,
+  .emergency__ring,
   .toast,
   .sheet,
   .sheet-scrim {

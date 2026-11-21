@@ -95,4 +95,6 @@
   --float-duration: 4s;
   --splash-duration: 5s;
   --press-lift: 0.125rem;
+  --sos-hold: 2s; /* the band's SOS hold time (spec 8.1), shown as the fill of the in-app button */
+  --push-slide: 0.25s;
 }

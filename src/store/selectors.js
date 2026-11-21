@@ -73,6 +73,15 @@ export function alertsOf(state, viewer, { patientId = null, status = null } = {}
   );
 }
 
+/** One alert when the viewer may read it (a patient her own, a barangay account its barangay's, a super account any). */
+export function alertById(state, viewer, alertId) {
+  const alert = byId(state.db.alerts).get(alertId) ?? null;
+  return alert && viewer && patientInScope(state, viewer, alert.patient_id) ? alert : null;
+}
+
+/** Alerts not yet resolved (new or acknowledged), newest first, in the viewer's scope. */
+export const openAlertsOf = (state, viewer, { patientId = null } = {}) => alertsOf(state, viewer, { patientId }).filter((a) => a.status !== 'resolved');
+
 /** Visit notes: providers in scope read all; a patient reads only those shared with her. */
 export function visitNotesOf(state, viewer, patientId) {
   const patient = patientInScope(state, viewer, patientId);
@@ -118,6 +127,32 @@ export function notificationsOf(state, viewer) {
   if (!viewer) return [];
   return newestFirst(state.db.notifications.filter((n) => n.profile_id === viewer.id), 'created_at');
 }
+/** How many notifications the viewer has not read yet: the bell's badge (COM-01). */
+export const unreadCountOf = (state, viewer) => (viewer ? state.db.notifications.filter((n) => n.profile_id === viewer.id && !n.read_at).length : 0);
+
+/**
+ * What a notification text needs besides the notification: the patient's name (only when the viewer may read her) and
+ * the event's title (only for events in scope). Used by the notification center and the banners.
+ */
+export function notificationContext(state, viewer, notification) {
+  const p = notification.payload ?? {};
+  const alert = p.alert_id ? byId(state.db.alerts).get(p.alert_id) : null;
+  const patientId = p.patient_id ?? alert?.patient_id ?? null;
+  const patient = patientId ? patientInScope(state, viewer, patientId) : null;
+  const event = p.event_id ? eventsOf(state, viewer).find((e) => e.id === p.event_id) : null;
+  return { role: viewer.role, patientName: patient?.full_name ?? null, eventTitle: event?.title ?? null };
+}
+
+/** The notices her phone showed from its own rules that the server has not made an alert of yet (ALR-02). */
+export const phoneNoticesOf = (state, viewer) =>
+  viewer?.role === 'patient' ? notificationsOf(state, viewer).filter((n) => n.type === 'alert_notice' && n.payload.local === true && !n.payload.alert_id) : [];
+
+/** The account's push choice (COM-04): 'allowed' with a subscription, 'declined' after Not now, otherwise 'unset'. */
+export function pushStateOf(state, profileId) {
+  if (state.db.push_subscriptions.some((s) => s.profile_id === profileId)) return 'allowed';
+  return profileOf(state, profileId)?.push_declined_at ? 'declined' : 'unset';
+}
+
 export const heleMessagesOf = (state, viewer) =>
   viewer ? state.db.hele_messages.filter((m) => m.profile_id === viewer.id).sort((a, b) => a.created_at - b.created_at) : [];
 
@@ -182,6 +217,7 @@ export function accessGate(state, now = Date.now()) {
     hasConsent: hasAcceptedTerms(state, viewer.id),
     minor: patient ? isMinor(patient.birthdate, manilaDate(now)) : false,
     hasGuardianConsent: state.db.guardian_consents.some((g) => g.profile_id === viewer.id),
+    needsPush: pushStateOf(state, viewer.id) === 'unset',
   });
   return { viewer, step, pairing: step === null && viewer.role === 'patient' && needsPairing(state, viewer.id) };
 }
