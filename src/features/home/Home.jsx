@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import PatientNotices from '../../components/alerts/PatientNotices.jsx';
 import Banner from '../../components/ui/Banner.jsx';
 import Button from '../../components/ui/Button.jsx';
 import Card from '../../components/ui/Card.jsx';
@@ -62,6 +63,7 @@ export default function Home() {
             {t('pairPrompt.body')}
           </EmptyState>
         </Card>
+        <PatientNotices />
         <LastCheckCard session={data.session} statuses={data.statuses} waiting={data.waiting} syncedAt={data.syncedAt} />
       </section>
     );
@@ -96,6 +98,8 @@ export default function Home() {
           {reasonText(t, live.reason ?? 'no_reading')}
         </Banner>
       ) : null}
+
+      <PatientNotices />
 
       <LastCheckCard session={data.session} statuses={data.statuses} waiting={data.waiting} syncedAt={data.syncedAt} />
 

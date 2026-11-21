@@ -39,3 +39,11 @@ export function RoleRoute({ role }) {
   if (access.viewer.role !== role) return <Navigate to={landingPath(access.viewer.role)} replace />;
   return <AppShell role={role} />;
 }
+
+/** Screens every role can reach (the alert detail, the notification center): the shell of whoever is signed in. */
+export function SignedInRoute() {
+  const access = useAccess();
+  if (!access.viewer) return <Navigate to="/sign-in" replace />;
+  if (access.step) return <Navigate to={access.target} replace />;
+  return <AppShell role={access.viewer.role} />;
+}
