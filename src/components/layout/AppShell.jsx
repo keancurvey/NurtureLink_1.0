@@ -1,7 +1,12 @@
 import { useEffect, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
+import PushLayer from '../alerts/PushLayer.jsx';
+import PushReminder from '../alerts/PushReminder.jsx';
+import SosStatus from '../alerts/SosStatus.jsx';
 import ProviderSession from '../../features/auth/ProviderSession.jsx';
 import { isProviderRole } from '../../lib/permissions.js';
+import { useStoreValue } from '../../store/hooks.js';
+import { unreadCount } from '../../lib/notifications.js';
 import { useGearOffset } from '../presenter/useGearOffset.js';
 import ConnectionBanner from './ConnectionBanner.jsx';
 import TopBar from './TopBar.jsx';
@@ -17,6 +22,7 @@ export default function AppShell({ role }) {
   const items = NAV[role];
   const isSuper = role === 'super';
   const tabsRef = useRef(null);
+  const unread = useStoreValue((state) => unreadCount(state.db.notifications, state.session?.profile_id));
 
   // The shell tells the gear what is anchored to the bottom (the tab bar) and which layout is showing, so the gear
   // sits above the tabs on phones and at the foot of the side navigation on the super account's desktop layout.
@@ -33,9 +39,12 @@ export default function AppShell({ role }) {
     <div className={`shell ${isSuper ? 'shell--super' : 'shell--phone'}`}>
       {isSuper ? <SideNav role={role} items={items} /> : null}
       <div className="shell__column">
-        <TopBar unreadCount={0 /* TEMP: real unread count in Prompt 5 */} />
+        <TopBar unreadCount={unread} />
         <ConnectionBanner />
+        <PushLayer />
         <main className="shell__main">
+          <SosStatus />
+          <PushReminder dismissible />
           <Outlet />
         </main>
         <BottomTabs ref={tabsRef} role={role} items={items} />

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Bell } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import Logo from '../ui/Logo.jsx';
@@ -31,15 +32,14 @@ export default function TopBar({ unreadCount = 0 }) {
           <span className="topbar__name">{t('app.name')}</span>
         </div>
         <LanguageToggle />
-        {/* TEMP: the bell opens the notification center in Prompt 5; the count stays at 0 until then. */}
-        <button type="button" className="bell" aria-label={bellLabel}>
+        <Link to="/notifications" className="bell" aria-label={bellLabel}>
           <Bell size={24} aria-hidden="true" />
           {unreadCount > 0 ? (
             <span className="bell__count" aria-hidden="true">
               {unreadCount > MAX_COUNT_SHOWN ? `${MAX_COUNT_SHOWN}+` : unreadCount}
             </span>
           ) : null}
-        </button>
+        </Link>
         <span className="topbar__time">{stamp}</span>
       </div>
     </header>

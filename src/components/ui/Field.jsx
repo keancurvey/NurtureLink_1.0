@@ -1,7 +1,8 @@
 import { useId } from 'react';
 import { TriangleAlert } from 'lucide-react';
 
-export default function Field({ label, hint, error, id, className = '', ...inputProps }) {
+export default function Field({ label, hint, error, id, className = '', multiline = false, ...inputProps }) {
+  const Control = multiline ? 'textarea' : 'input';
   const autoId = useId();
   const inputId = id ?? autoId;
   const hintId = hint ? `${inputId}-hint` : undefined;
@@ -12,9 +13,9 @@ export default function Field({ label, hint, error, id, className = '', ...input
       <label className="field__label" htmlFor={inputId}>
         {label}
       </label>
-      <input
+      <Control
         id={inputId}
-        className="field__input"
+        className={multiline ? 'field__input field__input--multi' : 'field__input'}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy}
         {...inputProps}
