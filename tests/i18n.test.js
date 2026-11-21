@@ -198,3 +198,72 @@ test('the texts chosen by a code (reasons, phases, statuses, battery levels, pai
     }
   }
 });
+
+// ---------- Alerts, notifications, escalation (Prompt 5) ----------
+
+const PROMPT5_DIRS = ['../src/features/alerts/', '../src/features/notifications/', '../src/components/alerts/'];
+
+test('every text key the alert, notification and push screens ask for exists in English and Filipino', () => {
+  const tables = { en: new Map(flatten(load('en', 'alerts.json'))), fil: new Map(flatten(load('fil', 'alerts.json'))) };
+  let checked = 0;
+  for (const dir of PROMPT5_DIRS) {
+    const url = new URL(dir, import.meta.url);
+    for (const file of readdirSync(url).filter((f) => f.endsWith('.jsx'))) {
+      const source = readFileSync(new URL(file, url), 'utf8');
+      assert.match(source, /useTranslation\('alerts'\)/, `${file} reads the alerts namespace`);
+      for (const [, key] of source.matchAll(/\bt\(\s*'([\w.]+)'/g)) {
+        for (const lang of ['en', 'fil']) assert.ok(tables[lang].has(key) || tables[lang].has(`${key}_other`), `${lang} alerts:${key} (${file})`);
+        checked += 1;
+      }
+    }
+  }
+  assert.ok(checked > 60, `checked ${checked}`);
+});
+
+test('the texts chosen by a code (alert types, facts, timeline, statuses, notifications, errors) all exist in both languages', async () => {
+  const { describeNotification } = await import('../src/lib/notifications.js');
+  const { alertFacts, alertTimeline } = await import('../src/lib/alertView.js');
+  const wanted = new Set();
+  for (const type of ALERT_TYPES) for (const who of ['provider', 'patient']) wanted.add(`type.${type}.${who}`);
+  for (const status of ['new', 'acknowledged', 'resolved', 'cancelled']) wanted.add(`status.${status}`);
+  const types = ['alert', 'alert_notice', 'battery_low', 'booking_request', 'appointment_approved', 'appointment_started', 'follow_up_open', 'event_created', 'event_reminder', 'message', 'referral', 'video_usage_warning', 'unknown'];
+  for (const role of ['patient', 'barangay', 'super']) {
+    for (const type of types) {
+      for (const extra of [{}, { escalated: true }, { cancelled: true }, { device: 'band' }]) {
+        const view = describeNotification({ type, payload: { alert_type: 'sos', ...extra }, read_at: null }, { role });
+        wanted.add(view.titleKey);
+        if (view.bodyKey) wanted.add(view.bodyKey);
+        if (view.values.typeKey) wanted.add(view.values.typeKey);
+      }
+    }
+  }
+  const metrics = [{ metric: 'spo2', value: 90 }, { metric: 'skin_temperature', value: 39 }, ...['low', 'high'].map((direction) => ({ metric: 'heart_rate', value: 1, direction }))];
+  const payloads = {
+    fhr_out_of_range: [{ direction: 'low' }, { direction: 'high' }], signal_loss: [{}], maternal_vitals: [{ metrics }],
+    sos: [{ source: 'app' }, { battery: 50 }, { battery: null }], battery_critical: [{ device: 'belt' }, { device: 'band' }], missed_check: [{}],
+  };
+  for (const type of ALERT_TYPES) for (const payload of payloads[type]) for (const fact of alertFacts({ type, payload })) wanted.add(fact.key);
+  const alert = { created_at: 1, last_seen_at: 2, merged_count: 1, escalated_at: 3, acknowledged_at: 4, acknowledged_by: 'x', referred_at: 5, referred_by: 'x' };
+  for (const status of ['acknowledged', 'resolved']) for (const step of alertTimeline({ ...alert, status, resolved_at: 6, resolved_by: 'x' })) wanted.add(`timeline.${step.key}`);
+  wanted.add('timeline.cancelled');
+  for (const code of ['already_acknowledged', 'resolved', 'already_resolved', 'not_allowed', 'not_found', 'not_acknowledged', 'not_yours', 'outcome_required', 'outcome_too_long', 'reason_required', 'reason_too_long', 'already_referred', 'generic']) wanted.add(`actions.error.${code}`);
+  for (const code of ['acknowledged', 'resolved', 'referred']) wanted.add(`actions.done.${code}`);
+  assert.ok(wanted.size > 70, `checking ${wanted.size}`);
+  for (const lang of ['en', 'fil']) {
+    const table = new Map(flatten(load(lang, 'alerts.json')));
+    for (const key of wanted) assert.ok(table.has(key), `${lang} alerts:${key}`);
+  }
+});
+
+test('the patient wording of an alert never reads as a diagnosis', () => {
+  const diagnostic = /\b(distress|hypoxia|fever|bradycardia|tachycardia|preeclampsia|miscarriage|fetal|diagnos\w*)\b/i;
+  for (const lang of ['en', 'fil']) {
+    const table = new Map(flatten(load(lang, 'alerts.json')));
+    for (const [key, text] of table) {
+      if (/\.patient$/.test(key) || key.startsWith('detail.notice') || key.startsWith('notice.') || key.startsWith('sos.') || key === 'notification.alert_notice') {
+        assert.doesNotMatch(text, diagnostic, `${lang} alerts:${key}`);
+      }
+    }
+    assert.match(table.get('notification.alert_notice'), lang === 'en' ? /contact your barangay health worker or midwife/ : /barangay health worker o midwife/, 'ALR-06');
+  }
+});

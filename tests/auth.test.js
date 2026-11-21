@@ -119,7 +119,7 @@ test('each role has the tabs of spec Appendix A and lands on its first one (AUTH
   assert.equal(landingPath(null), '/sign-in');
 });
 
-test('the steps before the app come in order: new password, consent, guardian consent', () => {
+test('the steps before the app come in order: new password, consent, guardian consent, push', () => {
   const base = { role: 'patient', mustChangePassword: false, hasConsent: true, minor: false, hasGuardianConsent: false };
   assert.equal(gateStep(base), null);
   assert.equal(gateStep({ ...base, hasConsent: false }), 'consent');
@@ -130,7 +130,9 @@ test('the steps before the app come in order: new password, consent, guardian co
   assert.equal(gateStep({ ...base, role: 'super', mustChangePassword: true, hasConsent: false }), 'change-password');
   assert.equal(gateStep({ ...base, role: 'barangay', mustChangePassword: true }), 'change-password');
   assert.equal(gateStep({ ...base, mustChangePassword: true }), null, 'a patient is never forced (AUTH-03 is for provider accounts)');
-  assert.deepEqual(Object.keys(GATE_PATHS).sort(), ['change-password', 'consent', 'guardian-consent']);
+  assert.equal(gateStep({ ...base, needsPush: true }), 'push', 'the push choice comes last (COM-04)');
+  assert.equal(gateStep({ ...base, minor: true, needsPush: true }), 'guardian-consent', 'the guardian first');
+  assert.deepEqual(Object.keys(GATE_PATHS).sort(), ['change-password', 'consent', 'guardian-consent', 'push']);
 });
 
 test('only provider accounts get the gear action that expires the session', () => {
@@ -278,6 +280,8 @@ test('accepting the terms records the document version and the time, and lets an
   assert.equal(rt.auth.acceptConsent().ok, true);
   const record = rt.db().consents.find((c) => c.profile_id === id);
   assert.deepEqual([record.document, record.version, record.accepted_at], ['terms_privacy', AUTH.termsVersion, NOW + 60000]);
+  assert.equal(sel.accessGate(rt.state(), NOW).step, 'push', 'a new account has not yet chosen push notifications (COM-04)');
+  rt.alerts.allowPush();
   assert.equal(sel.accessGate(rt.state(), NOW).step, null);
   // A new patient has no devices and has not seen the pairing wizard: she lands on it (AUTH-07, Prompt 4).
   assert.equal(sel.accessTarget(rt.state(), NOW), '/patient/pair');
@@ -300,7 +304,9 @@ test('a patient under 18 cannot go on without the guardian consent (AUTH-06)', (
   assert.equal(rt.auth.saveGuardianConsent({ guardian_name: 'Teresita Ilagan', relationship: 'mother', contact: '09175550244', acknowledged: true }).ok, true);
   const record = rt.db().guardian_consents.find((g) => g.profile_id === id);
   assert.deepEqual([record.guardian_name, record.relationship, record.contact, record.signed_at], ['Teresita Ilagan', 'mother', '0917 555 0244', NOW + 1000]);
-  assert.equal(sel.accessGate(rt.state(), NOW).step, null);
+  assert.equal(sel.accessGate(rt.state(), NOW).step, 'push');
+  rt.alerts.declinePush();
+  assert.equal(sel.accessGate(rt.state(), NOW).step, null, 'Not now also answers the question');
 });
 
 test('the seeded patient under 18 has her guardian consent on file, so she goes straight in', () => {
@@ -342,6 +348,8 @@ test('a provider account made by a super account must change the password before
   assert.equal(rt.auth.changePassword({ password: 'Tingloy-Care-2026' }).ok, true);
   assert.equal(sel.accessGate(rt.state(), NOW).step, 'consent', 'then the terms, which every role accepts');
   rt.auth.acceptConsent();
+  assert.equal(sel.accessGate(rt.state(), NOW).step, 'push');
+  rt.alerts.allowPush();
   assert.equal(sel.accessTarget(rt.state(), NOW), '/barangay/monitor');
 
   rt.auth.signOut();
