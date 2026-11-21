@@ -1,1 +1,211 @@
-{}
+{
+  "type": {
+    "fhr_out_of_range": {
+      "provider": "FHR out of range",
+      "patient": "Belt reading outside the usual range"
+    },
+    "signal_loss": {
+      "provider": "Repeated signal loss",
+      "patient": "No clear belt reading several times"
+    },
+    "maternal_vitals": {
+      "provider": "Maternal vitals out of range",
+      "patient": "Wrist band reading outside the usual range"
+    },
+    "sos": {
+      "provider": "SOS",
+      "patient": "Help request sent"
+    },
+    "battery_critical": {
+      "provider": "Device battery critical",
+      "patient": "Device battery very low"
+    },
+    "missed_check": {
+      "provider": "Missed check-up",
+      "patient": "No check in the last 24 hours"
+    }
+  },
+  "fact": {
+    "fhr_low": "Fetal heart rate stayed below {{limit}} bpm for {{seconds}} seconds. Lowest: {{bpm}} bpm.",
+    "fhr_high": "Fetal heart rate stayed above {{limit}} bpm for {{seconds}} seconds. Highest: {{bpm}} bpm.",
+    "signal_loss": "No usable reading in {{count}} checks in a row.",
+    "heart_rate_low": "Maternal heart rate {{value}} bpm, below {{limit}} bpm.",
+    "heart_rate_high": "Maternal heart rate {{value}} bpm, above {{limit}} bpm.",
+    "spo2": "SpO2 {{value}}%, below {{limit}}%.",
+    "skin_temperature": "Skin temperature {{value}} °C, above {{limit}} °C.",
+    "sos_band": "SOS pressed on the wrist band. Band battery {{battery}}%.",
+    "sos_band_nobattery": "SOS pressed on the wrist band.",
+    "sos_app": "SOS sent from the app.",
+    "battery_belt": "Belt battery at {{pct}}%.",
+    "battery_band": "Wrist band battery at {{pct}}%.",
+    "missed_check": "No completed check in {{hours}} hours."
+  },
+  "status": {
+    "new": "New",
+    "acknowledged": "Acknowledged",
+    "resolved": "Resolved",
+    "cancelled": "Cancelled"
+  },
+  "timeline": {
+    "raised": "Alert raised",
+    "merged": "Repeated {{count}} more times",
+    "escalated": "Not acknowledged in time: sent to the Municipal Health Office",
+    "acknowledged": "Acknowledged by {{name}}",
+    "referred": "Referred to the midwife by {{name}}",
+    "resolved": "Resolved by {{name}}",
+    "cancelled": "Cancelled by {{name}}"
+  },
+  "notification": {
+    "alert": {
+      "new": "{{patient}}: {{type}}",
+      "escalated": "Not acknowledged in time. {{patient}}: {{type}}",
+      "cancelled": "{{patient}} cancelled the SOS"
+    },
+    "alert_notice": "Please contact your barangay health worker or midwife",
+    "alert_notice_body": "{{type}}.",
+    "battery_low": {
+      "belt": "Your belt battery is at {{pct}}%. Please charge it soon.",
+      "band": "Your wrist band battery is at {{pct}}%. Please charge it soon."
+    },
+    "booking_request": "{{patient}} asked for a consultation",
+    "appointment_approved": {
+      "patient": "Your appointment was approved",
+      "provider": "Appointment approved for {{patient}}"
+    },
+    "appointment_started": {
+      "patient": "Your appointment is starting",
+      "provider": "Appointment with {{patient}} is starting"
+    },
+    "follow_up_open": "You can message the midwife for the next 24 hours",
+    "event_created": "New event: {{title}}",
+    "event_reminder": "Reminder: {{title}}",
+    "message": {
+      "patient": "New message from your health worker",
+      "provider": "New message from {{patient}}"
+    },
+    "referral": "Referral for {{patient}}",
+    "video_usage_warning": "Video minutes are at {{percent}}% of this month's allowance",
+    "other": "New notification"
+  },
+  "center": {
+    "title": "Notifications",
+    "markAll": "Mark all as read",
+    "markOne": "Mark as read",
+    "unread": "Unread",
+    "emptyTitle": "No notifications yet",
+    "emptyBody": "Alerts, messages and reminders will show here.",
+    "count": "{{count}} unread",
+    "allRead": "All read",
+    "list": "Notifications, newest first"
+  },
+  "banner": {
+    "region": "New notifications",
+    "group": "{{count}} new notifications",
+    "groupBody": "Tap to read them",
+    "dismiss": "Dismiss notification",
+    "now": "Just now"
+  },
+  "detail": {
+    "title": "Alert",
+    "back": "Back",
+    "patient": "Patient",
+    "what": "What was noticed",
+    "history": "What happened",
+    "outcome": "Outcome",
+    "respond": "Respond",
+    "noticeTitle": "Please contact your barangay health worker or midwife",
+    "noticeBody": "Your health team has been told. If you feel unwell or worried, contact them now.",
+    "message": "Message my barangay health worker",
+    "handled": "{{name}} has seen this alert.",
+    "closed": "This alert is closed.",
+    "notFoundTitle": "This alert is not available",
+    "notFoundBody": "It may belong to another account.",
+    "openAlerts": "Back to Home",
+    "raisedAt": "Raised {{time}}"
+  },
+  "actions": {
+    "title": "Respond to alert",
+    "acknowledge": "Acknowledge",
+    "acknowledging": "Acknowledging",
+    "claimed": "Acknowledged by {{name}}",
+    "claimedYou": "You acknowledged this alert",
+    "call": "Call {{name}}",
+    "chat": "Open chat",
+    "refer": "Refer to the midwife",
+    "referred": "Referred to the midwife by {{name}}",
+    "resolve": "Resolve",
+    "resolveTitle": "Resolve alert",
+    "outcomeLabel": "Outcome note",
+    "outcomeHint": "What was done and the result.",
+    "referTitle": "Refer to the midwife",
+    "reasonLabel": "Reason for referral",
+    "reasonHint": "The midwife also receives the patient's latest readings.",
+    "send": "Send referral",
+    "saveResolve": "Resolve alert",
+    "back": "Back",
+    "cancel": "Cancel",
+    "notYours": "Only {{name}} or a super account can resolve this alert.",
+    "claimFirst": "Acknowledge the alert first.",
+    "closed": "This alert is resolved.",
+    "done": {
+      "acknowledged": "You acknowledged the alert.",
+      "resolved": "The alert is resolved.",
+      "referred": "Referral sent to the midwife."
+    },
+    "error": {
+      "already_acknowledged": "{{name}} acknowledged this alert first.",
+      "resolved": "This alert is already resolved.",
+      "already_resolved": "This alert is already resolved.",
+      "not_allowed": "You cannot act on this alert.",
+      "not_found": "This alert is not available.",
+      "not_acknowledged": "Acknowledge the alert first.",
+      "not_yours": "Only the account that acknowledged this alert can do that.",
+      "outcome_required": "Write a short outcome note.",
+      "outcome_too_long": "The outcome note is too long.",
+      "reason_required": "Write the reason for the referral.",
+      "reason_too_long": "The reason is too long.",
+      "already_referred": "{{name}} already referred this patient.",
+      "generic": "Something went wrong. Please try again."
+    }
+  },
+  "history": {
+    "title": "Alert history",
+    "empty": "No alerts so far.",
+    "item": "{{type}}, {{status}}, {{time}}"
+  },
+  "notice": {
+    "title": "Please contact your barangay health worker or midwife",
+    "view": "View details"
+  },
+  "sos": {
+    "sentTitle": "Help request sent",
+    "sentBody": "Your barangay health worker and the midwife have been told.",
+    "seenBody": "{{name}} has seen your help request.",
+    "undeliveredTitle": "Help request not sent yet",
+    "undeliveredBody": "It will be sent as soon as your phone or band is connected again. Call your health worker if you can."
+  },
+  "sosButton": {
+    "label": "Hold for 2 seconds to send an SOS",
+    "hint": "Press and hold the button. Letting go early cancels it.",
+    "holding": "Keep holding",
+    "sending": "Sending",
+    "sent": "SOS sent",
+    "title": "Need help now?"
+  },
+  "push": {
+    "title": "Turn on notifications?",
+    "body": "NurtureLink can alert you right away about check results, messages and reminders, even when the app is closed.",
+    "point1": "Alerts about your readings reach you and your health team quickly.",
+    "point2": "You can still read every notification inside the app.",
+    "allow": "Allow notifications",
+    "later": "Not now",
+    "reminderTitle": "Notifications are off",
+    "reminderBody": "You will only see alerts inside the app.",
+    "turnOn": "Turn on",
+    "close": "Hide reminder"
+  },
+  "emergency": {
+    "title": "Emergency: {{patient}}",
+    "respond": "Respond"
+  }
+}

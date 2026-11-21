@@ -1,1 +1,211 @@
-{}
+{
+  "type": {
+    "fhr_out_of_range": {
+      "provider": "FHR na wala sa saklaw",
+      "patient": "Sukat ng belt na wala sa karaniwang saklaw"
+    },
+    "signal_loss": {
+      "provider": "Paulit-ulit na pagkawala ng signal",
+      "patient": "Walang malinaw na sukat ng belt nang ilang beses"
+    },
+    "maternal_vitals": {
+      "provider": "Vital signs ng ina na wala sa saklaw",
+      "patient": "Sukat ng wrist band na wala sa karaniwang saklaw"
+    },
+    "sos": {
+      "provider": "SOS",
+      "patient": "Naipadala na ang hiling mo ng tulong"
+    },
+    "battery_critical": {
+      "provider": "Kritikal ang baterya ng device",
+      "patient": "Napakababa na ng baterya ng device"
+    },
+    "missed_check": {
+      "provider": "Hindi nagawang check-up",
+      "patient": "Walang check sa nakalipas na 24 oras"
+    }
+  },
+  "fact": {
+    "fhr_low": "Nanatiling mas mababa sa {{limit}} bpm ang tibok ng puso ng sanggol sa loob ng {{seconds}} segundo. Pinakamababa: {{bpm}} bpm.",
+    "fhr_high": "Nanatiling mas mataas sa {{limit}} bpm ang tibok ng puso ng sanggol sa loob ng {{seconds}} segundo. Pinakamataas: {{bpm}} bpm.",
+    "signal_loss": "Walang magamit na sukat sa {{count}} magkakasunod na check.",
+    "heart_rate_low": "Tibok ng puso ng ina: {{value}} bpm, mas mababa sa {{limit}} bpm.",
+    "heart_rate_high": "Tibok ng puso ng ina: {{value}} bpm, mas mataas sa {{limit}} bpm.",
+    "spo2": "SpO2 {{value}}%, mas mababa sa {{limit}}%.",
+    "skin_temperature": "Temperatura ng balat {{value}} °C, mas mataas sa {{limit}} °C.",
+    "sos_band": "Pinindot ang SOS sa wrist band. Baterya ng band: {{battery}}%.",
+    "sos_band_nobattery": "Pinindot ang SOS sa wrist band.",
+    "sos_app": "Ipinadala ang SOS mula sa app.",
+    "battery_belt": "Nasa {{pct}}% ang baterya ng belt.",
+    "battery_band": "Nasa {{pct}}% ang baterya ng wrist band.",
+    "missed_check": "Walang natapos na check sa loob ng {{hours}} oras."
+  },
+  "status": {
+    "new": "Bago",
+    "acknowledged": "Tinanggap",
+    "resolved": "Naresolba",
+    "cancelled": "Kinansela"
+  },
+  "timeline": {
+    "raised": "Lumabas ang alerto",
+    "merged": "Umulit pa nang {{count}} beses",
+    "escalated": "Walang tumugon sa takdang oras: ipinasa sa Municipal Health Office",
+    "acknowledged": "Tinanggap ni {{name}}",
+    "referred": "Inirefer ni {{name}} sa midwife",
+    "resolved": "Naresolba ni {{name}}",
+    "cancelled": "Kinansela ni {{name}}"
+  },
+  "notification": {
+    "alert": {
+      "new": "{{patient}}: {{type}}",
+      "escalated": "Walang tumugon sa takdang oras. {{patient}}: {{type}}",
+      "cancelled": "Kinansela ni {{patient}} ang SOS"
+    },
+    "alert_notice": "Makipag-ugnayan sa barangay health worker o midwife mo",
+    "alert_notice_body": "{{type}}.",
+    "battery_low": {
+      "belt": "Nasa {{pct}}% na lang ang baterya ng belt mo. I-charge na ito sa lalong madaling panahon.",
+      "band": "Nasa {{pct}}% na lang ang baterya ng wrist band mo. I-charge na ito sa lalong madaling panahon."
+    },
+    "booking_request": "Humiling ng konsultasyon si {{patient}}",
+    "appointment_approved": {
+      "patient": "Naaprubahan ang appointment mo",
+      "provider": "Naaprubahan ang appointment ni {{patient}}"
+    },
+    "appointment_started": {
+      "patient": "Magsisimula na ang appointment mo",
+      "provider": "Magsisimula na ang appointment kay {{patient}}"
+    },
+    "follow_up_open": "Puwede mong i-message ang midwife sa susunod na 24 oras",
+    "event_created": "Bagong event: {{title}}",
+    "event_reminder": "Paalala: {{title}}",
+    "message": {
+      "patient": "Bagong mensahe mula sa health worker mo",
+      "provider": "Bagong mensahe mula kay {{patient}}"
+    },
+    "referral": "Referral para kay {{patient}}",
+    "video_usage_warning": "Nasa {{percent}}% na ang video minutes ngayong buwan",
+    "other": "Bagong abiso"
+  },
+  "center": {
+    "title": "Mga abiso",
+    "markAll": "Markahang nabasa na lahat",
+    "markOne": "Markahang nabasa na",
+    "unread": "Hindi pa nababasa",
+    "emptyTitle": "Wala pang abiso",
+    "emptyBody": "Dito lalabas ang mga alerto, mensahe at paalala.",
+    "count": "{{count}} ang hindi pa nababasa",
+    "allRead": "Nabasa na lahat",
+    "list": "Mga abiso, pinakabago muna"
+  },
+  "banner": {
+    "region": "Mga bagong abiso",
+    "group": "{{count}} bagong abiso",
+    "groupBody": "I-tap para basahin",
+    "dismiss": "Alisin ang abiso",
+    "now": "Ngayon lang"
+  },
+  "detail": {
+    "title": "Alerto",
+    "back": "Bumalik",
+    "patient": "Pasyente",
+    "what": "Ano ang napansin",
+    "history": "Ano ang nangyari",
+    "outcome": "Kinalabasan",
+    "respond": "Tumugon",
+    "noticeTitle": "Makipag-ugnayan sa barangay health worker o midwife mo",
+    "noticeBody": "Alam na ito ng health team mo. Kung masama ang pakiramdam mo o nag-aalala ka, makipag-ugnayan sa kanila ngayon.",
+    "message": "I-message ang barangay health worker ko",
+    "handled": "Nakita na ni {{name}} ang alerto na ito.",
+    "closed": "Sarado na ang alerto na ito.",
+    "notFoundTitle": "Hindi available ang alerto na ito",
+    "notFoundBody": "Maaaring sa ibang account ito.",
+    "openAlerts": "Bumalik sa Home",
+    "raisedAt": "Lumabas {{time}}"
+  },
+  "actions": {
+    "title": "Tumugon sa alerto",
+    "acknowledge": "Tanggapin",
+    "acknowledging": "Tinatanggap",
+    "claimed": "Tinanggap ni {{name}}",
+    "claimedYou": "Ikaw ang tumanggap ng alerto na ito",
+    "call": "Tawagan si {{name}}",
+    "chat": "Buksan ang chat",
+    "refer": "I-refer sa midwife",
+    "referred": "Inirefer ni {{name}} sa midwife",
+    "resolve": "I-resolba",
+    "resolveTitle": "I-resolba ang alerto",
+    "outcomeLabel": "Tala ng kinalabasan",
+    "outcomeHint": "Ano ang ginawa at ano ang resulta.",
+    "referTitle": "I-refer sa midwife",
+    "reasonLabel": "Dahilan ng referral",
+    "reasonHint": "Matatanggap din ng midwife ang pinakabagong sukat ng pasyente.",
+    "send": "Ipadala ang referral",
+    "saveResolve": "I-resolba ang alerto",
+    "back": "Bumalik",
+    "cancel": "Kanselahin",
+    "notYours": "Si {{name}} o isang super account lang ang puwedeng mag-resolba ng alerto na ito.",
+    "claimFirst": "Tanggapin muna ang alerto.",
+    "closed": "Naresolba na ang alerto na ito.",
+    "done": {
+      "acknowledged": "Tinanggap mo ang alerto.",
+      "resolved": "Naresolba na ang alerto.",
+      "referred": "Naipadala ang referral sa midwife."
+    },
+    "error": {
+      "already_acknowledged": "Naunahan ka ni {{name}} sa pagtanggap ng alerto na ito.",
+      "resolved": "Naresolba na ang alerto na ito.",
+      "already_resolved": "Naresolba na ang alerto na ito.",
+      "not_allowed": "Hindi mo puwedeng gawin ito sa alerto na ito.",
+      "not_found": "Hindi available ang alerto na ito.",
+      "not_acknowledged": "Tanggapin muna ang alerto.",
+      "not_yours": "Ang account lang na tumanggap ng alerto na ito ang puwedeng gumawa nito.",
+      "outcome_required": "Magsulat ng maikling tala ng kinalabasan.",
+      "outcome_too_long": "Masyadong mahaba ang tala ng kinalabasan.",
+      "reason_required": "Isulat ang dahilan ng referral.",
+      "reason_too_long": "Masyadong mahaba ang dahilan.",
+      "already_referred": "Inirefer na ni {{name}} ang pasyenteng ito.",
+      "generic": "May nangyaring mali. Subukan ulit."
+    }
+  },
+  "history": {
+    "title": "Kasaysayan ng mga alerto",
+    "empty": "Wala pang alerto.",
+    "item": "{{type}}, {{status}}, {{time}}"
+  },
+  "notice": {
+    "title": "Makipag-ugnayan sa barangay health worker o midwife mo",
+    "view": "Tingnan ang detalye"
+  },
+  "sos": {
+    "sentTitle": "Naipadala na ang hiling mo ng tulong",
+    "sentBody": "Alam na ito ng barangay health worker mo at ng midwife.",
+    "seenBody": "Nakita na ni {{name}} ang hiling mo ng tulong.",
+    "undeliveredTitle": "Hindi pa naipapadala ang hiling mo ng tulong",
+    "undeliveredBody": "Ipapadala ito kapag nakakonekta na ulit ang phone o band mo. Tawagan ang health worker mo kung kaya."
+  },
+  "sosButton": {
+    "label": "Pindutin at hawakan nang 2 segundo para magpadala ng SOS",
+    "hint": "Pindutin at hawakan ang button. Kapag binitawan nang maaga, makakansela ito.",
+    "holding": "Huwag bitawan",
+    "sending": "Ipinapadala",
+    "sent": "Naipadala ang SOS",
+    "title": "Kailangan mo ng tulong ngayon?"
+  },
+  "push": {
+    "title": "I-on ang mga abiso?",
+    "body": "Maaabisuhan ka agad ng NurtureLink tungkol sa resulta ng check, mga mensahe at paalala, kahit sarado ang app.",
+    "point1": "Mabilis na makakarating sa iyo at sa health team mo ang mga alerto tungkol sa sukat mo.",
+    "point2": "Mababasa mo pa rin ang bawat abiso sa loob ng app.",
+    "allow": "Payagan ang mga abiso",
+    "later": "Hindi muna",
+    "reminderTitle": "Naka-off ang mga abiso",
+    "reminderBody": "Sa loob lang ng app mo makikita ang mga alerto.",
+    "turnOn": "I-on",
+    "close": "Itago ang paalala"
+  },
+  "emergency": {
+    "title": "Emergency: {{patient}}",
+    "respond": "Tumugon"
+  }
+}

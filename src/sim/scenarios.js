@@ -260,7 +260,13 @@ export const SCENARIOS = [
     labelKey: 'presenter:scenario.sosBandOutOfRange',
     steps: () => [
       { run: (ctx) => ctx.link.disconnect(bandOf(ctx).serial) },
-      { after: 1 * SECOND, run: (ctx) => ctx.control.pressSos(bandOf(ctx).serial) },
+      {
+        after: 1 * SECOND,
+        run(ctx) {
+          ctx.control.pressSos(bandOf(ctx).serial);
+          ctx.bridge.markSosUndelivered(ctx.patientId); // the app tells her it could not be delivered
+        },
+      },
       { after: 8 * SECOND, run: (ctx) => reconnect(ctx, bandOf(ctx).serial) },
       { until: (ctx) => alertsSince(ctx).some((a) => a.type === 'sos'), limit: 30 * SECOND },
     ],
@@ -289,7 +295,9 @@ export const SCENARIOS = [
         after: (ctx) => ctx.escalationMs(),
         scale: false,
         run(ctx) {
-          ctx.result.escalated = ctx.core.escalateAlert(ctx.result.alertId);
+          // The sweep may have escalated it a moment before this step: either way it reached the super accounts.
+          ctx.core.escalateAlert(ctx.result.alertId);
+          ctx.result.escalated = Boolean(ctx.state().db.alerts.find((a) => a.id === ctx.result.alertId)?.escalated_at);
         },
       },
     ],

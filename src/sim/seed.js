@@ -831,6 +831,17 @@ export function createSeed({ now = Date.now(), seed = 20261108 } = {}) {
     });
   }
   db.access_log.sort((a, b) => a.at - b.at);
+
+  // Push notifications (COM-04): every seeded account chose them on this phone long ago, so only a new sign-up is asked.
+  for (const profile of db.profiles) {
+    db.push_subscriptions.push({
+      id: id('psh'),
+      profile_id: profile.id,
+      endpoint: `https://push.nurturelink.ph/s/${profile.id}`,
+      keys: { p256dh: `p256dh-${profile.id}`, auth: `auth-${profile.id}` },
+      created_at: now - 20 * MS_DAY,
+    });
+  }
   db.export_log.push(
     { id: id('exl'), actor_id: 'rowena-macaraig', filter: 'All barangays', row_count: 20, at: now - 12 * MS_DAY },
     { id: id('exl'), actor_id: 'cynthia-dimayuga', filter: 'Barangay 14 (Poblacion 2)', row_count: 3, at: now - 6 * MS_DAY },
