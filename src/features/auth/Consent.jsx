@@ -9,7 +9,7 @@ import { thresholdsOf } from '../../store/selectors.js';
 import AuthLayout from './AuthLayout.jsx';
 
 // The order of the document. Each section has a title and a body in the consent namespace; a body can run to paragraphs.
-const SECTIONS = ['about', 'using', 'readings', 'hele', 'access', 'video', 'retention', 'rights', 'providers', 'contact'];
+export const SECTIONS = ['about', 'using', 'readings', 'hele', 'access', 'video', 'retention', 'rights', 'providers', 'contact'];
 const GEAR_TICK_MS = 400;
 
 /** AUTH-05: the Terms of Service and data privacy consent. Access stays closed until it is accepted; version and time are recorded. */

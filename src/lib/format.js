@@ -25,3 +25,23 @@ export function formatRelative(ms, nowMs, lang = 'en') {
   if (seconds < 24 * 3600) return format.format(-Math.round(seconds / 3600), 'hour');
   return formatDateTime(ms, lang);
 }
+
+/** Time of day only, for example "3:45 pm". */
+export function formatTime(ms, lang = 'en') {
+  return new Intl.DateTimeFormat(localeOf(lang), { timeZone: TIME_ZONE, hour: 'numeric', minute: '2-digit', hour12: true }).format(new Date(ms));
+}
+
+/** A Manila calendar date ('YYYY-MM-DD') in full, for example "Friday, November 27". With year: "Friday, November 27, 2026". */
+export function formatDateLong(date, lang = 'en', { year = false } = {}) {
+  return new Intl.DateTimeFormat(localeOf(lang), { timeZone: 'UTC', weekday: 'long', month: 'long', day: 'numeric', ...(year ? { year: 'numeric' } : {}) }).format(new Date(`${date}T12:00:00Z`));
+}
+
+/** A date without the weekday, for example "Nov 27, 2026". */
+export function formatDateShort(date, lang = 'en') {
+  return new Intl.DateTimeFormat(localeOf(lang), { timeZone: 'UTC', month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(`${date}T12:00:00Z`));
+}
+
+/** "today", "tomorrow", "in 3 days" (days remaining) through Intl. */
+export function formatDaysAway(days, lang = 'en') {
+  return new Intl.RelativeTimeFormat(localeOf(lang), { numeric: 'auto' }).format(days, 'day');
+}

@@ -30,12 +30,16 @@ export function notificationPath(role, notification) {
     case 'battery_low':
       return tab(role, 'home');
     case 'booking_request':
+    case 'barangay_change_request':
     case 'referral':
     case 'appointment_started':
     case 'follow_up_open':
     case 'message':
       return role === 'barangay' ? tab(role, 'chat') : tab(role, 'consult');
+    case 'reschedule_request': // the approvals queue for a super account; the calendar for the barangay account whose patient's visit is moving
+      return role === 'barangay' ? tab(role, 'calendar') : tab(role, 'consult');
     case 'appointment_approved':
+    case 'appointment_reminder':
     case 'event_created':
     case 'event_reminder':
       return role === 'barangay' ? tab(role, 'calendar') : tab(role, 'schedule');
@@ -46,7 +50,7 @@ export function notificationPath(role, notification) {
   }
 }
 
-const ICONS = { alert: 'alert', alert_notice: 'alert', battery_low: 'battery', booking_request: 'calendar', appointment_approved: 'calendar', appointment_started: 'video', follow_up_open: 'chat', event_created: 'calendar', event_reminder: 'calendar', message: 'chat', referral: 'chat', video_usage_warning: 'video' };
+const ICONS = { alert: 'alert', alert_notice: 'alert', battery_low: 'battery', booking_request: 'calendar', reschedule_request: 'calendar', barangay_change_request: 'chat', appointment_reminder: 'calendar', appointment_approved: 'calendar', appointment_started: 'video', follow_up_open: 'chat', event_created: 'calendar', event_reminder: 'calendar', message: 'chat', referral: 'chat', video_usage_warning: 'video' };
 
 /**
  * What to show for a notification: texts are keys under alerts:notification.*, values may hold `...Key` entries that the
@@ -69,6 +73,12 @@ export function describeNotification(notification, { role, patientName = null, e
       return { ...base, tone: 'attention', titleKey: `notification.battery_low.${p.device === 'band' ? 'band' : 'belt'}`, values: { pct: p.pct } };
     case 'booking_request':
       return { ...base, tone: 'info', titleKey: 'notification.booking_request', values: { patient: patientName ?? '' } };
+    case 'reschedule_request':
+      return { ...base, tone: 'info', titleKey: 'notification.reschedule_request', values: { patient: patientName ?? '' } };
+    case 'barangay_change_request':
+      return { ...base, tone: 'info', titleKey: 'notification.barangay_change_request', values: { patient: patientName ?? '' } };
+    case 'appointment_reminder':
+      return { ...base, tone: 'info', titleKey: `notification.appointment_reminder.${p.lead === 'hours' ? 'hours' : 'day'}`, values: { kindKey: `notification.kind.${p.kind ?? 'clinic'}` } };
     case 'appointment_approved':
       return { ...base, tone: 'info', titleKey: role === 'patient' ? 'notification.appointment_approved.patient' : 'notification.appointment_approved.provider', values: { patient: patientName ?? '' } };
     case 'appointment_started':
@@ -78,7 +88,7 @@ export function describeNotification(notification, { role, patientName = null, e
     case 'event_created':
       return { ...base, tone: 'info', titleKey: 'notification.event_created', values: { title: eventTitle ?? '' } };
     case 'event_reminder':
-      return { ...base, tone: 'info', titleKey: 'notification.event_reminder', values: { title: eventTitle ?? '' } };
+      return { ...base, tone: 'info', titleKey: p.lead ? `notification.event_reminder_lead.${p.lead === 'hours' ? 'hours' : 'day'}` : 'notification.event_reminder', values: { title: eventTitle ?? '' } };
     case 'message':
       return { ...base, tone: 'info', titleKey: role === 'patient' ? 'notification.message.patient' : 'notification.message.provider', values: { patient: patientName ?? '' } };
     case 'referral':
