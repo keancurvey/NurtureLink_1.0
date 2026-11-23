@@ -1,1 +1,163 @@
-{}
+{
+  "title": "Profile",
+  "cancel": "Kanselahin",
+  "error": {
+    "required": "Kailangan ito.",
+    "phone": "Maglagay ng mobile number, halimbawa 0917 555 0123.",
+    "fullName": "Ilagay ang una at huling pangalan.",
+    "tooLong": "Masyadong mahaba. Hanggang {{max}} na letra lang.",
+    "taken": "Gamit na ng ibang account ang numerong ito.",
+    "date": "Maglagay ng totoong petsa.",
+    "future": "Pumili ng petsa pagkatapos ng ngayon.",
+    "barangay": "Pumili ng barangay sa listahan.",
+    "same_barangay": "Pumili ng barangay na iba sa kinaroroonan mo.",
+    "wrong": "Hindi ito ang kasalukuyan mong password.",
+    "mismatch": "Hindi magkapareho ang dalawang password.",
+    "weak": "Gumamit ng hindi bababa sa 8 karakter na may malaking letra, maliit na letra at numero.",
+    "same": "Dapat iba ang bagong password sa kasalukuyan."
+  },
+  "relationship": {
+    "husband": "Asawa (lalaki)",
+    "partner": "Kinakasama",
+    "mother": "Nanay",
+    "father": "Tatay",
+    "sister": "Kapatid na babae",
+    "brother": "Kapatid na lalaki",
+    "other": "Ibang tao"
+  },
+  "photo": {
+    "title": "Larawan sa profile",
+    "change": "Palitan ang larawan",
+    "choose": "Pumili ng larawan sa phone na ito",
+    "hint": "Pinaliliit ang larawan sa phone na ito bago i-save.",
+    "drawn": "Mga iginuhit na larawan",
+    "initials": "Gamitin ang mga initial ko",
+    "done": "Tapos na",
+    "saved": "Na-update ang larawan.",
+    "queued": "Nakasave sa phone na ito. Ipapadala ito kapag online ka na ulit.",
+    "art": {
+      "heart": "Puso",
+      "shield": "Kalasag",
+      "calendar": "Kalendaryo",
+      "chat": "Chat bubble",
+      "bell": "Kampana"
+    },
+    "error": {
+      "type": "Pumili ng larawang JPEG, PNG o WebP.",
+      "size": "Masyadong malaki ang larawan. Pumili ng mas maliit sa 12 MB.",
+      "unreadable": "Hindi namin mabasa ang larawang ito. Subukan ang iba.",
+      "invalid": "Hindi namin magamit ang larawang ito."
+    }
+  },
+  "personal": {
+    "title": "Personal na impormasyon",
+    "edit": "I-edit",
+    "save": "I-save",
+    "saved": "Na-save ang mga detalye mo.",
+    "queued": "Nakasave sa phone na ito. Ipapadala ito kapag online ka na ulit.",
+    "waiting": "May mga pagbabagong hinihintay maipadala",
+    "name": "Pangalan",
+    "birthdate": "Petsa ng kapanganakan",
+    "contact": "Contact number",
+    "address": "Tirahan",
+    "emergency": "Emergency contact",
+    "emergencyName": "Buong pangalan",
+    "emergencyRelationship": "Kaugnayan",
+    "emergencyNumber": "Contact number",
+    "barangay": "Barangay",
+    "choose": "Pumili"
+  },
+  "barangay": {
+    "request": "Humiling na magpalit ng barangay",
+    "title": "Magpalit ng barangay",
+    "intro": "Ang Municipal Health Office ang magpapasya dito. Mananatili ang barangay mo hangga't hindi nila ito inaaprubahan.",
+    "new": "Bagong barangay",
+    "reason": "Dahilan (opsyonal)",
+    "submit": "Ipadala ang hiling",
+    "sent": "Naipadala ang hiling. Rerepasuhin ito ng opisina.",
+    "queued": "Nakasave sa phone na ito. Ipapadala ito kapag online ka na ulit.",
+    "pending": "Naghihintay ng pag-apruba",
+    "requested": "Hiniling: {{name}}"
+  },
+  "pregnancy": {
+    "title": "Impormasyon sa pagbubuntis",
+    "managed": "Ang health worker mo ang nag-aayos ng mga may kandado. Mababasa mo lang ang mga ito dito.",
+    "readOnly": "Mababasa lang",
+    "lmp": "Huling regla",
+    "edd": "Inaasahang due date",
+    "eddCalculated": "Binilang na 280 araw pagkatapos ng huling regla mo",
+    "eddProvider": "Itinakda ng health worker mo",
+    "age": "Linggo ng pagbubuntis",
+    "ageValue": "{{weeks}}w {{days}}d",
+    "trimester": "Trimester",
+    "trimesterValue": {
+      "1": "Unang trimester",
+      "2": "Ikalawang trimester",
+      "3": "Ikatlong trimester"
+    },
+    "countdown": "Bilang ng araw",
+    "toGo": "Due {{when}}",
+    "passed": "Ang due date ay {{when}}",
+    "countdownDetail": "{{weeks}} linggo at {{days}} araw",
+    "risk": "Mga tala ng health worker mo",
+    "noRisk": "Wala pa",
+    "visitNotes": "Mga tala sa pagbisita",
+    "noVisitNotes": "Wala pang tala sa pagbisita na ibinahagi sa iyo.",
+    "vitals": "Blood pressure {{bp}}, timbang {{weight}} kg"
+  },
+  "history": {
+    "title": "Kasaysayan ng check-up",
+    "empty": "Dito lalabas ang mga nakaraan mong pagbisita.",
+    "more": "Magpakita pa",
+    "attended": "Dumalo",
+    "missed": "Hindi nakadalo",
+    "rescheduled": "Inilipat"
+  },
+  "devices": {
+    "title": "Mga nakakabit na device",
+    "firmware": "Firmware {{version}}",
+    "unpair": "Tanggalin",
+    "unpairTitle": "Tanggalin ang {{name}}?",
+    "unpairBody": "Titigil ang mga reading mula sa device na ito hangga't hindi mo ito ipinapares ulit. Mananatili sa record mo ang mga nakaraang reading.",
+    "unpairConfirm": "Tanggalin",
+    "unpaired": "Natanggal na ang {{name}}.",
+    "error": {
+      "offline": "Kailangan mong online para tanggalin ang isang device.",
+      "busy": "May check o SOS na isinasagawa. Subukan ulit kapag tapos na.",
+      "waiting_to_sync": "May mga check mula sa device na ito na hinihintay pang maipadala. Mag-online muna.",
+      "not_found": "Hindi namin mahanap ang device na ito."
+    }
+  },
+  "settings": {
+    "title": "Mga setting",
+    "language": "Wika",
+    "english": "English",
+    "filipino": "Filipino",
+    "push": "Mga abiso",
+    "pushOn": "Aabot sa iyo ang mga alert at paalala kahit nakasara ang app.",
+    "pushOff": "Sa loob lang ng app lalabas ang mga abiso hangga't hindi mo ito binubuksan.",
+    "hele": "I-save ang mga tanong ko kay Hele AI",
+    "heleHint": "Kapag binuksan mo ito, maaaring i-save nang walang pangalan mo ang mga tanong mo kay Hele AI para mapabuti ang mga sagot. Nakasara ito hangga't hindi mo pinipili.",
+    "password": "Palitan ang password",
+    "consent": "Tingnan ang pahintulot ko",
+    "signOut": "Mag-sign out"
+  },
+  "password": {
+    "title": "Palitan ang password",
+    "current": "Kasalukuyang password",
+    "new": "Bagong password",
+    "confirm": "Ulitin ang bagong password",
+    "save": "I-save ang password",
+    "saved": "Napalitan ang password mo.",
+    "offline": "Kailangan mong online para palitan ang password."
+  },
+  "consent": {
+    "title": "Ang pahintulot ko",
+    "accepted": "Bersyon {{version}}, tinanggap noong {{time}}",
+    "guardian": "Ibinigay ni {{name}} ({{relationship}}), {{time}}",
+    "hele": "Pag-save ng mga tanong ko kay Hele AI",
+    "withdrawn": "Bersyon {{version}}, binawi noong {{time}}",
+    "read": "Basahin ang mga tuntunin",
+    "hide": "Itago ang mga tuntunin"
+  }
+}

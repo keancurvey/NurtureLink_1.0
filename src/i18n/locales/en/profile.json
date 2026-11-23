@@ -1,1 +1,163 @@
-{}
+{
+  "title": "Profile",
+  "cancel": "Cancel",
+  "error": {
+    "required": "This is needed.",
+    "phone": "Enter a mobile number, for example 0917 555 0123.",
+    "fullName": "Enter a first and last name.",
+    "tooLong": "This is too long. Please keep it under {{max}} characters.",
+    "taken": "This number is used by another account.",
+    "date": "Enter a real date.",
+    "future": "Choose a date after today.",
+    "barangay": "Choose a barangay from the list.",
+    "same_barangay": "Choose a different barangay from your own.",
+    "wrong": "That is not your current password.",
+    "mismatch": "The two passwords are not the same.",
+    "weak": "Use at least 8 characters with a capital letter, a small letter and a number.",
+    "same": "Your new password must be different from the current one."
+  },
+  "relationship": {
+    "husband": "Husband",
+    "partner": "Partner",
+    "mother": "Mother",
+    "father": "Father",
+    "sister": "Sister",
+    "brother": "Brother",
+    "other": "Someone else"
+  },
+  "photo": {
+    "title": "Profile photo",
+    "change": "Change photo",
+    "choose": "Choose a photo from this phone",
+    "hint": "The photo is made smaller on this phone before it is saved.",
+    "drawn": "Drawn pictures",
+    "initials": "Use my initials",
+    "done": "Done",
+    "saved": "Photo updated.",
+    "queued": "Saved on this phone. It will be sent when you are back online.",
+    "art": {
+      "heart": "Heart",
+      "shield": "Shield",
+      "calendar": "Calendar",
+      "chat": "Chat bubble",
+      "bell": "Bell"
+    },
+    "error": {
+      "type": "Choose a JPEG, PNG or WebP picture.",
+      "size": "This picture is too big. Choose one under 12 MB.",
+      "unreadable": "We could not read this picture. Try another one.",
+      "invalid": "We could not use this picture."
+    }
+  },
+  "personal": {
+    "title": "Personal information",
+    "edit": "Edit",
+    "save": "Save",
+    "saved": "Your details were saved.",
+    "queued": "Saved on this phone. It will be sent when you are back online.",
+    "waiting": "Changes waiting to be sent",
+    "name": "Name",
+    "birthdate": "Birthdate",
+    "contact": "Contact number",
+    "address": "Address",
+    "emergency": "Emergency contact",
+    "emergencyName": "Full name",
+    "emergencyRelationship": "Relationship",
+    "emergencyNumber": "Contact number",
+    "barangay": "Barangay",
+    "choose": "Choose one"
+  },
+  "barangay": {
+    "request": "Ask to change barangay",
+    "title": "Change barangay",
+    "intro": "The Municipal Health Office decides on this. Your barangay stays the same until they approve it.",
+    "new": "New barangay",
+    "reason": "Reason (optional)",
+    "submit": "Send request",
+    "sent": "Request sent. The office will review it.",
+    "queued": "Saved on this phone. It will be sent when you are back online.",
+    "pending": "Pending approval",
+    "requested": "Requested: {{name}}"
+  },
+  "pregnancy": {
+    "title": "Pregnancy information",
+    "managed": "Your health worker keeps the items marked with a lock up to date. You can read them here.",
+    "readOnly": "Read only",
+    "lmp": "Last menstrual period",
+    "edd": "Expected due date",
+    "eddCalculated": "Counted as 280 days after your last period",
+    "eddProvider": "Set by your health worker",
+    "age": "Weeks of pregnancy",
+    "ageValue": "{{weeks}}w {{days}}d",
+    "trimester": "Trimester",
+    "trimesterValue": {
+      "1": "First trimester",
+      "2": "Second trimester",
+      "3": "Third trimester"
+    },
+    "countdown": "Countdown",
+    "toGo": "Due {{when}}",
+    "passed": "Due date was {{when}}",
+    "countdownDetail": "{{weeks}} weeks and {{days}} days",
+    "risk": "Notes from your health worker",
+    "noRisk": "None yet",
+    "visitNotes": "Visit notes",
+    "noVisitNotes": "No visit notes shared with you yet.",
+    "vitals": "Blood pressure {{bp}}, weight {{weight}} kg"
+  },
+  "history": {
+    "title": "Check-up history",
+    "empty": "Your past visits will show here.",
+    "more": "Show more",
+    "attended": "Attended",
+    "missed": "Missed",
+    "rescheduled": "Rescheduled"
+  },
+  "devices": {
+    "title": "Linked devices",
+    "firmware": "Firmware {{version}}",
+    "unpair": "Unpair",
+    "unpairTitle": "Unpair {{name}}?",
+    "unpairBody": "Readings from this device stop until you pair it again. Your past readings stay on your record.",
+    "unpairConfirm": "Unpair",
+    "unpaired": "{{name}} was unpaired.",
+    "error": {
+      "offline": "You need to be online to unpair a device.",
+      "busy": "A check or an SOS is in progress. Try again when it is finished.",
+      "waiting_to_sync": "Some checks made with this device are waiting to be sent. Go online first.",
+      "not_found": "We could not find this device."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "english": "English",
+    "filipino": "Filipino",
+    "push": "Notifications",
+    "pushOn": "Alerts and reminders reach you even when the app is closed.",
+    "pushOff": "Notifications stay inside the app until you turn this on.",
+    "hele": "Keep my questions to Hele AI",
+    "heleHint": "If you turn this on, your questions to Hele AI may be kept without your name to help improve the answers. It is off until you choose.",
+    "password": "Change password",
+    "consent": "Review my consent",
+    "signOut": "Sign out"
+  },
+  "password": {
+    "title": "Change password",
+    "current": "Current password",
+    "new": "New password",
+    "confirm": "New password again",
+    "save": "Save password",
+    "saved": "Your password was changed.",
+    "offline": "You need to be online to change your password."
+  },
+  "consent": {
+    "title": "My consent",
+    "accepted": "Version {{version}}, accepted {{time}}",
+    "guardian": "Given by {{name}} ({{relationship}}), {{time}}",
+    "hele": "Keeping my questions to Hele AI",
+    "withdrawn": "Version {{version}}, withdrawn {{time}}",
+    "read": "Read the terms",
+    "hide": "Hide the terms"
+  }
+}

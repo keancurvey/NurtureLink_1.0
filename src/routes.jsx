@@ -17,6 +17,8 @@ import CheckScreen from './features/home/CheckScreen.jsx';
 import Home from './features/home/Home.jsx';
 import NotificationCenter from './features/notifications/NotificationCenter.jsx';
 import PushPermission from './features/notifications/PushPermission.jsx';
+import Profile from './features/profile/Profile.jsx';
+import Schedule from './features/schedule/Schedule.jsx';
 
 export default function AppRoutes() {
   return (
@@ -48,6 +50,8 @@ export default function AppRoutes() {
           <Route index element={<Navigate to={items[0].path} replace />} />
           {items.map((item) => {
             if (role === 'patient' && item.path === 'home') return <Route key={item.path} path={item.path} element={<Home />} />;
+            if (role === 'patient' && item.path === 'schedule') return <Route key={item.path} path={item.path} element={<Schedule />} />;
+            if (role === 'patient' && item.path === 'profile') return <Route key={item.path} path={item.path} element={<Profile />} />;
             if (role === 'patient' && item.path === 'consult') {
               // TEMP (replaced in Prompt 7): the Consult tab's placeholder holds the SOS shortcut it will keep (PAT-C-06).
               return (

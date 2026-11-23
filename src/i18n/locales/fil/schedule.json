@@ -1,1 +1,69 @@
-{}
+{
+  "title": "Iskedyul",
+  "calendar": {
+    "prev": "Nakaraang buwan",
+    "next": "Susunod na buwan",
+    "today": "ngayon",
+    "legend": "Ang ibig sabihin ng mga simbolo",
+    "nothing": "Walang nakaiskedyul sa {{date}}."
+  },
+  "kind": {
+    "clinic": "Check-up",
+    "hospital": "Pagbisita sa ospital",
+    "teleconsult": "Teleconsultation",
+    "event": "Event"
+  },
+  "place": {
+    "clinic": "Barangay health station",
+    "office": "Tingloy Municipal Health Office",
+    "hospital": "Referral hospital, Batangas City",
+    "teleconsult": "Teleconsultation (video call)"
+  },
+  "status": {
+    "approved": "Naaprubahan",
+    "attended": "Dumalo",
+    "missed": "Hindi nakadalo",
+    "rescheduled": "Inilipat"
+  },
+  "provider": {
+    "role": {
+      "barangay": "Barangay health worker",
+      "super": "Municipal Health Office"
+    }
+  },
+  "details": {
+    "type": "Uri",
+    "time": "Oras",
+    "place": "Lugar",
+    "provider": "Kasama mo",
+    "organizer": "Inihanda ni",
+    "notes": "Mga tala",
+    "noNotes": "Wala pang tala."
+  },
+  "upcoming": {
+    "title": "Paparating",
+    "emptyTitle": "Wala pang paparating",
+    "emptyBody": "Dito lalabas ang mga check-up, konsultasyon at event mo."
+  },
+  "reschedule": {
+    "button": "Humiling ng ibang oras",
+    "requested": "May hiling na ilipat",
+    "title": "Humiling ng ibang oras",
+    "intro": "Sabihin kung bakit hindi ka makakapunta sa {{what}} mo. Aabisuhan ang opisina at babalikan ka nila.",
+    "reason": "Dahilan",
+    "preferred": "Petsang gusto mo (opsyonal)",
+    "preferredHint": "Ang opisina ang magkukumpirma ng huling petsa at oras.",
+    "submit": "Ipadala ang hiling",
+    "cancel": "Kanselahin",
+    "sent": "Naipadala ang hiling. Naabisuhan na ang opisina.",
+    "queued": "Nakasave sa phone na ito. Ipapadala ito kapag online ka na ulit.",
+    "error": {
+      "pending_exists": "Humiling ka na ng ibang oras para sa bisitang ito.",
+      "not_upcoming": "Hindi na maililipat sa app ang bisitang ito.",
+      "not_found": "Hindi namin mahanap ang bisitang ito.",
+      "not_allowed": "Hindi mo ito magagawa."
+    }
+  },
+  "synced": "Huling na-update {{time}}",
+  "syncedNever": "hindi pa"
+}

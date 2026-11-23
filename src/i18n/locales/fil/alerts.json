@@ -85,7 +85,22 @@
     },
     "referral": "Referral para kay {{patient}}",
     "video_usage_warning": "Nasa {{percent}}% na ang video minutes ngayong buwan",
-    "other": "Bagong abiso"
+    "other": "Bagong abiso",
+    "reschedule_request": "Humiling si {{patient}} ng ibang oras para sa isang bisita",
+    "barangay_change_request": "Humiling si {{patient}} na magpalit ng barangay",
+    "appointment_reminder": {
+      "day": "Paalala: bukas ang {{kind}} mo",
+      "hours": "Paalala: 2 oras na lang bago ang {{kind}} mo"
+    },
+    "event_reminder_lead": {
+      "day": "Bukas: {{title}}",
+      "hours": "Sa loob ng 2 oras: {{title}}"
+    },
+    "kind": {
+      "clinic": "check-up",
+      "hospital": "pagbisita sa ospital",
+      "teleconsult": "teleconsultation"
+    }
   },
   "center": {
     "title": "Mga abiso",

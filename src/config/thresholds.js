@@ -16,6 +16,7 @@ export const THRESHOLDS = {
   providerSession: { timeoutMinutes: 15, warnAfterMinutes: 14 },
   videoJoin: { beforeMinutes: 10, afterMinutes: 60 },
   followUpChatHours: 24,
+  reminders: { dayBeforeHours: 24, hoursBefore: 2 }, // PAT-S-04: proposed one day and two hours before
 };
 
 // Device defaults (spec 8.1).
@@ -72,4 +73,5 @@ export const AUTH = {
   lockSeconds: 30,
   resetCodeMinutes: 10,
   minPasswordLength: 8,
+  heleLoggingVersion: '1.0', // the consent the Hele question-logging switch records (PAT-A-06)
 };

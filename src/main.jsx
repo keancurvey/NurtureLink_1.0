@@ -7,6 +7,7 @@ import './styles/ui.css';
 import './styles/layout.css';
 import './styles/home.css';
 import './styles/alerts.css';
+import './styles/schedule.css';
 import './styles/presenter.css';
 import './i18n/index.js';
 import App from './App.jsx';

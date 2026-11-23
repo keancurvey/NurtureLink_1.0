@@ -85,7 +85,22 @@
     },
     "referral": "Referral for {{patient}}",
     "video_usage_warning": "Video minutes are at {{percent}}% of this month's allowance",
-    "other": "New notification"
+    "other": "New notification",
+    "reschedule_request": "{{patient}} asked for another time for a visit",
+    "barangay_change_request": "{{patient}} asked to change barangay",
+    "appointment_reminder": {
+      "day": "Reminder: your {{kind}} is tomorrow",
+      "hours": "Reminder: your {{kind}} is in 2 hours"
+    },
+    "event_reminder_lead": {
+      "day": "Tomorrow: {{title}}",
+      "hours": "In 2 hours: {{title}}"
+    },
+    "kind": {
+      "clinic": "check-up",
+      "hospital": "hospital visit",
+      "teleconsult": "teleconsultation"
+    }
   },
   "center": {
     "title": "Notifications",

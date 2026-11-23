@@ -1,1 +1,69 @@
-{}
+{
+  "title": "Schedule",
+  "calendar": {
+    "prev": "Previous month",
+    "next": "Next month",
+    "today": "today",
+    "legend": "What the symbols mean",
+    "nothing": "Nothing is scheduled on {{date}}."
+  },
+  "kind": {
+    "clinic": "Check-up",
+    "hospital": "Hospital visit",
+    "teleconsult": "Teleconsultation",
+    "event": "Event"
+  },
+  "place": {
+    "clinic": "Barangay health station",
+    "office": "Tingloy Municipal Health Office",
+    "hospital": "Referral hospital, Batangas City",
+    "teleconsult": "Teleconsultation (video call)"
+  },
+  "status": {
+    "approved": "Approved",
+    "attended": "Attended",
+    "missed": "Missed",
+    "rescheduled": "Rescheduled"
+  },
+  "provider": {
+    "role": {
+      "barangay": "Barangay health worker",
+      "super": "Municipal Health Office"
+    }
+  },
+  "details": {
+    "type": "Type",
+    "time": "Time",
+    "place": "Place",
+    "provider": "Provider",
+    "organizer": "Organized by",
+    "notes": "Notes",
+    "noNotes": "No notes yet."
+  },
+  "upcoming": {
+    "title": "Coming up",
+    "emptyTitle": "Nothing coming up",
+    "emptyBody": "Your check-ups, consultations and events will show here."
+  },
+  "reschedule": {
+    "button": "Ask for another time",
+    "requested": "Reschedule requested",
+    "title": "Ask for another time",
+    "intro": "Tell us why you cannot come to your {{what}}. The office will be told and will get back to you.",
+    "reason": "Reason",
+    "preferred": "Date you would like (optional)",
+    "preferredHint": "The office will confirm the final date and time.",
+    "submit": "Send request",
+    "cancel": "Cancel",
+    "sent": "Request sent. The office has been told.",
+    "queued": "Saved on this phone. It will be sent when you are back online.",
+    "error": {
+      "pending_exists": "You already asked for another time for this visit.",
+      "not_upcoming": "This visit can no longer be moved from the app.",
+      "not_found": "We could not find this visit.",
+      "not_allowed": "You cannot do this."
+    }
+  },
+  "synced": "Last updated {{time}}",
+  "syncedNever": "not yet"
+}
