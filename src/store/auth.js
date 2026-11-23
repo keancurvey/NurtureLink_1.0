@@ -169,9 +169,14 @@ export function createAuth({ store, core, setSession, now = Date.now }) {
   // ---------- Passwords (AUTH-03, AUTH-08) ----------
 
   /** The forced change on a provider's first sign-in, and any later change by a signed-in person. */
-  function changePassword({ password }) {
+  function changePassword({ password, current }) {
     const who = viewer();
     if (!who) return { ok: false, error: 'signed_out' };
+    // From Settings the person gives the password she has now (the forced first-login change does not ask). The server does this, so it needs the connection.
+    if (current !== undefined) {
+      if (!core.isOnline()) return { ok: false, error: 'offline' };
+      if (credentialOf(who.id)?.password !== current) return { ok: false, error: 'form', errors: { current: 'wrong' } };
+    }
     const errors = validateNewPassword({ password }, { current: credentialOf(who.id)?.password ?? null });
     if (Object.keys(errors).length > 0) return { ok: false, error: 'form', errors };
     commit([{ op: 'update', table: 'credentials', id: who.id, patch: { password, must_change_password: false } }]);

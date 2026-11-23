@@ -13,6 +13,8 @@ import { createAuth } from './auth.js';
 import { createCheckBridge } from './checkBridge.js';
 import { createCore } from './core.js';
 import { createDevices } from './devices.js';
+import { createProfileService } from './profile.js';
+import { createRequests } from './requests.js';
 import { createStore } from './store.js';
 
 // notice: why the sign-in screen has something to say ('session_expired'); it is never stored.
@@ -64,6 +66,8 @@ export function createRuntime({
   const auth = createAuth({ store, core, setSession, now });
   const devices = createDevices({ store, core, link, bridge, now });
   const alerts = createAlerts({ store, core, now });
+  const profile = createProfileService({ store, core, now });
+  const requests = createRequests({ store, core, now });
   const engine = createEngine({ store, core, sched, bridge, link, control, scenarios: SCENARIOS, now });
   let heartbeat = null;
   let sweeper = null;
@@ -79,6 +83,8 @@ export function createRuntime({
     auth,
     devices,
     alerts,
+    profile,
+    requests,
 
     /**
      * Start up: finish a run a reload cut short, upload what is still queued (when online), keep devices' last-seen
@@ -90,9 +96,14 @@ export function createRuntime({
       engine.resume();
       if (core.isOnline()) core.flushQueue();
       if (!heartbeat) heartbeat = setRepeat(() => control.heartbeat(), heartbeatMs);
-      // The escalation sweep (ALR-05) looks every second for an alert nobody acknowledged in time.
-      core.sweepEscalations();
-      if (!sweeper) sweeper = setRepeat(() => core.sweepEscalations(), sweepMs);
+      // The escalation sweep (ALR-05) looks every second for an alert nobody acknowledged in time; the same sweep sends the
+      // reminders that have come due (PAT-S-04).
+      const sweep = () => {
+        core.sweepEscalations();
+        core.sweepReminders();
+      };
+      sweep();
+      if (!sweeper) sweeper = setRepeat(sweep, sweepMs);
       return () => {
         if (heartbeat) clearRepeat(heartbeat);
         if (sweeper) clearRepeat(sweeper);

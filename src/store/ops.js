@@ -17,8 +17,9 @@ export function byId(rows) {
  * Apply a list of operations to the state and return the new state:
  *   { op: 'insert', table, row }            { op: 'insertMany', table, rows }
  *   { op: 'update', table, id, patch }      { op: 'updateMany', table, patches: [{ id, patch }] }
+ *   { op: 'delete', table, id }
  *   { op: 'meta', patch }                   { op: 'hardware', serial, patch }
- * An update of a row that does not exist changes nothing.
+ * An update or delete of a row that does not exist changes nothing.
  */
 export function applyOps(state, ops) {
   let { db, meta, hardware } = state;
@@ -32,6 +33,9 @@ export function applyOps(state, ops) {
         break;
       case 'update':
         db = { ...db, [op.table]: db[op.table].map((row) => (row.id === op.id ? { ...row, ...op.patch } : row)) };
+        break;
+      case 'delete':
+        if (db[op.table].some((row) => row.id === op.id)) db = { ...db, [op.table]: db[op.table].filter((row) => row.id !== op.id) };
         break;
       case 'updateMany': {
         const patches = new Map(op.patches.map(({ id, patch }) => [id, patch]));

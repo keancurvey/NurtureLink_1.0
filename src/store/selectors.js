@@ -4,6 +4,7 @@
 import { AUTH, buildThresholds } from '../config/thresholds.js';
 import { identifierKey, isMinor } from '../lib/authRules.js';
 import { manilaDate } from '../lib/dates.js';
+import { calendarItems } from '../lib/schedule.js';
 import * as access from '../lib/permissions.js';
 import { byId } from './ops.js';
 
@@ -251,6 +252,70 @@ export const liveCheckOf = (state, viewer) => (viewer?.role === 'patient' && sta
 export function freeNearbyDevice(state, type) {
   return Object.values(state.hardware).find((h) => h.type === type && h.bound_patient_id === null && (h.advertising || h.connected)) ?? null;
 }
+
+// ---------- Schedule and Profile (Prompt 6) ----------
+
+/** A patient's calendar items (PAT-S-01): her appointments with a date and the events for her barangay, by time. Empty for anyone else. */
+export function calendarOf(state, viewer) {
+  if (viewer?.role !== 'patient') return [];
+  return calendarItems({ appointments: appointmentsOf(state, viewer, { patientId: viewer.id }), events: eventsOf(state, viewer) });
+}
+
+/**
+ * Requests in scope, newest first: a patient her own, a barangay account its barangay's, a super account all. Requests a
+ * phone has not sent yet are hidden from providers, like other things made offline.
+ */
+export function requestsOf(state, viewer, { patientId = null, kind = null } = {}) {
+  if (!viewer) return [];
+  return newestFirst(
+    state.db.requests.filter((r) => (!patientId || r.patient_id === patientId) && (!kind || r.kind === kind) && patientInScope(state, viewer, r.patient_id) && visible(viewer, r)),
+    'created_at',
+  );
+}
+
+/** The open request of a kind (and appointment) of the signed-in patient, or null. */
+export const pendingRequestOf = (state, viewer, kind, appointmentId = null) =>
+  requestsOf(state, viewer, { patientId: viewer?.id, kind }).find((r) => r.status === 'pending' && (appointmentId === null || r.appointment_id === appointmentId)) ?? null;
+
+/**
+ * The patient's own details as her phone shows them: what was saved, with an edit made offline on top of it
+ * ({ profile, patient, queued }). Providers keep seeing the saved values until the edit is sent.
+ */
+export function personalInfoOf(state, viewer) {
+  if (viewer?.role !== 'patient') return null;
+  const profile = profileOf(state, viewer.id);
+  const patient = byId(state.db.patients).get(viewer.id);
+  if (!profile || !patient) return null;
+  const edit = patient.queued_edit?.values ?? null;
+  const merged = edit ? { ...patient, ...edit } : patient;
+  return { profile: edit ? { ...profile, ...edit } : profile, patient: merged, queued: Boolean(edit) };
+}
+
+/** A provider's name and role as a patient may see it: any super account, and the barangay accounts of her own barangay. */
+export function providerOf(state, viewer, providerId) {
+  const provider = providerId ? profileOf(state, providerId) : null;
+  if (!viewer || !provider || provider.role === 'patient') return null;
+  if (viewer.role === 'patient' && provider.role === 'barangay' && provider.barangay_id !== viewer.barangay_id) return null;
+  return { id: provider.id, full_name: provider.full_name, role: provider.role };
+}
+
+/** The consents of the signed-in account: the terms (latest), the guardian's form (a minor), and the Hele question-logging switch. */
+export function consentRecordsOf(state, viewer) {
+  if (!viewer) return { terms: null, guardian: null, hele: null };
+  const mine = state.db.consents.filter((c) => c.profile_id === viewer.id);
+  const latest = (document) => newestFirst(mine.filter((c) => c.document === document), 'accepted_at')[0] ?? null;
+  return {
+    terms: latest('terms_privacy'),
+    guardian: state.db.guardian_consents.find((g) => g.profile_id === viewer.id) ?? null,
+    hele: latest('hele_question_logging'),
+  };
+}
+
+/** Whether she let NurtureLink keep her questions to Hele AI, anonymised (PAT-A-06). Off until she turns it on. */
+export const heleLoggingOf = (state, viewer) => {
+  const { hele } = consentRecordsOf(state, viewer);
+  return Boolean(hele) && !hele.withdrawn_at;
+};
 
 // ---------- What the gear fills in (presenter only; nothing here reaches a screen's own text) ----------
 

@@ -4,7 +4,7 @@
 import { latency } from '../lib/latency.js';
 
 export function createActions(runtime, { delay = latency } = {}) {
-  const { core, auth, devices, alerts } = runtime;
+  const { core, auth, devices, alerts, profile, requests } = runtime;
   const slow = (fn) => async (...args) => {
     await delay();
     return fn(...args);
@@ -58,6 +58,22 @@ export function createActions(runtime, { delay = latency } = {}) {
     decline_push: () => alerts.declinePush(),
     /** The patient's in-app SOS (after the 2 second hold): answers { ok, state: 'sent' | 'undelivered' }. */
     send_sos: slow(() => alerts.sendSos()),
+    // Profile and Schedule (PAT-P-01 to PAT-P-05, PAT-S-05, PAT-A-06). Saving, asking the office and unpairing reach the server, so
+    // they take a moment; the photo choice and the Hele switch answer at once on the phone.
+    /** Contact number and emergency contact: { contact_no, emergency_name, emergency_relationship, emergency_no }. Answers { ok, queued } or { ok: false, error, errors }. */
+    save_personal: slow((values) => profile.savePersonal(values)),
+    /** { photo_url } (a small picture made on the phone), { avatar_art } (a drawn avatar) or nothing (the initials). */
+    set_photo: (values) => profile.setPhoto(values),
+    /** The Hele AI question-logging consent (PAT-A-06). */
+    set_hele_logging: (on) => profile.setHeleLogging(on),
+    /** A change of barangay, decided by a super account: { barangay_id, reason }. */
+    request_barangay_change: slow((values) => requests.requestBarangayChange(values)),
+    /** A new time for an upcoming appointment: { appointment_id, reason, preferred_date }. */
+    request_reschedule: slow((values) => requests.requestReschedule(values)),
+    /** Unpair a device from Profile: answers { ok } or { ok: false, error }. */
+    unpair_device: slow((serial) => devices.unpair(serial)),
+    /** Settings → Notifications off. */
+    disable_push: () => alerts.disablePush(),
     /** Gear: back to the starting records, signed out. */
     reset_data: slow(() => runtime.reset()),
   };

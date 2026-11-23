@@ -150,6 +150,16 @@ export function createAlerts({ store, core, now = Date.now }) {
       return { ok: true };
     },
 
+    /** Settings → Notifications off: the push subscription of this phone goes, and the reminder to turn it on shows (COM-04). */
+    disablePush() {
+      const me = viewer();
+      if (!me) return { ok: false };
+      const ops = state().db.push_subscriptions.filter((s) => s.profile_id === me.id).map((s) => ({ op: 'delete', table: 'push_subscriptions', id: s.id }));
+      ops.push({ op: 'update', table: 'profiles', id: me.id, patch: { push_declined_at: now() } });
+      core.commit(ops);
+      return { ok: true };
+    },
+
     // ---------- The patient's own SOS shortcut (assumption 9) ----------
 
     /**

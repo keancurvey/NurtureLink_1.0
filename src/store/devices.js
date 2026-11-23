@@ -97,6 +97,31 @@ export function createDevices({ store, core, link, bridge, now = Date.now }) {
       return { ok: true, device: byId(state().db.devices).get(row.id) };
     },
 
+    /**
+     * Unpair a device from Profile (PAT-P-05): the server lets go of the serial, so it needs the connection, and the device
+     * advertises again so it can be paired again (the wizard). Past readings stay. Refused while a check runs, while checks
+     * made with that device still wait to upload, and while the band holds an SOS nobody has acknowledged. Answers { ok }
+     * or { ok: false, error } with error one of not_found, offline, busy, waiting_to_sync.
+     */
+    unpair(serial) {
+      const viewer = patient();
+      const db = state().db;
+      const device = viewer ? db.devices.find((d) => d.serial === serial && d.patient_id === viewer.id) : null;
+      if (!device) return { ok: false, error: 'not_found' };
+      if (!core.isOnline()) return { ok: false, error: 'offline' };
+      const hw = hardware(serial);
+      if (bridge.isChecking(viewer.id) || (hw?.sos && !hw.sos.acked)) return { ok: false, error: 'busy' };
+      if (db.check_sessions.some((s) => s.patient_id === viewer.id && s.syncState === 'queued' && (s.belt_serial === serial || s.band_serial === serial))) {
+        return { ok: false, error: 'waiting_to_sync' };
+      }
+      link.disconnect(serial);
+      core.commit([
+        { op: 'delete', table: 'devices', id: device.id },
+        { op: 'hardware', serial, patch: { bound_patient_id: null, advertising: true } },
+      ]);
+      return { ok: true, device };
+    },
+
     /** The Connect button on a device row (PAT-H-02). Only her own devices. */
     connect(serial) {
       const viewer = patient();

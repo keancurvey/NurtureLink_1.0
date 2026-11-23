@@ -15,6 +15,7 @@ import {
 } from '../lib/alertRules.js';
 import { escalationMs, shouldEscalate } from '../lib/alertRules.js';
 import { batteryLevel, voltageForPct } from '../lib/battery.js';
+import { dueReminders } from '../lib/reminders.js';
 import { dedupeKey, queuedInOrder, splitDuplicates } from '../lib/offlineQueue.js';
 import { byId } from './ops.js';
 
@@ -139,6 +140,61 @@ export function createCore({ store, now = Date.now }) {
     const since = state().seededAt ?? 0;
     const due = alerts.filter((alert) => alert.created_at >= since && shouldEscalate(alert, at, ms));
     return due.filter((alert) => escalateAlert(alert.id)).length;
+  }
+
+  /**
+   * Reminders before appointments and events (PAT-S-04): one day and two hours before, each sent once and remembered on
+   * the row. An appointment's reminder goes to its patient; an event's to the patients and barangay accounts it is for.
+   * Like the escalation sweep, it covers what was set up after the records were built. Answers how many it sent.
+   */
+  function sweepReminders() {
+    const db = state().db;
+    const at = now();
+    const due = dueReminders({ appointments: db.appointments, events: db.events, now: at, since: state().seededAt ?? 0, thresholds: thresholds() });
+    for (const item of due) {
+      if (item.source === 'appointment') {
+        const row = byId(db.appointments).get(item.id);
+        sendPush([row.patient_id], 'appointment_reminder', { appointment_id: row.id, lead: item.lead, kind: row.type });
+        commit([{ op: 'update', table: 'appointments', id: row.id, patch: { reminded: [...(row.reminded ?? []), ...item.mark] } }]);
+      } else {
+        const row = byId(db.events).get(item.id);
+        const audience = db.profiles.filter((p) => p.active && (p.role === 'patient' || p.role === 'barangay') && (row.scope === 'all' || p.barangay_id === row.barangay_id));
+        sendPush(audience.map((p) => p.id), 'event_reminder', { event_id: row.id, lead: item.lead });
+        commit([{ op: 'update', table: 'events', id: row.id, patch: { reminded: [...(row.reminded ?? []), ...item.mark] } }]);
+      }
+    }
+    return due.length;
+  }
+
+  /**
+   * Tell the accounts a patient's request is for (send_push). A reschedule request reaches every super account (the
+   * shared approvals queue, PLAN.md assumption 8) and the appointment's own provider; a barangay change reaches the
+   * super accounts.
+   */
+  function deliverRequest(request) {
+    const db = state().db;
+    const supers = activeSupers(db).map((p) => p.id);
+    if (request.kind === 'reschedule') {
+      const appointment = byId(db.appointments).get(request.appointment_id);
+      const provider = appointment?.provider_id ? byId(db.profiles).get(appointment.provider_id) : null;
+      return sendPush([...supers, ...(provider?.active ? [provider.id] : [])], 'reschedule_request', {
+        request_id: request.id,
+        appointment_id: request.appointment_id,
+        patient_id: request.patient_id,
+      });
+    }
+    return sendPush(supers, 'barangay_change_request', { request_id: request.id, patient_id: request.patient_id });
+  }
+
+  /** The operations that save a patient's own details: contact and photo live on her profile, emergency contact on her patient row. */
+  function personalEditOps(patientId, edit) {
+    const PROFILE_FIELDS = ['contact_no', 'photo_url', 'avatar_art'];
+    const profilePatch = Object.fromEntries(Object.entries(edit).filter(([key]) => PROFILE_FIELDS.includes(key)));
+    const patientPatch = Object.fromEntries(Object.entries(edit).filter(([key]) => !PROFILE_FIELDS.includes(key)));
+    const ops = [];
+    if (Object.keys(profilePatch).length > 0) ops.push({ op: 'update', table: 'profiles', id: patientId, patch: profilePatch });
+    ops.push({ op: 'update', table: 'patients', id: patientId, patch: { ...patientPatch, queued_edit: null } });
+    return ops;
   }
 
   /**
@@ -305,7 +361,7 @@ export function createCore({ store, now = Date.now }) {
    * queued messages are marked delivered. Battery alerts are evaluated for devices whose status changed while offline.
    */
   function flushQueue() {
-    const summary = { checks: 0, messages: 0, duplicates: 0 };
+    const summary = { checks: 0, messages: 0, duplicates: 0, requests: 0, edits: 0 };
     const db = state().db;
     const queued = queuedInOrder(db.check_sessions);
     const patients = [...new Set(queued.map((s) => s.patient_id))];
@@ -321,6 +377,16 @@ export function createCore({ store, now = Date.now }) {
       summary.checks += result.inserted;
       summary.duplicates += result.duplicates;
     }
+    // What she asked of the office while offline reaches it now, oldest first; edits to her own details take effect (last write wins).
+    const requests = queuedInOrder(state().db.requests);
+    for (const request of requests) {
+      commit([{ op: 'update', table: 'requests', id: request.id, patch: { syncState: 'synced' } }]);
+      deliverRequest(request);
+    }
+    summary.requests = requests.length;
+    const edits = state().db.patients.filter((row) => row.queued_edit);
+    for (const row of edits) commit(personalEditOps(row.id, row.queued_edit.values));
+    summary.edits = edits.length;
     const messages = queuedInOrder(state().db.messages);
     if (messages.length) {
       const at = now();
@@ -358,6 +424,9 @@ export function createCore({ store, now = Date.now }) {
     raiseAlert,
     escalateAlert,
     sweepEscalations,
+    sweepReminders,
+    deliverRequest,
+    personalEditOps,
     evaluateOnPhone,
     relaySos,
     ingestReadings,
