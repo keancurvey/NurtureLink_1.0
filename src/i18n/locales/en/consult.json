@@ -1,1 +1,134 @@
-{}
+{
+  "title": "Consult",
+  "emergency": {
+    "title": "Not for emergencies",
+    "body": "Messages here are not for emergencies. If you need help right away, press and hold the SOS button or call your barangay health worker.",
+    "call": "Call {{name}}",
+    "callNone": "Call your barangay health worker"
+  },
+  "join": {
+    "title": "Video consultation",
+    "with": "With {{name}}",
+    "when": "{{date}}, {{time}}",
+    "button": "Join video",
+    "early": "You can join from {{time}}, 10 minutes before the call.",
+    "open": "The call room is open. You can join now.",
+    "badgeOpen": "Open now",
+    "badgeEarly": "Not open yet"
+  },
+  "threads": {
+    "title": "Conversations",
+    "barangay": "Barangay health team",
+    "midwife": "Midwife",
+    "emptyBarangay": "Say hello to your barangay health workers.",
+    "emptyMidwife": "No messages yet.",
+    "locked": "Locked",
+    "unread_one": "{{count}} new message",
+    "unread_other": "{{count}} new messages",
+    "you": "You: {{text}}",
+    "photo": "Photo",
+    "open": "Open the conversation with {{name}}",
+    "lockedNoAppointment": "Opens when your teleconsultation is approved.",
+    "lockedFollowUpOver": "The follow-up chat closed. Request a new consultation to message the midwife again."
+  },
+  "bookings": {
+    "title": "Booking requests",
+    "request": "Request a consultation",
+    "emptyTitle": "No requests yet",
+    "emptyBody": "Ask for a clinic visit or a teleconsultation. The Municipal Health Office will confirm the time.",
+    "requested": "Requested {{when}}",
+    "preferred": "Preferred: {{date}}, {{range}}",
+    "scheduled": "Scheduled: {{date}}, {{time}}",
+    "reason": "Reason",
+    "handledBy": "By {{name}}",
+    "assigned": "Midwife: {{name}}",
+    "declineReason": "Reason given",
+    "waiting": "Waiting to send. It goes out when your connection is back.",
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "declined": "Declined",
+      "rescheduled": "New time set"
+    },
+    "kind": {
+      "clinic": "Clinic visit",
+      "teleconsult": "Teleconsultation"
+    },
+    "range": {
+      "any": "any time",
+      "morning": "morning",
+      "afternoon": "afternoon"
+    }
+  },
+  "book": {
+    "title": "Request a consultation",
+    "intro": "Choose the kind of visit, the day and time you prefer and tell us why. A midwife will confirm the final time.",
+    "type": "Kind of visit",
+    "typeClinic": "Clinic visit at the barangay health station",
+    "typeTeleconsult": "Teleconsultation (video call)",
+    "date": "Preferred date",
+    "window": "Preferred time",
+    "windowAny": "Any time (8:00 am to 5:00 pm)",
+    "windowMorning": "Morning (8:00 am to 12:00 pm)",
+    "windowAfternoon": "Afternoon (1:00 pm to 5:00 pm)",
+    "reason": "Reason for the visit",
+    "reasonHint": "A few words are enough.",
+    "submit": "Send request",
+    "cancel": "Back",
+    "sent": "Request sent. We will tell you when it is approved.",
+    "queued": "Saved. It will be sent when your connection is back.",
+    "pendingBanner": "You already have a request waiting. You can ask again once it has an answer."
+  },
+  "chat": {
+    "back": "Back to conversations",
+    "with": "With {{names}}",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "empty": "No messages yet. Write the first one below.",
+    "list": "Messages",
+    "photo": "Photo",
+    "state": {
+      "sending": "Sending",
+      "sent": "Sent",
+      "delivered": "Delivered",
+      "seen": "Seen"
+    },
+    "lockedTitle": "This conversation is locked",
+    "lockedNoAppointment": "You can message the midwife once a teleconsultation is approved. Request one from the Consult tab.",
+    "lockedFollowUpOver": "The follow-up chat stays open for 24 hours after the appointment, and that time has passed. Request a new consultation to message the midwife again.",
+    "openUntil": "Open until {{when}}",
+    "joinHint": "The call room opens 10 minutes before the appointment."
+  },
+  "composer": {
+    "label": "Message",
+    "placeholder": "Write a message",
+    "send": "Send",
+    "attach": "Attach a photo",
+    "removePhoto": "Remove the photo",
+    "attached": "Photo ready to send",
+    "waiting": "Messages written offline wait on your phone and go out when the connection is back."
+  },
+  "error": {
+    "empty": "Write a message or add a photo first.",
+    "tooLong": "That message is too long. Please shorten it.",
+    "locked": "This conversation is locked.",
+    "not_found": "We could not find this conversation.",
+    "not_allowed": "You cannot do that with this account.",
+    "photo": "That photo could not be used.",
+    "required": "Please fill this in.",
+    "invalid": "Please check this entry.",
+    "past": "Please choose today or a later date.",
+    "tooFar": "Please choose a date within the next 3 months.",
+    "pending_exists": "You already have a request waiting.",
+    "type": "Please choose a photo (JPEG, PNG or WebP).",
+    "size": "That photo is too large. Please choose a smaller one.",
+    "unreadable": "That photo could not be read. Please choose another."
+  },
+  "call": {
+    "title": "Video consultation",
+    "waiting": "Waiting for {{name}} to join",
+    "waitingHint": "Stay on this screen. The call starts when your midwife joins.",
+    "leave": "Leave the call",
+    "notOpen": "This call room is not open."
+  }
+}

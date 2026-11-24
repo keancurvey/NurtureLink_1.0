@@ -87,7 +87,8 @@
   },
   "action": {
     "skipSplash": "Skip splash",
-    "expireSession": "Expire session"
+    "expireSession": "Expire session",
+    "attachPhoto": "Attach a photo"
   },
   "toast": {
     "started": "Started: {{name}}",
@@ -163,6 +164,7 @@
     "forgotContact": "Fill contact number",
     "forgotCode": "Fill the received code",
     "password": "Fill a strong password",
-    "pairingStep": "Fill this step"
+    "pairingStep": "Fill this step",
+    "booking": "Fill request"
   }
 }

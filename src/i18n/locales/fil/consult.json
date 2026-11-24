@@ -1,1 +1,134 @@
-{}
+{
+  "title": "Konsulta",
+  "emergency": {
+    "title": "Hindi para sa emergency",
+    "body": "Ang mga mensahe rito ay hindi para sa emergency. Kung kailangan n’yo ng tulong agad, pindutin at ipagpatuloy ang pagpindot sa SOS o tawagan ang inyong barangay health worker.",
+    "call": "Tawagan si {{name}}",
+    "callNone": "Tawagan ang barangay health worker"
+  },
+  "join": {
+    "title": "Video na konsultasyon",
+    "with": "Kasama si {{name}}",
+    "when": "{{date}}, {{time}}",
+    "button": "Sumali sa video",
+    "early": "Maaari kayong sumali simula {{time}}, 10 minuto bago ang tawag.",
+    "open": "Bukas na ang call room. Maaari na kayong sumali.",
+    "badgeOpen": "Bukas na",
+    "badgeEarly": "Hindi pa bukas"
+  },
+  "threads": {
+    "title": "Mga usapan",
+    "barangay": "Barangay health team",
+    "midwife": "Midwife",
+    "emptyBarangay": "Magsabi ng kumusta sa inyong barangay health workers.",
+    "emptyMidwife": "Wala pang mensahe.",
+    "locked": "Naka-lock",
+    "unread_one": "{{count}} bagong mensahe",
+    "unread_other": "{{count}} bagong mensahe",
+    "you": "Ikaw: {{text}}",
+    "photo": "Larawan",
+    "open": "Buksan ang usapan kasama si {{name}}",
+    "lockedNoAppointment": "Magbubukas kapag naaprubahan ang teleconsultation ninyo.",
+    "lockedFollowUpOver": "Sarado na ang follow-up chat. Humiling ng bagong konsultasyon para makapag-message ulit sa midwife."
+  },
+  "bookings": {
+    "title": "Mga hiling na appointment",
+    "request": "Humiling ng konsultasyon",
+    "emptyTitle": "Wala pang hiling",
+    "emptyBody": "Humiling ng pagbisita sa klinika o ng teleconsultation. Ang Municipal Health Office ang magkukumpirma ng oras.",
+    "requested": "Hiniling {{when}}",
+    "preferred": "Gusto: {{date}}, {{range}}",
+    "scheduled": "Nakatakda: {{date}}, {{time}}",
+    "reason": "Dahilan",
+    "handledBy": "Ni {{name}}",
+    "assigned": "Midwife: {{name}}",
+    "declineReason": "Ibinigay na dahilan",
+    "waiting": "Naghihintay na maipadala. Ipapadala ito kapag bumalik ang koneksyon.",
+    "status": {
+      "pending": "Naghihintay",
+      "approved": "Naaprubahan",
+      "declined": "Tinanggihan",
+      "rescheduled": "Bagong oras"
+    },
+    "kind": {
+      "clinic": "Pagbisita sa klinika",
+      "teleconsult": "Teleconsultation"
+    },
+    "range": {
+      "any": "kahit anong oras",
+      "morning": "umaga",
+      "afternoon": "hapon"
+    }
+  },
+  "book": {
+    "title": "Humiling ng konsultasyon",
+    "intro": "Piliin ang uri ng pagbisita, ang araw at oras na gusto n’yo, at sabihin kung bakit. Kukumpirmahin ng midwife ang huling oras.",
+    "type": "Uri ng pagbisita",
+    "typeClinic": "Pagbisita sa barangay health station",
+    "typeTeleconsult": "Teleconsultation (video call)",
+    "date": "Gustong petsa",
+    "window": "Gustong oras",
+    "windowAny": "Kahit anong oras (8:00 n.u. hanggang 5:00 n.h.)",
+    "windowMorning": "Umaga (8:00 n.u. hanggang 12:00 n.t.)",
+    "windowAfternoon": "Hapon (1:00 n.h. hanggang 5:00 n.h.)",
+    "reason": "Dahilan ng pagbisita",
+    "reasonHint": "Sapat na ang ilang salita.",
+    "submit": "Ipadala ang hiling",
+    "cancel": "Bumalik",
+    "sent": "Naipadala na ang hiling. Sasabihan namin kayo kapag naaprubahan.",
+    "queued": "Nakatabi na. Ipapadala ito kapag bumalik ang koneksyon.",
+    "pendingBanner": "May hiling na kayong naghihintay. Maaari ulit kayong humiling kapag may sagot na ito."
+  },
+  "chat": {
+    "back": "Bumalik sa mga usapan",
+    "with": "Kasama sina {{names}}",
+    "today": "Ngayon",
+    "yesterday": "Kahapon",
+    "empty": "Wala pang mensahe. Isulat ang una sa ibaba.",
+    "list": "Mga mensahe",
+    "photo": "Larawan",
+    "state": {
+      "sending": "Ipinapadala",
+      "sent": "Naipadala",
+      "delivered": "Naihatid",
+      "seen": "Nakita"
+    },
+    "lockedTitle": "Naka-lock ang usapang ito",
+    "lockedNoAppointment": "Maaari kayong mag-message sa midwife kapag naaprubahan ang teleconsultation. Humiling nito sa tab na Konsulta.",
+    "lockedFollowUpOver": "Bukas ang follow-up chat sa loob ng 24 oras pagkatapos ng appointment, at lumipas na ang oras na iyon. Humiling ng bagong konsultasyon para makapag-message ulit sa midwife.",
+    "openUntil": "Bukas hanggang {{when}}",
+    "joinHint": "Magbubukas ang call room 10 minuto bago ang appointment."
+  },
+  "composer": {
+    "label": "Mensahe",
+    "placeholder": "Magsulat ng mensahe",
+    "send": "Ipadala",
+    "attach": "Magdagdag ng larawan",
+    "removePhoto": "Alisin ang larawan",
+    "attached": "Handa nang ipadala ang larawan",
+    "waiting": "Ang mga mensaheng isinulat nang offline ay maghihintay sa phone at ipapadala kapag bumalik ang koneksyon."
+  },
+  "error": {
+    "empty": "Magsulat muna ng mensahe o magdagdag ng larawan.",
+    "tooLong": "Masyadong mahaba ang mensahe. Paikliin po ito.",
+    "locked": "Naka-lock ang usapang ito.",
+    "not_found": "Hindi namin makita ang usapang ito.",
+    "not_allowed": "Hindi ito maaari sa account na ito.",
+    "photo": "Hindi magamit ang larawang iyon.",
+    "required": "Pakisagutan po ito.",
+    "invalid": "Pakisuri ang inilagay.",
+    "past": "Pumili po ng petsa ngayon o mas huli.",
+    "tooFar": "Pumili po ng petsa sa loob ng susunod na 3 buwan.",
+    "pending_exists": "May hiling na kayong naghihintay.",
+    "type": "Pumili po ng larawan (JPEG, PNG o WebP).",
+    "size": "Masyadong malaki ang larawan. Pumili po ng mas maliit.",
+    "unreadable": "Hindi mabasa ang larawang iyon. Pumili po ng iba."
+  },
+  "call": {
+    "title": "Video na konsultasyon",
+    "waiting": "Hinihintay na sumali si {{name}}",
+    "waitingHint": "Manatili sa screen na ito. Magsisimula ang tawag kapag sumali ang midwife ninyo.",
+    "leave": "Umalis sa tawag",
+    "notOpen": "Hindi bukas ang call room na ito."
+  }
+}

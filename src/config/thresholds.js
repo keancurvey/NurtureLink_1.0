@@ -75,3 +75,14 @@ export const AUTH = {
   minPasswordLength: 8,
   heleLoggingVersion: '1.0', // the consent the Hele question-logging switch records (PAT-A-06)
 };
+
+// Consult rules (PAT-C-02, PAT-C-04). Proposed values, like the other rules: how long a sent message takes to reach the other
+// phone, the longest message, the size of a photo made on the phone, and how far ahead a visit may be asked for.
+export const CHAT = {
+  deliveryMs: 1200,
+  messageMax: 1000,
+  photoMaxSide: 800,
+  photoQuality: 0.75,
+  photoMaxChars: 400000,
+  bookingHorizonDays: 90,
+};

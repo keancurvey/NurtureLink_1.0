@@ -134,6 +134,11 @@ const followUpEnd = (appointment) =>
   appointment.scheduled_at + THRESHOLDS.videoJoin.afterMinutes * MS_MINUTE + THRESHOLDS.followUpChatHours * MS_HOUR;
 
 const midwifeThread = (ctx) => ctx.state().db.conversations.find((c) => c.patient_id === ctx.patientId && c.kind === 'midwife') ?? null;
+/** The teleconsultation the patient asked for that no super account has decided yet, oldest first (PLAN.md Environment State, P2-2). */
+const waitingTeleconsult = (ctx) =>
+  ctx.state()
+    .db.appointments.filter((a) => a.patient_id === ctx.patientId && a.type === 'teleconsult' && a.status === 'pending')
+    .sort((a, b) => a.requested_at - b.requested_at)[0] ?? null;
 const nextApprovedTeleconsult = (ctx) =>
   ctx.state()
     .db.appointments.filter((a) => a.patient_id === ctx.patientId && a.type === 'teleconsult' && a.status === 'approved' && a.scheduled_at !== null)
@@ -151,7 +156,16 @@ function incomingMessage(ctx) {
   let recipient;
   let pool;
   let language;
-  if (role === 'patient') {
+  const chosen = ctx.params.conversationId ? db.conversations.find((c) => c.id === ctx.params.conversationId && c.patient_id === ctx.patientId) : null;
+  if (role === 'patient' && chosen?.kind === 'midwife') {
+    // the midwife thread she has open: the assigned midwife answers while the thread is open
+    if (!(chosen.unlocked_until > ctx.now())) return;
+    conversation = chosen;
+    sender = ctx.profile(chosen.assigned_provider_id) ?? activeSupers(ctx)[0];
+    recipient = patient;
+    pool = data.CHAT_MIDWIFE_REPLIES;
+    language = sender.language;
+  } else if (role === 'patient') {
     // the patient's own chat: her barangay's account answers
     const accounts = activeBarangayAccounts(ctx, patient.barangay_id);
     const count = db.messages.filter((m) => m.conversation_id === barangay.id).length;
@@ -457,9 +471,23 @@ export const SCENARIOS = [
     steps: () => [
       {
         run(ctx) {
-          const appointment = nextApprovedTeleconsult(ctx);
           const thread = midwifeThread(ctx);
-          if (!appointment || !thread) return;
+          let appointment = nextApprovedTeleconsult(ctx);
+          if (!appointment) {
+            // No approved teleconsultation yet: the office approves the one she asked for, then it starts (P2-2; the approvals
+            // screen of the super account is Prompt 9). The first super account approves and the second is the assigned midwife.
+            const waiting = waitingTeleconsult(ctx);
+            if (!waiting || !thread) return;
+            const [approver, assigned = approver] = activeSupers(ctx);
+            if (!approver) return;
+            const at = ctx.now();
+            const approval = { status: 'approved', provider_id: assigned.id, handled_by: approver.id, handled_at: at, scheduled_at: at };
+            ctx.commit([{ op: 'update', table: 'appointments', id: waiting.id, patch: approval }]);
+            ctx.sendPush([ctx.patientId], 'appointment_approved', { appointment_id: waiting.id });
+            ctx.sendPush(activeBarangayAccounts(ctx, ctx.profile(ctx.patientId).barangay_id).map((p) => p.id), 'appointment_approved', { appointment_id: waiting.id, patient_id: ctx.patientId });
+            appointment = { ...waiting, ...approval };
+          }
+          if (!thread) return;
           const started = { ...appointment, scheduled_at: ctx.now() };
           ctx.commit([
             { op: 'update', table: 'appointments', id: appointment.id, patch: { scheduled_at: started.scheduled_at } },

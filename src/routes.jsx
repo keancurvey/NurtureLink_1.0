@@ -10,13 +10,16 @@ import GuardianConsent from './features/auth/GuardianConsent.jsx';
 import { RoleRoute, SignedInRoute, SignedOutOnly, StepRoute } from './features/auth/Guards.jsx';
 import SignIn from './features/auth/SignIn.jsx';
 import SignUp from './features/auth/SignUp.jsx';
-import SosShortcut from './components/alerts/SosShortcut.jsx';
 import AlertDetail from './features/alerts/AlertDetail.jsx';
 import PairingWizard from './features/devices/PairingWizard.jsx';
 import CheckScreen from './features/home/CheckScreen.jsx';
 import Home from './features/home/Home.jsx';
 import NotificationCenter from './features/notifications/NotificationCenter.jsx';
 import PushPermission from './features/notifications/PushPermission.jsx';
+import BookingForm from './features/consult/BookingForm.jsx';
+import CallScreen from './features/consult/CallScreen.jsx';
+import ChatScreen from './features/consult/ChatScreen.jsx';
+import Consult from './features/consult/Consult.jsx';
 import Profile from './features/profile/Profile.jsx';
 import Schedule from './features/schedule/Schedule.jsx';
 
@@ -52,21 +55,7 @@ export default function AppRoutes() {
             if (role === 'patient' && item.path === 'home') return <Route key={item.path} path={item.path} element={<Home />} />;
             if (role === 'patient' && item.path === 'schedule') return <Route key={item.path} path={item.path} element={<Schedule />} />;
             if (role === 'patient' && item.path === 'profile') return <Route key={item.path} path={item.path} element={<Profile />} />;
-            if (role === 'patient' && item.path === 'consult') {
-              // TEMP (replaced in Prompt 7): the Consult tab's placeholder holds the SOS shortcut it will keep (PAT-C-06).
-              return (
-                <Route
-                  key={item.path}
-                  path={item.path}
-                  element={
-                    <>
-                      <TempPage titleKey={`nav.${item.key}`} art={item.art} />
-                      <SosShortcut />
-                    </>
-                  }
-                />
-              );
-            }
+            if (role === 'patient' && item.path === 'consult') return <Route key={item.path} path={item.path} element={<Consult />} />;
             const Screen = item.path === 'profile' ? TempProfile : TempPage;
             return <Route key={item.path} path={item.path} element={<Screen titleKey={`nav.${item.key}`} art={item.art} />} />;
           })}
@@ -74,6 +63,9 @@ export default function AppRoutes() {
             <>
               <Route path="home/check" element={<CheckScreen />} />
               <Route path="pair" element={<PairingWizard />} />
+              <Route path="consult/chat/:conversationId" element={<ChatScreen />} />
+              <Route path="consult/book" element={<BookingForm />} />
+              <Route path="consult/call/:appointmentId" element={<CallScreen />} />
             </>
           ) : null}
         </Route>

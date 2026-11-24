@@ -87,7 +87,8 @@
   },
   "action": {
     "skipSplash": "Laktawan ang splash",
-    "expireSession": "Tapusin ang session"
+    "expireSession": "Tapusin ang session",
+    "attachPhoto": "Magdagdag ng larawan"
   },
   "toast": {
     "started": "Sinimulan: {{name}}",
@@ -163,6 +164,7 @@
     "forgotContact": "Ilagay ang numero ng telepono",
     "forgotCode": "Ilagay ang natanggap na code",
     "password": "Ilagay ang matibay na password",
-    "pairingStep": "Punan ang hakbang na ito"
+    "pairingStep": "Punan ang hakbang na ito",
+    "booking": "Punan ang hiling"
   }
 }

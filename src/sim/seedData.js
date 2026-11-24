@@ -153,6 +153,22 @@ export const CHAT_MIDWIFE = {
   fil: 'Magandang araw po! Nakatakda na ang teleconsultation ninyo bukas. Pakisigurong may charge ang phone at nasa inyo ang belt.',
 };
 
+// What the midwife answers in an open midwife thread (the gear's Incoming message): short, general and not clinical.
+export const CHAT_MIDWIFE_REPLIES = {
+  en: [
+    'Hello! Thank you for your message. I have noted it for our consultation.',
+    'Please keep your phone charged and the belt on hand for the call.',
+    'Good to hear from you. We can go through your latest readings together.',
+    'See you po at the appointment. Message me here if anything changes.',
+  ],
+  fil: [
+    'Magandang araw po! Salamat sa mensahe ninyo. Naitala ko po ito para sa konsultasyon natin.',
+    'Pakisigurong may charge ang phone at nasa inyo ang belt para sa tawag.',
+    'Masaya pong marinig kayo. Maaari nating suriin nang sabay ang mga pinakabagong reading ninyo.',
+    'Hanggang sa appointment po. Mag-message po kayo rito kung may magbago.',
+  ],
+};
+
 export const VISIT_NOTES = {
   en: [
     'Routine prenatal visit. No complaints mentioned.',
