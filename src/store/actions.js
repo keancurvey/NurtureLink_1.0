@@ -4,7 +4,7 @@
 import { latency } from '../lib/latency.js';
 
 export function createActions(runtime, { delay = latency } = {}) {
-  const { core, auth, devices, alerts, profile, requests } = runtime;
+  const { core, auth, devices, alerts, profile, requests, consult } = runtime;
   const slow = (fn) => async (...args) => {
     await delay();
     return fn(...args);
@@ -74,6 +74,14 @@ export function createActions(runtime, { delay = latency } = {}) {
     unpair_device: slow((serial) => devices.unpair(serial)),
     /** Settings → Notifications off. */
     disable_push: () => alerts.disablePush(),
+    // Consult (PAT-C-02, PAT-C-04, PAT-C-06). Sending and asking the office reach the server, so they take a moment; marking a
+    // thread seen answers at once on the phone.
+    /** Write to the barangay inbox or the midwife: { conversation_id, body, attachment_url | attachment_art, client_id }. Answers { ok, queued } or { ok: false, error, errors?, reason? }. */
+    send_message: slow((values) => consult.sendMessage(values)),
+    /** She has this thread open: what the other side wrote is seen. */
+    mark_seen: (conversationId) => consult.markSeen(conversationId),
+    /** A booking request: { type, preferred_date, window, reason }. Answers { ok, queued } or { ok: false, error, errors? }. */
+    request_booking: slow((values) => requests.requestBooking(values)),
     /** Gear: back to the starting records, signed out. */
     reset_data: slow(() => runtime.reset()),
   };

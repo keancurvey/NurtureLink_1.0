@@ -3,6 +3,7 @@
 // (a profile) and returns an empty list or null when the viewer may not see the data.
 import { AUTH, buildThresholds } from '../config/thresholds.js';
 import { identifierKey, isMinor } from '../lib/authRules.js';
+import { bookingRows, nextTeleconsult, threadLock, unseenFrom } from '../lib/consult.js';
 import { manilaDate } from '../lib/dates.js';
 import { calendarItems } from '../lib/schedule.js';
 import * as access from '../lib/permissions.js';
@@ -96,7 +97,7 @@ export function visitNotesOf(state, viewer, patientId) {
 export function appointmentsOf(state, viewer, { patientId = null } = {}) {
   if (!viewer) return [];
   return state.db.appointments
-    .filter((a) => (!patientId || a.patient_id === patientId) && patientInScope(state, viewer, a.patient_id))
+    .filter((a) => (!patientId || a.patient_id === patientId) && patientInScope(state, viewer, a.patient_id) && visible(viewer, a))
     .sort((a, b) => (a.scheduled_at ?? a.requested_at) - (b.scheduled_at ?? b.requested_at));
 }
 
@@ -337,4 +338,69 @@ export function pendingResetCode(state, identifier, now = Date.now()) {
   const profile = profileByIdentifier(state, identifier);
   const credential = profile ? credentialOf(state, profile.id) : null;
   return credential?.reset_code && credential.reset_expires_at > now ? credential.reset_code : null;
+}
+
+// ---------- Consult (Prompt 7) ----------
+
+/**
+ * A patient's two threads (PAT-C-01), the barangay inbox first: { conversation, last, unread, lock }. `last` is the newest
+ * message she can see, `unread` counts what the other side wrote and she has not seen, `lock` is { open, reason }.
+ */
+export function threadsOf(state, viewer, now = Date.now()) {
+  if (viewer?.role !== 'patient') return [];
+  const order = { barangay: 0, midwife: 1 };
+  return conversationsOf(state, viewer)
+    .sort((a, b) => order[a.kind] - order[b.kind])
+    .map((conversation) => {
+      const messages = messagesOf(state, viewer, conversation.id);
+      return { conversation, last: messages[messages.length - 1] ?? null, unread: unseenFrom(messages, viewer.id).length, lock: threadLock(conversation, now) };
+    });
+}
+
+/** One thread of the signed-in patient with its messages, or null when it is not hers. */
+export function threadOf(state, viewer, conversationId, now = Date.now()) {
+  return threadsOf(state, viewer, now)
+    .map((thread) => ({ ...thread, messages: messagesOf(state, viewer, thread.conversation.id) }))
+    .find((thread) => thread.conversation.id === conversationId) ?? null;
+}
+
+/**
+ * Who wrote what in a thread she can read (ACC-03: every message shows its sender's name): a Map of profile id to
+ * { name, role }. Only the senders of messages she can see and the people the thread is with are in it.
+ */
+export function senderNamesOf(state, viewer, conversationId) {
+  const names = new Map();
+  for (const message of messagesOf(state, viewer, conversationId)) {
+    const sender = profileOf(state, message.sender_id);
+    if (sender) names.set(sender.id, { name: sender.full_name, role: sender.role });
+  }
+  return names;
+}
+
+/** The accounts of her barangay's health team and the midwife of her thread, for the thread's heading. */
+export function threadPeopleOf(state, viewer, conversation) {
+  if (viewer?.role !== 'patient' || !conversation || conversation.patient_id !== viewer.id) return [];
+  const people =
+    conversation.kind === 'barangay'
+      ? state.db.profiles.filter((p) => p.role === 'barangay' && p.barangay_id === conversation.barangay_id && p.active)
+      : [profileOf(state, conversation.assigned_provider_id)].filter((p) => p?.active);
+  return people.map((p) => ({ id: p.id, name: p.full_name, role: p.role }));
+}
+
+/** Her booking requests, newest first, with how each stands (PAT-C-04). Waiting ones made offline show only to her. */
+export function bookingsOf(state, viewer, now = Date.now()) {
+  return viewer?.role === 'patient' ? bookingRows(appointmentsOf(state, viewer, { patientId: viewer.id }), now) : [];
+}
+
+/** The teleconsultation to join or wait for: the one running now, otherwise the next approved one. */
+export function teleconsultOf(state, viewer, now = Date.now()) {
+  return viewer?.role === 'patient' ? nextTeleconsult(appointmentsOf(state, viewer, { patientId: viewer.id }), now) : null;
+}
+
+/** The health account the Call button rings: the first active account of her barangay with a number. Null when there is none. */
+export function callTargetOf(state, viewer) {
+  if (viewer?.role !== 'patient') return null;
+  const own = profileOf(state, viewer.id);
+  const account = state.db.profiles.find((p) => p.role === 'barangay' && p.active && p.barangay_id === own?.barangay_id && p.contact_no);
+  return account ? { id: account.id, name: account.full_name, contact_no: account.contact_no } : null;
 }

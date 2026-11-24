@@ -35,3 +35,28 @@ export async function downscalePhoto(file, max = PHOTO_SIZE) {
     throw new Error('unreadable');
   }
 }
+
+/** A picture scaled down to fit inside max by max, keeping its shape and never made larger: { width, height }. */
+export function fitWithin(width, height, max) {
+  const scale = Math.min(1, max / Math.max(width, height));
+  return { width: Math.max(1, Math.round(width * scale)), height: Math.max(1, Math.round(height * scale)) };
+}
+
+/** Browser only: a photo for a chat message, as a small JPEG data URL no larger than `max` on its long side. */
+export async function downscaleAttachment(file, max, quality) {
+  try {
+    const bitmap = await createImageBitmap(file);
+    const { width, height } = fitWithin(bitmap.width, bitmap.height, max);
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext('2d');
+    context.fillStyle = '#FFFFFF';
+    context.fillRect(0, 0, width, height);
+    context.drawImage(bitmap, 0, 0, width, height);
+    bitmap.close?.();
+    return canvas.toDataURL('image/jpeg', quality);
+  } catch {
+    throw new Error('unreadable');
+  }
+}

@@ -29,12 +29,14 @@ export function notificationPath(role, notification) {
       return p.alert_id ? `/alerts/${p.alert_id}` : tab(role, 'home');
     case 'battery_low':
       return tab(role, 'home');
+    case 'message': // a patient's message opens its thread
+      if (role === 'patient' && p.conversation_id) return `/patient/consult/chat/${p.conversation_id}`;
+      return role === 'barangay' ? tab(role, 'chat') : tab(role, 'consult');
     case 'booking_request':
     case 'barangay_change_request':
     case 'referral':
     case 'appointment_started':
     case 'follow_up_open':
-    case 'message':
       return role === 'barangay' ? tab(role, 'chat') : tab(role, 'consult');
     case 'reschedule_request': // the approvals queue for a super account; the calendar for the barangay account whose patient's visit is moving
       return role === 'barangay' ? tab(role, 'calendar') : tab(role, 'consult');

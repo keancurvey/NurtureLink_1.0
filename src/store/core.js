@@ -2,7 +2,7 @@
 // (ingest_readings, send_push) and the alert path (ALR-01 to ALR-05). Everything the simulated devices, the scenarios
 // and the check flow write goes through here, so replacing this module with calls to a real backend is the only change
 // needed to go live. Screens call the same functions through the latency wrapper in actions.js.
-import { buildThresholds } from '../config/thresholds.js';
+import { CHAT, buildThresholds } from '../config/thresholds.js';
 import {
   evaluateBattery,
   evaluateFhr,
@@ -186,6 +186,11 @@ export function createCore({ store, now = Date.now }) {
     return sendPush(supers, 'barangay_change_request', { request_id: request.id, patient_id: request.patient_id });
   }
 
+  /** Tell every active super account a booking request is waiting (the shared approvals queue, SUP-C-01). */
+  function deliverBooking(appointment) {
+    return sendPush(activeSupers(state().db).map((p) => p.id), 'booking_request', { appointment_id: appointment.id, patient_id: appointment.patient_id });
+  }
+
   /** The operations that save a patient's own details: contact and photo live on her profile, emergency contact on her patient row. */
   function personalEditOps(patientId, edit) {
     const PROFILE_FIELDS = ['contact_no', 'photo_url', 'avatar_art'];
@@ -195,6 +200,50 @@ export function createCore({ store, now = Date.now }) {
     if (Object.keys(profilePatch).length > 0) ops.push({ op: 'update', table: 'profiles', id: patientId, patch: profilePatch });
     ops.push({ op: 'update', table: 'patients', id: patientId, patch: { ...patientPatch, queued_edit: null } });
     return ops;
+  }
+
+  /**
+   * Who a message is for: every active barangay account of the patient's barangay (a shared inbox, ACC-03), or the midwife
+   * assigned to the appointment. Nobody when the account is not active.
+   */
+  function messageRecipients(conversation) {
+    const db = state().db;
+    if (conversation.kind === 'barangay') return activeBarangayAccounts(db, conversation.barangay_id).map((p) => p.id);
+    const provider = conversation.assigned_provider_id ? byId(db.profiles).get(conversation.assigned_provider_id) : null;
+    return provider?.active ? [provider.id] : [];
+  }
+
+  /** The recipients' bell and banner (send_push) for a message that has reached the server. */
+  function tellMessageRecipients(message) {
+    const conversation = byId(state().db.conversations).get(message.conversation_id);
+    if (!conversation) return [];
+    return sendPush(messageRecipients(conversation), 'message', { conversation_id: conversation.id, patient_id: conversation.patient_id });
+  }
+
+  /**
+   * Keep a message a patient wrote (PAT-C-02, PAT-C-06). Online, the server has it at once, it reaches the other phone a
+   * moment later (delivered) and the recipients are told. Offline it waits on the phone, hidden from providers, and goes out
+   * with the queue. A client id the server already holds is a duplicate and is not stored again (spec 3.2).
+   */
+  function sendMessage(row) {
+    const existing = row.client_id ? state().db.messages.find((m) => m.client_id === row.client_id) : null;
+    if (existing) return { message: existing, duplicate: true };
+    const online = isOnline();
+    const at = now();
+    const message = {
+      attachment_url: null,
+      attachment_art: null,
+      ...row,
+      id: id('msg'),
+      sent_at: at,
+      delivered_at: online ? at + CHAT.deliveryMs : null,
+      seen_at: null,
+      syncState: online ? 'synced' : 'queued',
+      ...(online ? {} : { queued_at: at }),
+    };
+    commit([{ op: 'insert', table: 'messages', row: message }]);
+    if (online) tellMessageRecipients(message);
+    return { message, duplicate: false };
   }
 
   /**
@@ -384,13 +433,21 @@ export function createCore({ store, now = Date.now }) {
       deliverRequest(request);
     }
     summary.requests = requests.length;
+    // A booking request made offline reaches the approvals queue now.
+    const bookings = queuedInOrder(state().db.appointments);
+    for (const appointment of bookings) {
+      commit([{ op: 'update', table: 'appointments', id: appointment.id, patch: { syncState: 'synced' } }]);
+      deliverBooking(appointment);
+    }
+    summary.requests += bookings.length;
     const edits = state().db.patients.filter((row) => row.queued_edit);
     for (const row of edits) commit(personalEditOps(row.id, row.queued_edit.values));
     summary.edits = edits.length;
     const messages = queuedInOrder(state().db.messages);
     if (messages.length) {
       const at = now();
-      commit([{ op: 'updateMany', table: 'messages', patches: messages.map((m) => ({ id: m.id, patch: { syncState: 'synced', delivered_at: at } })) }]);
+      commit([{ op: 'updateMany', table: 'messages', patches: messages.map((m) => ({ id: m.id, patch: { syncState: 'synced', delivered_at: at + CHAT.deliveryMs } })) }]);
+      for (const message of messages) tellMessageRecipients(message);
       summary.messages = messages.length;
     }
     const devicePatients = [...new Set(state().db.devices.map((d) => d.patient_id))];
@@ -426,6 +483,9 @@ export function createCore({ store, now = Date.now }) {
     sweepEscalations,
     sweepReminders,
     deliverRequest,
+    deliverBooking,
+    messageRecipients,
+    sendMessage,
     personalEditOps,
     evaluateOnPhone,
     relaySos,
