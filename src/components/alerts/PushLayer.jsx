@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Bell, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { notificationText } from '../../features/alerts/text.js';
@@ -19,6 +19,9 @@ import { STATUS_ICONS } from '../ui/statusIcons.js';
 export default function PushLayer() {
   const { t } = useTranslation('alerts');
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const onScreen = useRef(pathname); // the screen she is on: a message for the thread she has open needs no banner
+  onScreen.current = pathname;
   const actions = useActions();
   const { store } = useRuntime();
   const viewerId = useStoreValue((state) => state.session?.profile_id ?? null);
@@ -36,10 +39,17 @@ export default function PushLayer() {
       return;
     }
     if (!viewerId) return;
-    const arrived = mine.filter((n) => !known.current.ids.has(n.id) && !n.read_at && (online || n.payload?.local === true));
-    if (arrived.length === 0) return;
     const state = store.getState();
     const viewer = viewerOf(state);
+    const arrived = mine.filter((n) => {
+      if (known.current.ids.has(n.id) || n.read_at || !(online || n.payload?.local === true)) return false;
+      if (n.type === 'message' && describeNotification(n, { role: viewer?.role }).path === onScreen.current) {
+        known.current.ids.add(n.id); // she is reading that thread
+        return false;
+      }
+      return true;
+    });
+    if (arrived.length === 0) return;
     const at = Date.now();
     const fresh = arrived.map((n) => {
       known.current.ids.add(n.id);

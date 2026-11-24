@@ -31,3 +31,14 @@ export function birthdateForAge(age, now = Date.now()) {
   const monthDay = today.slice(5) === '02-29' ? '02-28' : today.slice(5);
   return addDays(`${Number(today.slice(0, 4)) - age}-${monthDay}`, -90);
 }
+
+/** What the gear types into the booking form (PLAN.md Section 7: Fill request): a teleconsultation tomorrow afternoon. */
+export const BOOKING_FILL = {
+  type: 'teleconsult',
+  window: 'afternoon',
+  daysAhead: 1,
+  reason: {
+    en: 'Questions about my last check-up and my schedule',
+    fil: 'May mga tanong po tungkol sa huling check-up at sa iskedyul ko',
+  },
+};

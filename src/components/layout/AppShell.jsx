@@ -27,6 +27,20 @@ export default function AppShell({ role }) {
   // The shell tells the gear what is anchored to the bottom (the tab bar) and which layout is showing, so the gear
   // sits above the tabs on phones and at the foot of the side navigation on the super account's desktop layout.
   useGearOffset(tabsRef);
+  // The tab bar's height, for a chat's message box that sits just above it (--tabbar-h).
+  useEffect(() => {
+    const element = tabsRef.current;
+    if (!element) return undefined;
+    const root = document.documentElement;
+    const report = () => root.style.setProperty('--tabbar-h', `${element.offsetHeight}px`);
+    report();
+    const observer = typeof ResizeObserver === 'function' ? new ResizeObserver(report) : null;
+    observer?.observe(element);
+    return () => {
+      observer?.disconnect();
+      root.style.removeProperty('--tabbar-h');
+    };
+  }, []);
   useEffect(() => {
     const root = document.documentElement;
     root.dataset.shell = isSuper ? 'super' : 'phone';
