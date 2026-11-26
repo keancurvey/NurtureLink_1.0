@@ -219,7 +219,7 @@ function GearPanelBody({ onClose, viewer, role }) {
                 <div className="gear-group" key={group}>
                   <h4 className="gear-group__title">{groupTitles[group]}</h4>
                   <div className="gear-actions">
-                    {ids.map((id) => (
+                    {ids.filter((id) => !screenActions.some((action) => action.id === id)).map((id) => (
                       <Button key={id} variant="ghost" className="gear-action" onClick={() => choose(id)}>
                         {labelOf(id)}
                       </Button>

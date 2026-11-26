@@ -42,3 +42,22 @@ export const BOOKING_FILL = {
     fil: 'May mga tanong po tungkol sa huling check-up at sa iskedyul ko',
   },
 };
+
+/** What the gear types into the visit note form (PLAN.md Section 7: Barangay, visit note: Fill the form). */
+export const VISIT_NOTE_FILL = {
+  bp_systolic: '112',
+  bp_diastolic: '72',
+  weight_kg: '62.4',
+  note: {
+    en: 'Feels well and the baby is active. Advised to keep taking her vitamins and to come back for the next check-up.',
+    fil: 'Maayos ang pakiramdam at malikot ang baby. Pinayuhang ituloy ang pag-inom ng bitamina at bumalik sa susunod na check-up.',
+  },
+};
+
+/** What the gear types into the event form (PLAN.md Section 7: Barangay, event form: Fill the form): a talk the day after tomorrow, 9 to 11 am. */
+export const EVENT_FILL = {
+  daysAhead: 2,
+  start: '09:00',
+  end: '11:00',
+  title: { en: 'Healthy pregnancy talk', fil: 'Usapang malusog na pagbubuntis' },
+};
