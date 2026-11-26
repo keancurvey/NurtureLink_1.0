@@ -29,11 +29,13 @@ export function notificationPath(role, notification) {
       return p.alert_id ? `/alerts/${p.alert_id}` : tab(role, 'home');
     case 'battery_low':
       return tab(role, 'home');
-    case 'message': // a patient's message opens its thread
+    case 'message': // a message opens its thread: the patient's own, or a barangay account's chat with that patient
       if (role === 'patient' && p.conversation_id) return `/patient/consult/chat/${p.conversation_id}`;
+      if (role === 'barangay' && p.patient_id) return `/barangay/chat/${p.patient_id}`;
       return role === 'barangay' ? tab(role, 'chat') : tab(role, 'consult');
     case 'booking_request':
     case 'barangay_change_request':
+    case 'appointment_proposal':
     case 'referral':
     case 'appointment_started':
     case 'follow_up_open':
@@ -52,7 +54,7 @@ export function notificationPath(role, notification) {
   }
 }
 
-const ICONS = { alert: 'alert', alert_notice: 'alert', battery_low: 'battery', booking_request: 'calendar', reschedule_request: 'calendar', barangay_change_request: 'chat', appointment_reminder: 'calendar', appointment_approved: 'calendar', appointment_started: 'video', follow_up_open: 'chat', event_created: 'calendar', event_reminder: 'calendar', message: 'chat', referral: 'chat', video_usage_warning: 'video' };
+const ICONS = { alert: 'alert', alert_notice: 'alert', battery_low: 'battery', booking_request: 'calendar', reschedule_request: 'calendar', barangay_change_request: 'chat', appointment_proposal: 'calendar', appointment_reminder: 'calendar', appointment_approved: 'calendar', appointment_started: 'video', follow_up_open: 'chat', event_created: 'calendar', event_reminder: 'calendar', message: 'chat', referral: 'chat', video_usage_warning: 'video' };
 
 /**
  * What to show for a notification: texts are keys under alerts:notification.*, values may hold `...Key` entries that the
@@ -79,6 +81,8 @@ export function describeNotification(notification, { role, patientName = null, e
       return { ...base, tone: 'info', titleKey: 'notification.reschedule_request', values: { patient: patientName ?? '' } };
     case 'barangay_change_request':
       return { ...base, tone: 'info', titleKey: 'notification.barangay_change_request', values: { patient: patientName ?? '' } };
+    case 'appointment_proposal':
+      return { ...base, tone: 'info', titleKey: 'notification.appointment_proposal', values: { patient: patientName ?? '' } };
     case 'appointment_reminder':
       return { ...base, tone: 'info', titleKey: `notification.appointment_reminder.${p.lead === 'hours' ? 'hours' : 'day'}`, values: { kindKey: `notification.kind.${p.kind ?? 'clinic'}` } };
     case 'appointment_approved':

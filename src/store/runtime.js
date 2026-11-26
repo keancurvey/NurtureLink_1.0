@@ -10,6 +10,7 @@ import { SCENARIOS } from '../sim/scenarios.js';
 import { createScheduler } from '../sim/scheduler.js';
 import { createAlerts } from './alerts.js';
 import { createAuth } from './auth.js';
+import { createBarangay } from './barangay.js';
 import { createCheckBridge } from './checkBridge.js';
 import { createConsult } from './consult.js';
 import { createCore } from './core.js';
@@ -70,6 +71,7 @@ export function createRuntime({
   const profile = createProfileService({ store, core, now });
   const requests = createRequests({ store, core, now });
   const consult = createConsult({ store, core, now });
+  const barangay = createBarangay({ store, core, now });
   const engine = createEngine({ store, core, sched, bridge, link, control, scenarios: SCENARIOS, now });
   let heartbeat = null;
   let sweeper = null;
@@ -88,6 +90,7 @@ export function createRuntime({
     profile,
     requests,
     consult,
+    barangay,
 
     /**
      * Start up: finish a run a reload cut short, upload what is still queued (when online), keep devices' last-seen

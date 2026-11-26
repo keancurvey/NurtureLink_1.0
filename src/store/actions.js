@@ -4,7 +4,7 @@
 import { latency } from '../lib/latency.js';
 
 export function createActions(runtime, { delay = latency } = {}) {
-  const { core, auth, devices, alerts, profile, requests, consult } = runtime;
+  const { core, auth, devices, alerts, profile, requests, consult, barangay } = runtime;
   const slow = (fn) => async (...args) => {
     await delay();
     return fn(...args);
@@ -82,6 +82,20 @@ export function createActions(runtime, { delay = latency } = {}) {
     mark_seen: (conversationId) => consult.markSeen(conversationId),
     /** A booking request: { type, preferred_date, window, reason }. Answers { ok, queued } or { ok: false, error, errors? }. */
     request_booking: slow((values) => requests.requestBooking(values)),
+    // The barangay account (BRG-M-04 to BRG-M-06, BRG-K-01). Writing to the record reaches the server, so it takes a moment;
+    // noting that a record was opened is quiet and answers at once.
+    /** A patient record or her latest vitals was opened: written to the access log. */
+    open_record: (patientId, action) => barangay.openRecord(patientId, action),
+    /** LMP, EDD and risk notes of a patient: { lmp, edd, risk_notes }. Answers { ok } or { ok: false, error, errors? }. */
+    save_clinical: slow((patientId, values) => barangay.saveClinical(patientId, values)),
+    /** A visit note: { bp_systolic, bp_diastolic, weight_kg, note, shared }. */
+    add_visit_note: slow((patientId, values) => barangay.addVisitNote(patientId, values)),
+    /** Refer a patient to the midwife: { reason }. The latest vitals go with it. */
+    refer_patient: slow((patientId, values) => barangay.refer(patientId, values)),
+    /** Propose an appointment time: { type, preferred_date, window, reason }. */
+    propose_appointment: slow((patientId, values) => barangay.proposeAppointment(patientId, values)),
+    /** An event for the account's own barangay: { title, date, start, end }. */
+    create_event: slow((values) => barangay.createEvent(values)),
     /** Gear: back to the starting records, signed out. */
     reset_data: slow(() => runtime.reset()),
   };

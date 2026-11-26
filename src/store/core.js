@@ -213,15 +213,19 @@ export function createCore({ store, now = Date.now }) {
     return provider?.active ? [provider.id] : [];
   }
 
-  /** The recipients' bell and banner (send_push) for a message that has reached the server. */
+  /**
+   * The recipients' bell and banner (send_push) for a message that has reached the server: the patient when a provider wrote
+   * it, otherwise the accounts the thread is for.
+   */
   function tellMessageRecipients(message) {
     const conversation = byId(state().db.conversations).get(message.conversation_id);
     if (!conversation) return [];
-    return sendPush(messageRecipients(conversation), 'message', { conversation_id: conversation.id, patient_id: conversation.patient_id });
+    const recipients = message.sender_id === conversation.patient_id ? messageRecipients(conversation) : [conversation.patient_id];
+    return sendPush(recipients, 'message', { conversation_id: conversation.id, patient_id: conversation.patient_id });
   }
 
   /**
-   * Keep a message a patient wrote (PAT-C-02, PAT-C-06). Online, the server has it at once, it reaches the other phone a
+   * Keep a message a patient or a provider wrote (PAT-C-02, PAT-C-06, ACC-03). Online, the server has it at once, it reaches the other phone a
    * moment later (delivered) and the recipients are told. Offline it waits on the phone, hidden from providers, and goes out
    * with the queue. A client id the server already holds is a duplicate and is not stored again (spec 3.2).
    */

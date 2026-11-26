@@ -44,6 +44,7 @@ export const NOTIFICATION_TYPES = [
   'booking_request', // to super accounts
   'reschedule_request', // to super accounts and the appointment's provider (PAT-S-05): payload { request_id, appointment_id, patient_id }
   'barangay_change_request', // to super accounts (PAT-P-01): payload { request_id, patient_id }
+  'appointment_proposal', // to super accounts: a barangay account proposes a time for a patient (spec 6.2): payload { request_id, patient_id, proposed_by }
   'appointment_approved',
   'appointment_reminder', // to the patient, one day and two hours before: payload { appointment_id, lead: 'day' | 'hours', kind }
   'appointment_started',

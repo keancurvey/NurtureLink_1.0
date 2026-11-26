@@ -45,3 +45,8 @@ export function formatDateShort(date, lang = 'en') {
 export function formatDaysAway(days, lang = 'en') {
   return new Intl.RelativeTimeFormat(localeOf(lang), { numeric: 'auto' }).format(days, 'day');
 }
+
+/** A day and month for a chart axis, for example "Nov 18". */
+export function formatDayMonth(ms, lang = 'en') {
+  return new Intl.DateTimeFormat(localeOf(lang), { timeZone: TIME_ZONE, month: 'short', day: 'numeric' }).format(new Date(ms));
+}

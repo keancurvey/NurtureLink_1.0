@@ -5,6 +5,7 @@ import { AUTH, buildThresholds } from '../config/thresholds.js';
 import { identifierKey, isMinor } from '../lib/authRules.js';
 import { bookingRows, nextTeleconsult, threadLock, unseenFrom } from '../lib/consult.js';
 import { manilaDate } from '../lib/dates.js';
+import { patientCard, sortCards } from '../lib/monitor.js';
 import { calendarItems } from '../lib/schedule.js';
 import * as access from '../lib/permissions.js';
 import { byId } from './ops.js';
@@ -403,4 +404,78 @@ export function callTargetOf(state, viewer) {
   const own = profileOf(state, viewer.id);
   const account = state.db.profiles.find((p) => p.role === 'barangay' && p.active && p.barangay_id === own?.barangay_id && p.contact_no);
   return account ? { id: account.id, name: account.full_name, contact_no: account.contact_no } : null;
+}
+
+// ---------- The barangay account (Prompt 8) ----------
+
+const isBarangay = (viewer) => viewer?.active === true && viewer.role === 'barangay';
+
+/** The cards of the Monitor tab (BRG-M-02): every patient of the viewer's barangay, emergencies first. Empty for anyone else. */
+export function monitorOf(state, viewer, now = Date.now()) {
+  if (!isBarangay(viewer)) return [];
+  const thresholds = thresholdsOf(state);
+  const cards = patientsInScope(state, viewer).map((profile) =>
+    patientCard({
+      profile,
+      patient: byId(state.db.patients).get(profile.id) ?? null,
+      pregnancy: state.db.pregnancies.find((p) => p.patient_id === profile.id && p.status === 'active') ?? null,
+      latest: latestCheck(state, viewer, profile.id),
+      alerts: alertsOf(state, viewer, { patientId: profile.id }),
+      appointments: appointmentsOf(state, viewer, { patientId: profile.id }),
+      now,
+      thresholds,
+    }),
+  );
+  return sortCards(cards);
+}
+
+/**
+ * The Chat tab's list (BRG-C-01): one shared inbox per patient of the barangay, the newest conversation first, each with the
+ * last message and how many of the patient's messages nobody has seen yet (the read state is shared by the barangay's accounts).
+ */
+export function inboxOf(state, viewer) {
+  if (!isBarangay(viewer)) return [];
+  const rows = conversationsOf(state, viewer).map((conversation) => {
+    const messages = messagesOf(state, viewer, conversation.id);
+    return {
+      patient: profileOf(state, conversation.patient_id),
+      conversation,
+      last: messages[messages.length - 1] ?? null,
+      unread: messages.filter((m) => m.sender_id === conversation.patient_id && !m.seen_at).length,
+    };
+  });
+  return rows.sort((a, b) => (b.last?.sent_at ?? 0) - (a.last?.sent_at ?? 0) || a.patient.full_name.localeCompare(b.patient.full_name));
+}
+
+/** One patient's shared inbox with its messages, oldest first, or null when she is not a patient of the viewer's barangay. */
+export function inboxThreadOf(state, viewer, patientId) {
+  const row = inboxOf(state, viewer).find((r) => r.patient.id === patientId);
+  return row ? { ...row, messages: messagesOf(state, viewer, row.conversation.id) } : null;
+}
+
+/** The calendar of a barangay account (BRG-K-01): the appointments of its patients and the events for its barangay, by time. */
+export function providerCalendarOf(state, viewer) {
+  if (!isBarangay(viewer)) return [];
+  return calendarItems({ appointments: appointmentsOf(state, viewer), events: eventsOf(state, viewer) });
+}
+
+/** The Municipal Health Office as a barangay account reaches it (BRG-P-01): the active super accounts and how to call them. */
+export function officeContactsOf(state, viewer) {
+  if (!isBarangay(viewer)) return [];
+  return state.db.profiles.filter((p) => p.role === 'super' && p.active).map((p) => ({ id: p.id, name: p.full_name, title: p.title ?? null, contact_no: p.contact_no, email: p.email }));
+}
+
+/**
+ * The referrals sent about a patient in the viewer's barangay, newest first: { at, by, reason, vitals }. A referral is kept as
+ * one notification for each super account, so the copies are folded into one.
+ */
+export function referralsOf(state, viewer, patientId) {
+  if (!isBarangay(viewer) || !patientInScope(state, viewer, patientId)) return [];
+  const seen = new Map();
+  for (const n of state.db.notifications) {
+    if (n.type !== 'referral' || n.payload.patient_id !== patientId) continue;
+    const key = `${n.payload.from_profile_id}|${n.created_at}`;
+    if (!seen.has(key)) seen.set(key, { at: n.created_at, by: profileOf(state, n.payload.from_profile_id)?.full_name ?? null, reason: n.payload.reason ?? '', vitals: n.payload.vitals ?? null });
+  }
+  return newestFirst([...seen.values()], 'at');
 }
