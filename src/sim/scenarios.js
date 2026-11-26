@@ -195,8 +195,11 @@ function incomingMessage(ctx) {
     client_id: null,
     syncState: 'synced',
   };
-  // The other side has now seen what the viewer sent earlier in this thread.
-  const seen = db.messages.filter((m) => m.conversation_id === conversation.id && m.sender_id === recipient?.id && !m.seen_at);
+  // The other side has now seen what the viewer sent earlier in this thread. In a barangay's shared inbox the patient has
+  // seen what any account of the barangay wrote (ACC-03).
+  const team = new Set(db.profiles.filter((p) => p.role === 'barangay' && p.barangay_id === patient.barangay_id).map((p) => p.id));
+  const fromViewerSide = (m) => (role === 'barangay' && conversation.kind === 'barangay' ? team.has(m.sender_id) : m.sender_id === recipient?.id);
+  const seen = db.messages.filter((m) => m.conversation_id === conversation.id && fromViewerSide(m) && !m.seen_at);
   ctx.commit([
     { op: 'insert', table: 'messages', row: message },
     { op: 'updateMany', table: 'messages', patches: seen.map((m) => ({ id: m.id, patch: { seen_at: at } })) },

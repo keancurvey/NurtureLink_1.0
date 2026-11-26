@@ -88,6 +88,7 @@
     "other": "Bagong abiso",
     "reschedule_request": "Humiling si {{patient}} ng ibang oras para sa isang bisita",
     "barangay_change_request": "Humiling si {{patient}} na magpalit ng barangay",
+    "appointment_proposal": "Nagmungkahi ang barangay ng oras ng pagbisita para kay {{patient}}",
     "appointment_reminder": {
       "day": "Paalala: bukas ang {{kind}} mo",
       "hours": "Paalala: 2 oras na lang bago ang {{kind}} mo"

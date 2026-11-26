@@ -165,6 +165,8 @@
     "forgotCode": "Fill the received code",
     "password": "Fill a strong password",
     "pairingStep": "Fill this step",
-    "booking": "Fill request"
+    "booking": "Fill request",
+    "visitNote": "Fill the form",
+    "event": "Fill the form"
   }
 }

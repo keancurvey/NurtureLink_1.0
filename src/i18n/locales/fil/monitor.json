@@ -1,1 +1,288 @@
-{}
+{
+  "title": "Monitor",
+  "cancel": "Kanselahin",
+  "trimester": {
+    "1": "Unang trimester",
+    "2": "Ikalawang trimester",
+    "3": "Ikatlong trimester"
+  },
+  "status": {
+    "normal": "Normal",
+    "attention": "Kailangang tutukan",
+    "alert": "Alerto",
+    "none": "Wala pang sukat"
+  },
+  "counts": {
+    "label": "Buod",
+    "patients": "Mga pasyente",
+    "alerts": "Aktibong alerto",
+    "overdue": "Lagpas na check-up",
+    "due": "Due date ngayong buwan"
+  },
+  "filter": {
+    "search": "Hanapin ayon sa pangalan",
+    "trimester": "Trimester",
+    "allTrimesters": "Lahat ng trimester",
+    "alertsOnly": "May alerto lang",
+    "overdueOnly": "Lagpas na check-up lang"
+  },
+  "empty": {
+    "title": "Wala pang pasyente",
+    "body": "Lalabas dito ang mga pasyente ng barangay mo kapag nag-sign up sila.",
+    "noMatchTitle": "Walang maipakitang pasyente",
+    "noMatchBody": "Walang pasyenteng tugma sa hinahanap o sa mga filter. Baguhin ang mga ito para makakita ng iba."
+  },
+  "card": {
+    "list": "Mga pasyente, {{count}} ang nakikita",
+    "open": "Buksan ang rekord ni {{name}}",
+    "age_one": "{{count}} taong gulang",
+    "age_other": "{{count}} taong gulang",
+    "lastCheck": "Huling check {{when}}",
+    "noCheck": "Wala pang check",
+    "overdue": "Lagpas na ang check-up",
+    "respond": "Tumugon",
+    "acknowledgedBy": "Tinanggap ni {{name}}"
+  },
+  "pregnancy": {
+    "title": "Pagbubuntis",
+    "edit": "I-edit",
+    "age": "Linggo ng pagbubuntis",
+    "ageValue": "{{weeks}}w {{days}}d",
+    "lmp": "Huling regla (LMP)",
+    "edd": "Inaasahang due date (EDD)",
+    "eddCalculated": "Binilang: LMP + 280 araw",
+    "eddProvider": "Itinakda ng provider",
+    "dueIn": "Due {{date}} ({{when}})",
+    "duePassed": "Due {{date}} ({{when}})",
+    "toGo": "Due {{when}}",
+    "passed": "Ang due date ay {{when}}",
+    "risk": "Mga tala sa panganib",
+    "noRisk": "Wala",
+    "updated": "Huling binago ni {{name}}, {{date}}"
+  },
+  "vitals": {
+    "fhr": "Heart rate ng baby",
+    "hr": "Heart rate ng ina",
+    "spo2": "Oxygen level (SpO2)",
+    "temp": "Temperatura ng balat",
+    "unit": {
+      "bpm": "bpm",
+      "spo2": "%",
+      "temp": "°C"
+    },
+    "confidence": "Kumpiyansa {{value}}%",
+    "unverified": "Hindi pa napatunayan: walang sukat ng wrist band na mapagkukumparahan.",
+    "noReading": "Walang malinaw na sukat.",
+    "notMeasured": "Hindi nasukat",
+    "none": "–",
+    "when": "{{date}} ({{relative}})",
+    "emptyTitle": "Wala pang check",
+    "emptyBody": "Lalabas dito ang una niyang natapos na check."
+  },
+  "detail": {
+    "back": "Bumalik sa Monitor",
+    "call": "Tawagan",
+    "chat": "Chat",
+    "schedule": "Iskedyul",
+    "openAlerts": "Mga bukas na alerto",
+    "latest": "Pinakabagong sukat",
+    "alertHistory": "Kasaysayan ng mga alerto"
+  },
+  "history": {
+    "title": "Kasaysayan ng mga sukat",
+    "measure": "Sukat",
+    "period": "Panahon",
+    "tab": {
+      "fhr": "Baby",
+      "hr": "Ina",
+      "spo2": "SpO2",
+      "temp": "Temp"
+    },
+    "days": {
+      "short": "{{count}} araw",
+      "long": "{{count}} araw"
+    },
+    "normalRange": "Normal na saklaw",
+    "outside": "Wala sa normal na saklaw",
+    "outsideCount_one": "{{count}} check na wala sa normal na saklaw",
+    "outsideCount_other": "{{count}} check na wala sa normal na saklaw",
+    "chartLabel": "{{name}}, nakaraang {{days}} araw: {{count}} check, pinakamababa {{min}}, pinakamataas {{max}}, pinakabago {{latest}} {{unit}}, {{outside}} ang wala sa normal na saklaw",
+    "chartNone": "{{name}}: walang sukat sa nakaraang {{days}} araw.",
+    "facts": "{{count}} check. Pinakamababa {{min}}, pinakamataas {{max}}, pinakabago {{latest}} {{unit}}.",
+    "recent": "Mga huling check",
+    "noChecks": "Wala pang natapos na check.",
+    "row": "Baby {{fhr}} bpm · Ina {{hr}} bpm · SpO2 {{spo2}}% · {{temp}} °C",
+    "more": "Magpakita pa",
+    "upcoming": "Paparating",
+    "attended": "Dumalo",
+    "missed": "Hindi nakadalo",
+    "rescheduled": "Inilipat",
+    "pending": "Naghihintay ng pag-apruba",
+    "declined": "Tinanggihan"
+  },
+  "visits": {
+    "title": "Kasaysayan ng check-up",
+    "empty": "Wala pang pagbisita.",
+    "kind": {
+      "clinic": "Check-up",
+      "hospital": "Pagbisita sa ospital",
+      "teleconsult": "Teleconsultation"
+    }
+  },
+  "note": {
+    "listTitle": "Mga tala sa pagbisita",
+    "add": "Magdagdag ng tala",
+    "empty": "Wala pang tala sa pagbisita.",
+    "title": "Tala sa pagbisita",
+    "systolic": "Blood pressure, itaas na numero",
+    "diastolic": "Blood pressure, ibabang numero",
+    "weight": "Timbang (kg)",
+    "observations": "Mga obserbasyon",
+    "observationsHint": "Ang nakita mo at ang ipinayo mo.",
+    "share": "Ibahagi sa pasyente",
+    "shareOn": "Mababasa niya ang talang ito sa profile niya.",
+    "shareOff": "Mga provider lang ang makakabasa ng talang ito.",
+    "save": "I-save ang tala",
+    "cancel": "Bumalik",
+    "saved": "Na-save na ang tala sa pagbisita.",
+    "vitals": "Blood pressure {{bp}}, timbang {{weight}} kg",
+    "sharedBadge": "Ibinahagi sa pasyente",
+    "privateBadge": "Para sa mga provider lang",
+    "error": {
+      "required": "Kailangan ito.",
+      "invalid": "Maglagay ng numero.",
+      "range": "Parang mali ang numerong ito. Pakisuri.",
+      "diastolicHigher": "Dapat mas mababa ang ibabang numero kaysa sa itaas.",
+      "tooLong": "Masyadong mahaba. Panatilihin sa ilalim ng {{max}} na titik."
+    }
+  },
+  "clinical": {
+    "title": "I-edit ang detalye ng pagbubuntis",
+    "lmp": "Huling regla (LMP)",
+    "edd": "Inaasahang due date (EDD)",
+    "eddHint": "Sumusunod ito sa LMP (LMP + 280 araw). Baguhin lang kung maglalagay ng due date na itinakda ng provider.",
+    "risk": "Mga tala sa panganib",
+    "riskHint": "Makikita lang ng mga provider.",
+    "save": "I-save ang mga pagbabago",
+    "saved": "Na-save na ang detalye ng pagbubuntis.",
+    "error": {
+      "required": "Kailangan ito.",
+      "invalid": "Maglagay ng tamang petsa.",
+      "future": "Hindi puwedeng petsa sa hinaharap.",
+      "tooOld": "Masyadong matagal na ang petsang ito.",
+      "farFromLmp": "Masyadong malayo ang due date sa LMP. Pakisuri ang dalawang petsa.",
+      "tooLong": "Masyadong mahaba. Panatilihin sa ilalim ng {{max}} na titik."
+    }
+  },
+  "refer": {
+    "cardTitle": "Referral sa midwife",
+    "none": "Wala pang naipadalang referral.",
+    "button": "I-refer sa midwife",
+    "title": "I-refer sa midwife",
+    "intro": "Matatanggap ng Municipal Health Office ang dahilan mo at ang pinakabago niyang sukat.",
+    "reason": "Dahilan ng referral",
+    "reasonHint": "Sabihin kung ano ang napansin mo at bakit mo siya ire-refer.",
+    "vitals": "Pinakabagong sukat na kasama nito",
+    "send": "Ipadala ang referral",
+    "sent": "Naipadala na ang referral sa Municipal Health Office.",
+    "sentBy": "Ipinadala ni {{name}}, {{date}}"
+  },
+  "propose": {
+    "button": "Magmungkahi ng oras ng appointment",
+    "title": "Magmungkahi ng oras",
+    "intro": "Ang Municipal Health Office ang magkukumpirma ng huling oras.",
+    "type": "Uri ng pagbisita",
+    "type_clinic": "Pagbisita sa barangay health station",
+    "type_teleconsult": "Teleconsultation (video call)",
+    "date": "Iminumungkahing petsa",
+    "window": "Iminumungkahing oras",
+    "window_any": "Kahit anong oras (8:00 n.u. hanggang 5:00 n.h.)",
+    "window_morning": "Umaga (8:00 n.u. hanggang 12:00 n.t.)",
+    "window_afternoon": "Hapon (1:00 n.h. hanggang 5:00 n.h.)",
+    "reason": "Dahilan ng pagbisita",
+    "send": "Ipadala ang mungkahi",
+    "sent": "Naipadala na ang mungkahi sa Municipal Health Office.",
+    "waiting": "May mungkahi para sa {{date}} na naghihintay sa Municipal Health Office.",
+    "pending": "May mungkahi na para sa pasyenteng ito na naghihintay sa Municipal Health Office.",
+    "error": {
+      "required": "Kailangan ito.",
+      "invalid": "Maglagay ng tamang petsa.",
+      "past": "Pumili ng ngayon o ng mas huling petsa.",
+      "tooFar": "Pumili ng petsa sa loob ng susunod na 90 araw.",
+      "tooLong": "Masyadong mahaba. Panatilihin sa ilalim ng {{max}} na titik."
+    }
+  },
+  "chat": {
+    "title": "Chat",
+    "open": "Buksan ang chat kay {{name}}",
+    "noPatients": "Lalabas dito ang mga chat sa mga pasyente ng barangay mo.",
+    "empty": "Wala pang mensahe",
+    "you": "Ikaw: {{text}}",
+    "from": "{{name}}: {{text}}",
+    "unread_one": "{{count}} bagong mensahe",
+    "unread_other": "{{count}} bagong mensahe",
+    "back": "Bumalik sa Chat",
+    "shared": "Pinagsasaluhang inbox ng mga health account ng barangay mo",
+    "vitals": "Pinakabagong sukat",
+    "vitalsTitle": "Pinakabagong sukat ni {{name}}",
+    "openPatient": "Buksan ang pasyente",
+    "emptyThread": "Wala pang mensahe kay {{name}}. Isulat ang una.",
+    "waiting": "Offline ka. Nakatabi ang mensahe mo sa phone na ito at ipapadala kapag bumalik ang koneksyon."
+  },
+  "calendar": {
+    "title": "Kalendaryo",
+    "create": "Gumawa ng event",
+    "emptyBody": "Lalabas dito ang mga event at pagbisita ng mga pasyente mo.",
+    "openPatient": "Buksan ang pasyente"
+  },
+  "event": {
+    "title": "Bagong event",
+    "intro": "Sasabihan ang mga pasyente at health account ng {{barangay}} tungkol sa event na ito.",
+    "name": "Pangalan ng event",
+    "date": "Petsa",
+    "start": "Magsisimula",
+    "end": "Matatapos",
+    "save": "Gumawa ng event",
+    "cancel": "Bumalik",
+    "saved": "Nagawa na ang event. Nasabihan ang mga pasyente at health account ng barangay mo.",
+    "error": {
+      "required": "Kailangan ito.",
+      "tooLong": "Masyadong mahaba. Panatilihin sa ilalim ng {{max}} na titik.",
+      "invalid": "Maglagay ng tamang halaga.",
+      "past": "Pumili ng ngayon o ng mas huling petsa.",
+      "tooFar": "Pumili ng petsa sa loob ng susunod na taon.",
+      "endBeforeStart": "Dapat mas huli ang pagtatapos kaysa sa simula."
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "account": "Detalye ng account",
+    "barangay": "Barangay",
+    "contact": "Contact number",
+    "email": "Email",
+    "settings": "Mga setting",
+    "language": "Wika",
+    "english": "English",
+    "filipino": "Filipino",
+    "push": "Mga abiso",
+    "pushOn": "Aabot sa iyo ang mga alerto at paalala kahit nakasara ang app.",
+    "pushOff": "Sa loob lang ng app lalabas ang mga abiso hangga't hindi mo ito binubuksan.",
+    "password": "Palitan ang password",
+    "office": "Municipal Health Office",
+    "officeBody": "Tingloy Municipal Health Office. Tumawag para sa mga tanong tungkol sa account, referral at pagbisita.",
+    "call": "Tawagan",
+    "callPerson": "Tawagan si {{name}}",
+    "signOut": "Mag-sign out"
+  },
+  "error": {
+    "generic": "May nangyaring mali. Subukan ulit.",
+    "not_allowed": "Hindi mo ito magagawa.",
+    "not_found": "Hindi ito pasyente ng barangay mo.",
+    "offline": "Offline ka. Kailangan nito ng koneksyon. Subukan ulit kapag online ka na.",
+    "no_pregnancy": "Walang aktibong rekord ng pagbubuntis ang pasyenteng ito.",
+    "form": "Suriin ang mga may markang field.",
+    "pending_exists": "May hiling nang naghihintay.",
+    "reason_required": "Isulat ang dahilan ng referral.",
+    "reason_too_long": "Masyadong mahaba. Paikliin."
+  }
+}

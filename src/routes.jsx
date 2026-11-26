@@ -20,6 +20,14 @@ import BookingForm from './features/consult/BookingForm.jsx';
 import CallScreen from './features/consult/CallScreen.jsx';
 import ChatScreen from './features/consult/ChatScreen.jsx';
 import Consult from './features/consult/Consult.jsx';
+import BarangayCalendar from './features/calendar/BarangayCalendar.jsx';
+import EventForm from './features/calendar/EventForm.jsx';
+import BarangayChat from './features/chat/BarangayChat.jsx';
+import BarangayChatList from './features/chat/BarangayChatList.jsx';
+import Monitor from './features/monitor/Monitor.jsx';
+import PatientDetail from './features/monitor/PatientDetail.jsx';
+import VisitNoteForm from './features/monitor/VisitNoteForm.jsx';
+import BarangayProfile from './features/profile/BarangayProfile.jsx';
 import Profile from './features/profile/Profile.jsx';
 import Schedule from './features/schedule/Schedule.jsx';
 
@@ -56,6 +64,10 @@ export default function AppRoutes() {
             if (role === 'patient' && item.path === 'schedule') return <Route key={item.path} path={item.path} element={<Schedule />} />;
             if (role === 'patient' && item.path === 'profile') return <Route key={item.path} path={item.path} element={<Profile />} />;
             if (role === 'patient' && item.path === 'consult') return <Route key={item.path} path={item.path} element={<Consult />} />;
+            if (role === 'barangay' && item.path === 'monitor') return <Route key={item.path} path={item.path} element={<Monitor />} />;
+            if (role === 'barangay' && item.path === 'chat') return <Route key={item.path} path={item.path} element={<BarangayChatList />} />;
+            if (role === 'barangay' && item.path === 'calendar') return <Route key={item.path} path={item.path} element={<BarangayCalendar />} />;
+            if (role === 'barangay' && item.path === 'profile') return <Route key={item.path} path={item.path} element={<BarangayProfile />} />;
             const Screen = item.path === 'profile' ? TempProfile : TempPage;
             return <Route key={item.path} path={item.path} element={<Screen titleKey={`nav.${item.key}`} art={item.art} />} />;
           })}
@@ -66,6 +78,14 @@ export default function AppRoutes() {
               <Route path="consult/chat/:conversationId" element={<ChatScreen />} />
               <Route path="consult/book" element={<BookingForm />} />
               <Route path="consult/call/:appointmentId" element={<CallScreen />} />
+            </>
+          ) : null}
+          {role === 'barangay' ? (
+            <>
+              <Route path="monitor/:patientId" element={<PatientDetail />} />
+              <Route path="monitor/:patientId/note" element={<VisitNoteForm />} />
+              <Route path="chat/:patientId" element={<BarangayChat />} />
+              <Route path="calendar/new" element={<EventForm />} />
             </>
           ) : null}
         </Route>

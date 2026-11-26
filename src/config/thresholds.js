@@ -86,3 +86,16 @@ export const CHAT = {
   photoMaxChars: 400000,
   bookingHorizonDays: 90,
 };
+
+// Barangay account rules (BRG-M-01 to BRG-M-06). Proposed values, like the other rules: when a missed check-up counts as
+// overdue, how many days of readings the charts open with, and the limits the forms accept.
+export const MONITOR = {
+  overdueDays: 30,
+  chartDays: { short: 7, long: 21 },
+  noteMax: 500,
+  eventTitleMax: 80,
+  eventPlace: 'Barangay health station', // where an event of the barangay is held (a generic place, no street names)
+  bp: { systolic: [60, 260], diastolic: [30, 160] },
+  weightKg: [25, 200],
+  maxGestationDays: 301, // an LMP more than 43 weeks before today is refused
+};

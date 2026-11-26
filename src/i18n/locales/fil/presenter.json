@@ -165,6 +165,8 @@
     "forgotCode": "Ilagay ang natanggap na code",
     "password": "Ilagay ang matibay na password",
     "pairingStep": "Punan ang hakbang na ito",
-    "booking": "Punan ang hiling"
+    "booking": "Punan ang hiling",
+    "visitNote": "Punan ang form",
+    "event": "Punan ang form"
   }
 }

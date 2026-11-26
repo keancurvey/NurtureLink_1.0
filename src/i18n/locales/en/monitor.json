@@ -1,1 +1,288 @@
-{}
+{
+  "title": "Monitor",
+  "cancel": "Cancel",
+  "trimester": {
+    "1": "First trimester",
+    "2": "Second trimester",
+    "3": "Third trimester"
+  },
+  "status": {
+    "normal": "Normal",
+    "attention": "Needs attention",
+    "alert": "Alert",
+    "none": "No readings yet"
+  },
+  "counts": {
+    "label": "Summary",
+    "patients": "Patients",
+    "alerts": "Active alerts",
+    "overdue": "Overdue check-ups",
+    "due": "Due dates this month"
+  },
+  "filter": {
+    "search": "Search by name",
+    "trimester": "Trimester",
+    "allTrimesters": "All trimesters",
+    "alertsOnly": "Alerts only",
+    "overdueOnly": "Overdue check-ups only"
+  },
+  "empty": {
+    "title": "No patients yet",
+    "body": "Patients of your barangay will appear here once they sign up.",
+    "noMatchTitle": "No patients to show",
+    "noMatchBody": "No patient matches your search or filters. Change them to see more."
+  },
+  "card": {
+    "list": "Patients, {{count}} shown",
+    "open": "Open the record of {{name}}",
+    "age_one": "{{count}} year old",
+    "age_other": "{{count}} years old",
+    "lastCheck": "Last check {{when}}",
+    "noCheck": "No check yet",
+    "overdue": "Check-up overdue",
+    "respond": "Respond",
+    "acknowledgedBy": "Acknowledged by {{name}}"
+  },
+  "pregnancy": {
+    "title": "Pregnancy",
+    "edit": "Edit",
+    "age": "Gestational age",
+    "ageValue": "{{weeks}}w {{days}}d",
+    "lmp": "Last menstrual period (LMP)",
+    "edd": "Expected due date (EDD)",
+    "eddCalculated": "Calculated: LMP + 280 days",
+    "eddProvider": "Set by a provider",
+    "dueIn": "Due {{date}} ({{when}})",
+    "duePassed": "Due {{date}} ({{when}})",
+    "toGo": "Due {{when}}",
+    "passed": "Due date was {{when}}",
+    "risk": "Risk notes",
+    "noRisk": "None",
+    "updated": "Last changed by {{name}}, {{date}}"
+  },
+  "vitals": {
+    "fhr": "Baby’s heart rate",
+    "hr": "Mother’s heart rate",
+    "spo2": "Oxygen level (SpO2)",
+    "temp": "Skin temperature",
+    "unit": {
+      "bpm": "bpm",
+      "spo2": "%",
+      "temp": "°C"
+    },
+    "confidence": "Confidence {{value}}%",
+    "unverified": "Unverified: no wrist band reading to compare with.",
+    "noReading": "No clear reading.",
+    "notMeasured": "Not measured",
+    "none": "–",
+    "when": "{{date}} ({{relative}})",
+    "emptyTitle": "No checks yet",
+    "emptyBody": "Her first completed check will show here."
+  },
+  "detail": {
+    "back": "Back to Monitor",
+    "call": "Call",
+    "chat": "Chat",
+    "schedule": "Schedule",
+    "openAlerts": "Open alerts",
+    "latest": "Latest vitals",
+    "alertHistory": "Alert history"
+  },
+  "history": {
+    "title": "Readings history",
+    "measure": "Reading",
+    "period": "Period",
+    "tab": {
+      "fhr": "Baby",
+      "hr": "Mother",
+      "spo2": "SpO2",
+      "temp": "Temp"
+    },
+    "days": {
+      "short": "{{count}} days",
+      "long": "{{count}} days"
+    },
+    "normalRange": "Normal range",
+    "outside": "Outside the normal range",
+    "outsideCount_one": "{{count}} check outside the normal range",
+    "outsideCount_other": "{{count}} checks outside the normal range",
+    "chartLabel": "{{name}}, last {{days}} days: {{count}} checks, lowest {{min}}, highest {{max}}, latest {{latest}} {{unit}}, {{outside}} outside the normal range",
+    "chartNone": "{{name}}: no readings in the last {{days}} days.",
+    "facts": "{{count}} checks. Lowest {{min}}, highest {{max}}, latest {{latest}} {{unit}}.",
+    "recent": "Recent checks",
+    "noChecks": "No completed checks yet.",
+    "row": "Baby {{fhr}} bpm · Mother {{hr}} bpm · SpO2 {{spo2}}% · {{temp}} °C",
+    "more": "Show more",
+    "upcoming": "Upcoming",
+    "attended": "Attended",
+    "missed": "Missed",
+    "rescheduled": "Rescheduled",
+    "pending": "Waiting for approval",
+    "declined": "Declined"
+  },
+  "visits": {
+    "title": "Check-up history",
+    "empty": "No visits yet.",
+    "kind": {
+      "clinic": "Check-up",
+      "hospital": "Hospital visit",
+      "teleconsult": "Teleconsultation"
+    }
+  },
+  "note": {
+    "listTitle": "Visit notes",
+    "add": "Add a note",
+    "empty": "No visit notes yet.",
+    "title": "Visit note",
+    "systolic": "Blood pressure, top number",
+    "diastolic": "Blood pressure, bottom number",
+    "weight": "Weight (kg)",
+    "observations": "Observations",
+    "observationsHint": "What you saw and what you advised.",
+    "share": "Share with the patient",
+    "shareOn": "She can read this note in her profile.",
+    "shareOff": "Only providers can read this note.",
+    "save": "Save note",
+    "cancel": "Back",
+    "saved": "Visit note saved.",
+    "vitals": "Blood pressure {{bp}}, weight {{weight}} kg",
+    "sharedBadge": "Shared with patient",
+    "privateBadge": "Providers only",
+    "error": {
+      "required": "This is needed.",
+      "invalid": "Enter a number.",
+      "range": "This number looks wrong. Check it.",
+      "diastolicHigher": "The bottom number must be lower than the top number.",
+      "tooLong": "That is too long. Keep it under {{max}} characters."
+    }
+  },
+  "clinical": {
+    "title": "Edit pregnancy details",
+    "lmp": "Last menstrual period (LMP)",
+    "edd": "Expected due date (EDD)",
+    "eddHint": "It follows the LMP (LMP + 280 days). Change it only to enter a due date a provider set.",
+    "risk": "Risk notes",
+    "riskHint": "Visible to providers only.",
+    "save": "Save changes",
+    "saved": "Pregnancy details saved.",
+    "error": {
+      "required": "This is needed.",
+      "invalid": "Enter a valid date.",
+      "future": "The date cannot be in the future.",
+      "tooOld": "That date is too long ago.",
+      "farFromLmp": "The due date is too far from the LMP. Check both dates.",
+      "tooLong": "That is too long. Keep it under {{max}} characters."
+    }
+  },
+  "refer": {
+    "cardTitle": "Referral to the midwife",
+    "none": "No referral sent yet.",
+    "button": "Refer to midwife",
+    "title": "Refer to the midwife",
+    "intro": "The Municipal Health Office will receive your reason and her latest vitals.",
+    "reason": "Reason for the referral",
+    "reasonHint": "Say what you noticed and why you are referring her.",
+    "vitals": "Latest vitals sent with it",
+    "send": "Send referral",
+    "sent": "Referral sent to the Municipal Health Office.",
+    "sentBy": "Sent by {{name}}, {{date}}"
+  },
+  "propose": {
+    "button": "Propose an appointment time",
+    "title": "Propose a time",
+    "intro": "The Municipal Health Office will confirm the final time.",
+    "type": "Kind of visit",
+    "type_clinic": "Visit at the barangay health station",
+    "type_teleconsult": "Teleconsultation (video call)",
+    "date": "Proposed date",
+    "window": "Proposed time",
+    "window_any": "Any time (8:00 am to 5:00 pm)",
+    "window_morning": "Morning (8:00 am to 12:00 pm)",
+    "window_afternoon": "Afternoon (1:00 pm to 5:00 pm)",
+    "reason": "Reason for the visit",
+    "send": "Send proposal",
+    "sent": "Proposal sent to the Municipal Health Office.",
+    "waiting": "A proposal for {{date}} is waiting for the Municipal Health Office.",
+    "pending": "A proposal for this patient is already waiting for the Municipal Health Office.",
+    "error": {
+      "required": "This is needed.",
+      "invalid": "Enter a valid date.",
+      "past": "Choose today or a later date.",
+      "tooFar": "Choose a date within the next 90 days.",
+      "tooLong": "That is too long. Keep it under {{max}} characters."
+    }
+  },
+  "chat": {
+    "title": "Chat",
+    "open": "Open the chat with {{name}}",
+    "noPatients": "Chats with patients of your barangay will appear here.",
+    "empty": "No messages yet",
+    "you": "You: {{text}}",
+    "from": "{{name}}: {{text}}",
+    "unread_one": "{{count}} new message",
+    "unread_other": "{{count}} new messages",
+    "back": "Back to Chat",
+    "shared": "Shared inbox of your barangay’s health accounts",
+    "vitals": "Latest vitals",
+    "vitalsTitle": "Latest vitals of {{name}}",
+    "openPatient": "Open the patient",
+    "emptyThread": "No messages with {{name}} yet. Write the first one.",
+    "waiting": "You are offline. Your message waits on this phone and is sent when you are back online."
+  },
+  "calendar": {
+    "title": "Calendar",
+    "create": "Create an event",
+    "emptyBody": "Events and visits of your patients will appear here.",
+    "openPatient": "Open the patient"
+  },
+  "event": {
+    "title": "New event",
+    "intro": "Patients and health accounts of {{barangay}} will be told about this event.",
+    "name": "Event name",
+    "date": "Date",
+    "start": "Starts",
+    "end": "Ends",
+    "save": "Create event",
+    "cancel": "Back",
+    "saved": "Event created. Patients and health accounts of your barangay were told.",
+    "error": {
+      "required": "This is needed.",
+      "tooLong": "That is too long. Keep it under {{max}} characters.",
+      "invalid": "Enter a valid value.",
+      "past": "Choose today or a later date.",
+      "tooFar": "Choose a date within the next year.",
+      "endBeforeStart": "The end must be after the start."
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "account": "Account details",
+    "barangay": "Barangay",
+    "contact": "Contact number",
+    "email": "Email",
+    "settings": "Settings",
+    "language": "Language",
+    "english": "English",
+    "filipino": "Filipino",
+    "push": "Notifications",
+    "pushOn": "Alerts and reminders reach you even when the app is closed.",
+    "pushOff": "Notifications stay inside the app until you turn this on.",
+    "password": "Change password",
+    "office": "Municipal Health Office",
+    "officeBody": "Tingloy Municipal Health Office. Call for questions about accounts, referrals and visits.",
+    "call": "Call",
+    "callPerson": "Call {{name}}",
+    "signOut": "Sign out"
+  },
+  "error": {
+    "generic": "Something went wrong. Try again.",
+    "not_allowed": "You cannot do this.",
+    "not_found": "This patient is not in your barangay.",
+    "offline": "You are offline. This needs a connection. Try again when you are back online.",
+    "no_pregnancy": "This patient has no active pregnancy record.",
+    "form": "Check the highlighted fields.",
+    "pending_exists": "A request is already waiting.",
+    "reason_required": "Write the reason for the referral.",
+    "reason_too_long": "That is too long. Keep it shorter."
+  }
+}

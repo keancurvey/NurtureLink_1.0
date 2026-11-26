@@ -88,6 +88,7 @@
     "other": "New notification",
     "reschedule_request": "{{patient}} asked for another time for a visit",
     "barangay_change_request": "{{patient}} asked to change barangay",
+    "appointment_proposal": "A barangay account proposed a visit time for {{patient}}",
     "appointment_reminder": {
       "day": "Reminder: your {{kind}} is tomorrow",
       "hours": "Reminder: your {{kind}} is in 2 hours"
