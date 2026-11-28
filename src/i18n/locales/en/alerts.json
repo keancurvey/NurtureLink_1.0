@@ -101,6 +101,22 @@
       "clinic": "check-up",
       "hospital": "hospital visit",
       "teleconsult": "teleconsultation"
+    },
+    "appointment_rescheduled": "The office set a new time for your appointment",
+    "appointment_declined": "Your booking request was declined",
+    "request_decided": {
+      "reschedule": {
+        "approved": "Your new time was approved",
+        "declined": "Your request for a new time was declined"
+      },
+      "barangay_change": {
+        "approved": "Your change of barangay was approved",
+        "declined": "Your request to change barangay was declined"
+      },
+      "appointment_proposal": {
+        "approved": "The visit you proposed for {{patient}} was approved",
+        "declined": "The visit you proposed for {{patient}} was declined"
+      }
     }
   },
   "center": {

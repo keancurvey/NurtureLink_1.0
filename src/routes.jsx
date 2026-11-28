@@ -1,7 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Splash from './components/layout/Splash.jsx';
 import TempPage from './components/layout/TempPage.jsx';
-import TempProfile from './components/layout/TempProfile.jsx';
 import { NAV } from './components/layout/navItems.js';
 import ChangePassword from './features/auth/ChangePassword.jsx';
 import Consent from './features/auth/Consent.jsx';
@@ -30,6 +29,16 @@ import VisitNoteForm from './features/monitor/VisitNoteForm.jsx';
 import BarangayProfile from './features/profile/BarangayProfile.jsx';
 import Profile from './features/profile/Profile.jsx';
 import Schedule from './features/schedule/Schedule.jsx';
+import OfficeConsult from './features/consult/OfficeConsult.jsx';
+import OfficeChat from './features/consult/OfficeChat.jsx';
+import OfficeSchedule from './features/schedule/OfficeSchedule.jsx';
+import OfficeEventForm from './features/schedule/OfficeEventForm.jsx';
+import PatientProfile from './features/patient/PatientProfile.jsx';
+import Tracker from './features/tracker/Tracker.jsx';
+import AccountForm from './features/admin/AccountForm.jsx';
+import Accounts from './features/admin/Accounts.jsx';
+import ActivityLogs from './features/admin/ActivityLogs.jsx';
+import OfficeProfile from './features/admin/OfficeProfile.jsx';
 
 export default function AppRoutes() {
   return (
@@ -68,8 +77,11 @@ export default function AppRoutes() {
             if (role === 'barangay' && item.path === 'chat') return <Route key={item.path} path={item.path} element={<BarangayChatList />} />;
             if (role === 'barangay' && item.path === 'calendar') return <Route key={item.path} path={item.path} element={<BarangayCalendar />} />;
             if (role === 'barangay' && item.path === 'profile') return <Route key={item.path} path={item.path} element={<BarangayProfile />} />;
-            const Screen = item.path === 'profile' ? TempProfile : TempPage;
-            return <Route key={item.path} path={item.path} element={<Screen titleKey={`nav.${item.key}`} art={item.art} />} />;
+            if (role === 'super' && item.path === 'tracker') return <Route key={item.path} path={item.path} element={<Tracker />} />;
+            if (role === 'super' && item.path === 'consult') return <Route key={item.path} path={item.path} element={<OfficeConsult />} />;
+            if (role === 'super' && item.path === 'schedule') return <Route key={item.path} path={item.path} element={<OfficeSchedule />} />;
+            if (role === 'super' && item.path === 'profile') return <Route key={item.path} path={item.path} element={<OfficeProfile />} />;
+            return <Route key={item.path} path={item.path} element={<TempPage titleKey={`nav.${item.key}`} art={item.art} />} />;
           })}
           {role === 'patient' ? (
             <>
@@ -78,6 +90,17 @@ export default function AppRoutes() {
               <Route path="consult/chat/:conversationId" element={<ChatScreen />} />
               <Route path="consult/book" element={<BookingForm />} />
               <Route path="consult/call/:appointmentId" element={<CallScreen />} />
+            </>
+          ) : null}
+          {role === 'super' ? (
+            <>
+              <Route path="patient/:patientId" element={<PatientProfile />} />
+              <Route path="consult/chat/:conversationId" element={<OfficeChat />} />
+              <Route path="consult/call/:appointmentId" element={<CallScreen />} />
+              <Route path="schedule/new" element={<OfficeEventForm />} />
+              <Route path="profile/accounts" element={<Accounts />} />
+              <Route path="profile/accounts/new" element={<AccountForm />} />
+              <Route path="profile/logs" element={<ActivityLogs />} />
             </>
           ) : null}
           {role === 'barangay' ? (

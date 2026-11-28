@@ -101,6 +101,22 @@
       "clinic": "check-up",
       "hospital": "pagbisita sa ospital",
       "teleconsult": "teleconsultation"
+    },
+    "appointment_rescheduled": "Nagtakda ang opisina ng bagong oras para sa appointment mo",
+    "appointment_declined": "Tinanggihan ang hiling mong magpa-book",
+    "request_decided": {
+      "reschedule": {
+        "approved": "Naaprubahan ang bagong oras mo",
+        "declined": "Tinanggihan ang hiling mong ibang oras"
+      },
+      "barangay_change": {
+        "approved": "Naaprubahan ang paglipat mo ng barangay",
+        "declined": "Tinanggihan ang hiling mong lumipat ng barangay"
+      },
+      "appointment_proposal": {
+        "approved": "Naaprubahan ang bisitang iminungkahi mo para kay {{patient}}",
+        "declined": "Tinanggihan ang bisitang iminungkahi mo para kay {{patient}}"
+      }
     }
   },
   "center": {

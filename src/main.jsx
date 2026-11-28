@@ -10,6 +10,7 @@ import './styles/alerts.css';
 import './styles/schedule.css';
 import './styles/consult.css';
 import './styles/monitor.css';
+import './styles/office.css';
 import './styles/presenter.css';
 import './i18n/index.js';
 import App from './App.jsx';

@@ -167,6 +167,7 @@
     "pairingStep": "Fill this step",
     "booking": "Fill request",
     "visitNote": "Fill the form",
-    "event": "Fill the form"
+    "event": "Fill the form",
+    "account": "Fill a new barangay account (name, email, contact)"
   }
 }

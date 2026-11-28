@@ -4,6 +4,7 @@
 // attaching a photo (fills the chat composer) and the video call events (the call room, Prompt 10). Expiring a provider
 // session is a gear action of the provider shell (features/auth/ProviderSession.jsx), not a scenario.
 import { DEVICE_DEFAULTS, THRESHOLDS } from '../config/thresholds.js';
+import { followUpEnd, isConfirmed } from '../lib/consult.js';
 import { MS_HOUR, MS_MINUTE, addDays, manilaDate, manilaTime } from '../lib/dates.js';
 import * as data from './seedData.js';
 
@@ -129,10 +130,6 @@ function ageChecks(ctx) {
 
 // ---------- Schedule and consult ----------
 
-/** The midwife thread stays open through the call window and the follow-up hours after it (PAT-C-03). */
-const followUpEnd = (appointment) =>
-  appointment.scheduled_at + THRESHOLDS.videoJoin.afterMinutes * MS_MINUTE + THRESHOLDS.followUpChatHours * MS_HOUR;
-
 const midwifeThread = (ctx) => ctx.state().db.conversations.find((c) => c.patient_id === ctx.patientId && c.kind === 'midwife') ?? null;
 /** The teleconsultation the patient asked for that no super account has decided yet, oldest first (PLAN.md Environment State, P2-2). */
 const waitingTeleconsult = (ctx) =>
@@ -141,7 +138,7 @@ const waitingTeleconsult = (ctx) =>
     .sort((a, b) => a.requested_at - b.requested_at)[0] ?? null;
 const nextApprovedTeleconsult = (ctx) =>
   ctx.state()
-    .db.appointments.filter((a) => a.patient_id === ctx.patientId && a.type === 'teleconsult' && a.status === 'approved' && a.scheduled_at !== null)
+    .db.appointments.filter((a) => a.patient_id === ctx.patientId && a.type === 'teleconsult' && isConfirmed(a) && a.scheduled_at !== null)
     .sort((a, b) => a.scheduled_at - b.scheduled_at)[0] ?? null;
 
 function incomingMessage(ctx) {
@@ -519,7 +516,7 @@ export const SCENARIOS = [
         run(ctx) {
           const at = ctx.now();
           const running = ctx.state().db.appointments
-            .filter((a) => a.patient_id === ctx.patientId && a.type === 'teleconsult' && a.status === 'approved' && a.scheduled_at !== null && a.scheduled_at <= at)
+            .filter((a) => a.patient_id === ctx.patientId && a.type === 'teleconsult' && isConfirmed(a) && a.scheduled_at !== null && a.scheduled_at <= at)
             .sort((a, b) => b.scheduled_at - a.scheduled_at)[0];
           const thread = midwifeThread(ctx);
           if (!running || !thread) return;
