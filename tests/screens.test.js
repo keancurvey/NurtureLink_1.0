@@ -28,7 +28,8 @@ test('every fixed text key used by the Schedule and Profile screens exists in En
       for (const [variable, spaces] of byVariable) {
         const pattern = new RegExp(`\\b${variable}\\(\\s*'([\\w.]+)'`, 'g');
         for (const [, key] of source.matchAll(pattern)) {
-          for (const lang of ['en', 'fil']) assert.ok(spaces.some((ns) => keys(lang, ns).has(key)), `${lang} ${spaces.join('|')}:${key} (${file})`);
+          // A text with a count has one key for each plural form (key_one, key_other).
+          for (const lang of ['en', 'fil']) assert.ok(spaces.some((ns) => keys(lang, ns).has(key) || keys(lang, ns).has(`${key}_other`)), `${lang} ${spaces.join('|')}:${key} (${file})`);
           checked += 1;
         }
       }

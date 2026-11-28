@@ -181,7 +181,7 @@ test('empty, too long, locked, foreign and bad-photo messages are refused with a
   assert.equal((await actions.send_message({ conversation_id: BARANGAY, body: 'Hi', attachment_url: 'data:text/html;base64,AAAA' })).error, 'photo');
   assert.equal(rt.db().messages.length, before);
   rt.auth.signInAs(ROWENA);
-  assert.equal((await actions.send_message({ conversation_id: BARANGAY, body: 'Hello' })).error, 'not_allowed', 'super accounts write through their own service (Prompt 9)');
+  assert.equal((await actions.send_message({ conversation_id: BARANGAY, body: 'Hello' })).error, 'not_found', 'a super account reads and writes only its own midwife threads, and the inbox of a barangay with no active account (ACC-09)');
 });
 
 test('a photo travels with the message: her own small picture or a drawn one', async () => {
@@ -336,12 +336,13 @@ test('Bring next appointment to now does nothing for a patient with neither an a
 
 // ---------- Notifications lead to the thread ----------
 
-test('a message notification opens the thread for a patient and for a barangay account, the usual tab for the others', () => {
+test('a message notification opens the thread for a patient, a barangay account and a super account', () => {
   const n = { type: 'message', payload: { conversation_id: BARANGAY, patient_id: MARICEL }, read_at: null };
   assert.equal(notificationPath('patient', n), `/patient/consult/chat/${BARANGAY}`);
   assert.equal(notificationPath('barangay', n), `/barangay/chat/${MARICEL}`, 'a barangay account opens the chat with that patient');
   assert.equal(notificationPath('barangay', { type: 'message', payload: {}, read_at: null }), '/barangay/chat');
-  assert.equal(notificationPath('super', n), '/super/consult');
+  assert.equal(notificationPath('super', n), `/super/consult/chat/${BARANGAY}`, 'a super account opens the conversation');
+  assert.equal(notificationPath('super', { type: 'message', payload: {}, read_at: null }), '/super/consult');
   assert.equal(describeNotification(n, { role: 'patient' }).path, `/patient/consult/chat/${BARANGAY}`);
 });
 
