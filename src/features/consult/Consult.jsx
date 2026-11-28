@@ -7,7 +7,7 @@ import Avatar from '../../components/ui/Avatar.jsx';
 import Badge from '../../components/ui/Badge.jsx';
 import Card from '../../components/ui/Card.jsx';
 import EmptyState from '../../components/ui/EmptyState.jsx';
-import { hasPhoto } from '../../lib/consult.js';
+import { hasPhoto, isConfirmed } from '../../lib/consult.js';
 import { formatDateLong, formatRelative, formatTime } from '../../lib/format.js';
 import { manilaDate } from '../../lib/dates.js';
 import { useStoreState, useViewer } from '../../store/hooks.js';
@@ -72,7 +72,7 @@ function BookingCard({ row, provider, handler, now, lang }) {
         </p>
       ) : null}
       {handler ? <p className="card__meta">{t('bookings.handledBy', { name: handler.full_name })}</p> : null}
-      {provider && row.status === 'approved' ? <p className="card__meta">{t('bookings.assigned', { name: provider.full_name })}</p> : null}
+      {provider && isConfirmed(row) ? <p className="card__meta">{t('bookings.assigned', { name: provider.full_name })}</p> : null}
       {row.status === 'declined' && row.decline_reason ? (
         <p>
           <span className="booking__label">{t('bookings.declineReason')}: </span>
@@ -80,7 +80,7 @@ function BookingCard({ row, provider, handler, now, lang }) {
         </p>
       ) : null}
       {waiting ? <p className="card__meta">{t('bookings.waiting')}</p> : null}
-      {row.status === 'approved' && row.type === 'teleconsult' ? <JoinButton appointment={row} now={now} /> : null}
+      {isConfirmed(row) && row.type === 'teleconsult' ? <JoinButton appointment={row} now={now} /> : null}
     </li>
   );
 }

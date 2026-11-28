@@ -24,7 +24,7 @@ import { ClinicalSheet, ProposeSheet, ReferSheet } from './Sheets.jsx';
 import { statusBadge } from './monitorText.js';
 
 const HISTORY_STEP = 5;
-const VISIT_BADGE = {
+export const VISIT_BADGE = {
   approved: ['info', 'history.upcoming'],
   attended: ['normal', 'history.attended'],
   missed: ['attention', 'history.missed'],

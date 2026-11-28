@@ -7,6 +7,7 @@ import Card from '../../components/ui/Card.jsx';
 import EmptyState from '../../components/ui/EmptyState.jsx';
 import Sheet from '../../components/ui/Sheet.jsx';
 import { KIND_ICONS } from '../../components/ui/kindIcons.js';
+import { isConfirmed } from '../../lib/consult.js';
 import { manilaDate } from '../../lib/dates.js';
 import { formatDateLong, formatDaysAway, formatRelative, formatTime } from '../../lib/format.js';
 import { KINDS, itemsOn, markersByDate, monthOf, upcomingItems } from '../../lib/schedule.js';
@@ -33,7 +34,7 @@ function ItemDetails({ item, now, provider, pending, onReschedule }) {
   const name = isEvent ? item.row.title : t(`kind.${item.kind}`);
   const badge = STATUS_BADGE[item.status];
   const time = item.endsAt ? `${formatTime(item.startsAt, i18n.language)} – ${formatTime(item.endsAt, i18n.language)}` : formatTime(item.startsAt, i18n.language);
-  const canReschedule = !isEvent && item.status === 'approved' && item.startsAt > now;
+  const canReschedule = !isEvent && isConfirmed(item.row) && item.startsAt > now;
   const notes = item.row.notes ?? null;
   const reason = item.row.reason ?? null;
   return (
