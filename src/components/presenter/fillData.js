@@ -61,3 +61,6 @@ export const EVENT_FILL = {
   end: '11:00',
   title: { en: 'Healthy pregnancy talk', fil: 'Usapang malusog na pagbubuntis' },
 };
+
+/** What the gear types into the create account form (PLAN.md Section 7: Super, create account form): a new barangay account for Barangay 14. */
+export const ACCOUNT_FILL = { role: 'barangay', full_name: 'Lorna Villarin', email: 'lorna.villarin@nurturelink.ph', contact_no: '0917 555 0321', barangay_id: 'brgy-14', language: 'fil' };
