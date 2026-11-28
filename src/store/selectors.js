@@ -5,7 +5,10 @@ import { AUTH, buildThresholds } from '../config/thresholds.js';
 import { identifierKey, isMinor } from '../lib/authRules.js';
 import { bookingRows, nextTeleconsult, threadLock, unseenFrom } from '../lib/consult.js';
 import { manilaDate } from '../lib/dates.js';
+import { openItemsOf, uncoveredBarangays } from '../lib/accountRules.js';
+import { approvalItems, handledItems, pendingItems } from '../lib/approvals.js';
 import { patientCard, sortCards } from '../lib/monitor.js';
+import { trackerRow } from '../lib/tracker.js';
 import { calendarItems } from '../lib/schedule.js';
 import * as access from '../lib/permissions.js';
 import { byId } from './ops.js';
@@ -111,15 +114,28 @@ export function eventsOf(state, viewer) {
     .sort((a, b) => a.starts_at - b.starts_at);
 }
 
+/** What a super account's view of a thread depends on besides the thread: its deactivated assignee, and whether its barangay has an active account. */
+function threadContext(state, viewer, conversation) {
+  if (viewer?.role !== 'super') return {};
+  return {
+    assignee: conversation.assigned_provider_id ? profileOf(state, conversation.assigned_provider_id) : null,
+    barangayActive: state.db.profiles.some((p) => p.role === 'barangay' && p.active && p.barangay_id === conversation.barangay_id),
+  };
+}
+
+/** Whether the viewer may read this conversation (spec 6.2, ACC-08, ACC-09). */
+export const canReadThread = (state, viewer, conversation) =>
+  Boolean(conversation) && access.canReadConversation(viewer, conversation, profileOf(state, conversation.patient_id), threadContext(state, viewer, conversation));
+
 export function conversationsOf(state, viewer) {
   if (!viewer) return [];
-  return state.db.conversations.filter((c) => access.canReadConversation(viewer, c, profileOf(state, c.patient_id)));
+  return state.db.conversations.filter((c) => canReadThread(state, viewer, c));
 }
 
 /** Messages made offline stay with their sender until they reach the server. */
 export function messagesOf(state, viewer, conversationId) {
   const conversation = byId(state.db.conversations).get(conversationId);
-  if (!conversation || !access.canReadConversation(viewer, conversation, profileOf(state, conversation.patient_id))) return [];
+  if (!canReadThread(state, viewer, conversation)) return [];
   return state.db.messages
     .filter((m) => m.conversation_id === conversationId && (!access.isQueued(m) || m.sender_id === viewer.id))
     .sort((a, b) => a.sent_at - b.sent_at);
@@ -478,4 +494,108 @@ export function referralsOf(state, viewer, patientId) {
     if (!seen.has(key)) seen.set(key, { at: n.created_at, by: profileOf(state, n.payload.from_profile_id)?.full_name ?? null, reason: n.payload.reason ?? '', vitals: n.payload.vitals ?? null });
   }
   return newestFirst([...seen.values()], 'at');
+}
+
+// ---------- The super account (Prompt 9) ----------
+
+const isSuper = (viewer) => viewer?.active === true && viewer.role === 'super';
+
+/** The rows of the Pregnancy Tracker (SUP-T-01, SUP-T-02): every patient of every barangay, no vitals. Empty for anyone but a super account. */
+export function trackerOf(state, viewer, now = Date.now()) {
+  if (!isSuper(viewer)) return [];
+  const thresholds = thresholdsOf(state);
+  const barangays = byId(state.db.barangays);
+  return patientsInScope(state, viewer).map((profile) =>
+    trackerRow({
+      profile,
+      patient: byId(state.db.patients).get(profile.id) ?? null,
+      pregnancy: state.db.pregnancies.find((p) => p.patient_id === profile.id && p.status === 'active') ?? null,
+      appointments: appointmentsOf(state, viewer, { patientId: profile.id }),
+      barangayName: barangays.get(profile.barangay_id)?.name ?? '',
+      now,
+      nearDueDays: thresholds.nearDueDays,
+    }),
+  );
+}
+
+/** The approvals queue shared by all super accounts (SUP-C-01): { pending, handled } as items (see lib/approvals.js). */
+export function approvalsOf(state, viewer) {
+  if (!isSuper(viewer)) return { pending: [], handled: [] };
+  const items = approvalItems({ appointments: appointmentsOf(state, viewer), requests: requestsOf(state, viewer) });
+  return { pending: pendingItems(items), handled: handledItems(items) };
+}
+
+/**
+ * The referral inbox of a super account (SUP-C-02): the referrals barangay accounts sent, newest first, as
+ * { id, at, read, patient_id, reason, vitals, from, alert_id }. Each account has its own copy, so read state is its own.
+ */
+export function referralInboxOf(state, viewer) {
+  if (!isSuper(viewer)) return [];
+  return notificationsOf(state, viewer)
+    .filter((n) => n.type === 'referral')
+    .map((n) => ({ id: n.id, at: n.created_at, read: Boolean(n.read_at), patient_id: n.payload.patient_id, reason: n.payload.reason ?? '', vitals: n.payload.vitals ?? null, from: n.payload.from_profile_id ? profileOf(state, n.payload.from_profile_id)?.full_name ?? null : null, alert_id: n.payload.alert_id ?? null }));
+}
+
+/** The Schedule tab of a super account (SUP-S-01): every approved appointment and every event, by time. */
+export function officeCalendarOf(state, viewer) {
+  if (!isSuper(viewer)) return [];
+  return calendarItems({ appointments: appointmentsOf(state, viewer), events: eventsOf(state, viewer) });
+}
+
+/**
+ * The conversations a super account reads (SUP-C-02): its own midwife threads, the midwife threads of a deactivated account and the
+ * inbox of a barangay that has no active account. Each is { patient, conversation, last, unread, lock, why } with `why` one of
+ * 'assigned', 'unassigned' (its midwife was deactivated) or 'no_account' (its barangay has no active account). Latest message first.
+ */
+export function officeThreadsOf(state, viewer, now = Date.now()) {
+  if (!isSuper(viewer)) return [];
+  const rows = conversationsOf(state, viewer).map((conversation) => {
+    const messages = messagesOf(state, viewer, conversation.id);
+    return {
+      patient: profileOf(state, conversation.patient_id),
+      conversation,
+      last: messages[messages.length - 1] ?? null,
+      unread: messages.filter((m) => m.sender_id === conversation.patient_id && !m.seen_at).length,
+      lock: threadLock(conversation, now),
+      why: conversation.kind === 'barangay' ? 'no_account' : conversation.assigned_provider_id === viewer.id ? 'assigned' : 'unassigned',
+    };
+  });
+  return rows.sort((a, b) => (b.last?.sent_at ?? 0) - (a.last?.sent_at ?? 0) || a.patient.full_name.localeCompare(b.patient.full_name));
+}
+
+/** One conversation of a super account with its messages, or null when it may not read it. */
+export function officeThreadOf(state, viewer, conversationId, now = Date.now()) {
+  const row = officeThreadsOf(state, viewer, now).find((r) => r.conversation.id === conversationId);
+  return row ? { ...row, messages: messagesOf(state, viewer, conversationId) } : null;
+}
+
+/** The accounts a super account manages (SUP-P-01): barangay accounts and other super accounts, super accounts first, then by barangay and name. */
+export function accountsOf(state, viewer) {
+  const barangays = byId(state.db.barangays);
+  const order = (p) => (p.role === 'super' ? '' : barangays.get(p.barangay_id)?.name ?? '');
+  return providerAccounts(state, viewer)
+    .map((p) => ({ ...p, barangay_name: p.role === 'barangay' ? barangays.get(p.barangay_id)?.name ?? '' : null }))
+    .sort((a, b) => (a.role === b.role ? 0 : a.role === 'super' ? -1 : 1) || order(a).localeCompare(order(b)) || a.full_name.localeCompare(b.full_name));
+}
+
+/** The barangays with no active account, with how many patients each has (ACC-09). Empty for anyone but a super account. */
+export function coverageGapsOf(state, viewer) {
+  if (!isSuper(viewer)) return [];
+  return uncoveredBarangays(state.db.profiles, state.db.barangays).map((barangay) => ({ barangay, patients: state.db.profiles.filter((p) => p.role === 'patient' && p.barangay_id === barangay.id).length }));
+}
+
+/** What one account leaves open and could be handed over (ACC-08): { appointments, threads, alerts } as lists of ids. */
+export function openItemsFor(state, viewer, accountId, now = Date.now()) {
+  const profile = isSuper(viewer) ? profileOf(state, accountId) : null;
+  if (!profile || profile.role === 'patient') return { appointments: [], threads: [], alerts: [] };
+  return openItemsOf(profile, { now, appointments: state.db.appointments, conversations: state.db.conversations, alerts: state.db.alerts });
+}
+
+/** The activity logs a super account reads (SUP-X-02, SUP-T-03): record openings and exports, newest first, with the names resolved. */
+export function activityLogsOf(state, viewer) {
+  const nameOf = (id) => profileOf(state, id)?.full_name ?? '';
+  return {
+    access: accessLogOf(state, viewer).map((row) => ({ ...row, actor: nameOf(row.actor_id), patient: nameOf(row.patient_id) })),
+    exports: exportLogOf(state, viewer).map((row) => ({ ...row, actor: nameOf(row.actor_id) })),
+  };
 }

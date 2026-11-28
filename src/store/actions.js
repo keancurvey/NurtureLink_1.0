@@ -4,7 +4,8 @@
 import { latency } from '../lib/latency.js';
 
 export function createActions(runtime, { delay = latency } = {}) {
-  const { core, auth, devices, alerts, profile, requests, consult, barangay } = runtime;
+  const { core, auth, devices, alerts, profile, requests, consult, barangay, office } = runtime;
+  const isSuper = () => runtime.store.getState().session && runtime.store.getState().db.profiles.find((p) => p.id === runtime.store.getState().session.profile_id)?.role === 'super';
   const slow = (fn) => async (...args) => {
     await delay();
     return fn(...args);
@@ -85,7 +86,7 @@ export function createActions(runtime, { delay = latency } = {}) {
     // The barangay account (BRG-M-04 to BRG-M-06, BRG-K-01). Writing to the record reaches the server, so it takes a moment;
     // noting that a record was opened is quiet and answers at once.
     /** A patient record or her latest vitals was opened: written to the access log. */
-    open_record: (patientId, action) => barangay.openRecord(patientId, action),
+    open_record: (patientId, action) => (isSuper() ? office : barangay).openRecord(patientId, action),
     /** LMP, EDD and risk notes of a patient: { lmp, edd, risk_notes }. Answers { ok } or { ok: false, error, errors? }. */
     save_clinical: slow((patientId, values) => barangay.saveClinical(patientId, values)),
     /** A visit note: { bp_systolic, bp_diastolic, weight_kg, note, shared }. */
@@ -96,6 +97,29 @@ export function createActions(runtime, { delay = latency } = {}) {
     propose_appointment: slow((patientId, values) => barangay.proposeAppointment(patientId, values)),
     /** An event for the account's own barangay: { title, date, start, end }. */
     create_event: slow((values) => barangay.createEvent(values)),
+    // The super account (SUP-T-03, SUP-C-01, SUP-S-01, SUP-P-01, ACC-05 to ACC-08). Decisions, events, the export and account changes reach the
+    // server, so they take a moment.
+    /** Approve a booking request: { date, time, provider_id }, the visit and the super account who becomes the assigned midwife. */
+    approve_booking: slow((appointmentId, values) => office.approveBooking(appointmentId, values)),
+    /** Give a booking request another time: { date, time, provider_id }. */
+    reschedule_booking: slow((appointmentId, values) => office.rescheduleBooking(appointmentId, values)),
+    /** Decline a booking request: { reason }. */
+    decline_booking: slow((appointmentId, values) => office.declineBooking(appointmentId, values)),
+    /** Approve a new time, a change of barangay or a time a barangay account proposed: { date, time, provider_id } where it needs them. */
+    approve_request: slow((requestId, values) => office.approveRequest(requestId, values)),
+    /** Decline one of those requests: { reason }. */
+    decline_request: slow((requestId, values) => office.declineRequest(requestId, values)),
+    /** An event for all barangays or one: { title, scope, barangay_id, date, start, end }. */
+    create_office_event: slow((values) => office.createEvent(values)),
+    /** Edge function export_patients: the rows of the filtered list, and an entry in the export log: { barangay_id, sort, omit_contacts }. */
+    export_patients: slow((values) => office.exportPatients(values)),
+    /** Edge function create_provider: a barangay or super account with a temporary password, shown once. */
+    create_provider: slow((values) => office.createProvider(values)),
+    reset_provider_password: slow((profileId) => office.resetProviderPassword(profileId)),
+    update_provider_contact: slow((profileId, values) => office.updateProviderContact(profileId, values)),
+    deactivate_provider: slow((profileId) => office.deactivateProvider(profileId)),
+    /** Hand what a deactivated account left open to another account at the same level. */
+    reassign_provider: slow((fromId, toId) => office.reassign(fromId, toId)),
     /** Gear: back to the starting records, signed out. */
     reset_data: slow(() => runtime.reset()),
   };

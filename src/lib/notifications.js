@@ -32,6 +32,7 @@ export function notificationPath(role, notification) {
     case 'message': // a message opens its thread: the patient's own, or a barangay account's chat with that patient
       if (role === 'patient' && p.conversation_id) return `/patient/consult/chat/${p.conversation_id}`;
       if (role === 'barangay' && p.patient_id) return `/barangay/chat/${p.patient_id}`;
+      if (role === 'super' && p.conversation_id) return `/super/consult/chat/${p.conversation_id}`;
       return role === 'barangay' ? tab(role, 'chat') : tab(role, 'consult');
     case 'booking_request':
     case 'barangay_change_request':
@@ -42,6 +43,10 @@ export function notificationPath(role, notification) {
       return role === 'barangay' ? tab(role, 'chat') : tab(role, 'consult');
     case 'reschedule_request': // the approvals queue for a super account; the calendar for the barangay account whose patient's visit is moving
       return role === 'barangay' ? tab(role, 'calendar') : tab(role, 'consult');
+    case 'appointment_declined': // the patient sees the answer in her booking requests
+    case 'request_decided':
+      return role === 'patient' && (p.kind === 'reschedule') ? tab(role, 'schedule') : role === 'patient' && p.kind === 'barangay_change' ? tab(role, 'profile') : role === 'barangay' ? tab(role, 'calendar') : tab(role, 'consult');
+    case 'appointment_rescheduled':
     case 'appointment_approved':
     case 'appointment_reminder':
     case 'event_created':
@@ -54,7 +59,7 @@ export function notificationPath(role, notification) {
   }
 }
 
-const ICONS = { alert: 'alert', alert_notice: 'alert', battery_low: 'battery', booking_request: 'calendar', reschedule_request: 'calendar', barangay_change_request: 'chat', appointment_proposal: 'calendar', appointment_reminder: 'calendar', appointment_approved: 'calendar', appointment_started: 'video', follow_up_open: 'chat', event_created: 'calendar', event_reminder: 'calendar', message: 'chat', referral: 'chat', video_usage_warning: 'video' };
+const ICONS = { alert: 'alert', alert_notice: 'alert', battery_low: 'battery', booking_request: 'calendar', reschedule_request: 'calendar', barangay_change_request: 'chat', appointment_proposal: 'calendar', appointment_reminder: 'calendar', appointment_approved: 'calendar', appointment_rescheduled: 'calendar', appointment_declined: 'calendar', request_decided: 'calendar', appointment_started: 'video', follow_up_open: 'chat', event_created: 'calendar', event_reminder: 'calendar', message: 'chat', referral: 'chat', video_usage_warning: 'video' };
 
 /**
  * What to show for a notification: texts are keys under alerts:notification.*, values may hold `...Key` entries that the
@@ -87,6 +92,15 @@ export function describeNotification(notification, { role, patientName = null, e
       return { ...base, tone: 'info', titleKey: `notification.appointment_reminder.${p.lead === 'hours' ? 'hours' : 'day'}`, values: { kindKey: `notification.kind.${p.kind ?? 'clinic'}` } };
     case 'appointment_approved':
       return { ...base, tone: 'info', titleKey: role === 'patient' ? 'notification.appointment_approved.patient' : 'notification.appointment_approved.provider', values: { patient: patientName ?? '' } };
+    case 'appointment_rescheduled':
+      return { ...base, tone: 'info', titleKey: 'notification.appointment_rescheduled', values: {} };
+    case 'appointment_declined':
+      return { ...base, tone: 'neutral', titleKey: 'notification.appointment_declined', values: {} };
+    case 'request_decided': {
+      const status = p.status === 'approved' ? 'approved' : 'declined';
+      const kind = p.kind === 'barangay_change' || p.kind === 'appointment_proposal' ? p.kind : 'reschedule';
+      return { ...base, tone: status === 'approved' ? 'info' : 'neutral', titleKey: `notification.request_decided.${kind}.${status}`, values: { patient: patientName ?? '' } };
+    }
     case 'appointment_started':
       return { ...base, tone: 'info', titleKey: role === 'patient' ? 'notification.appointment_started.patient' : 'notification.appointment_started.provider', values: { patient: patientName ?? '' } };
     case 'follow_up_open':

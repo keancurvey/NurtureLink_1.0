@@ -1,5 +1,6 @@
 // Schedule rules (PAT-S-01 to PAT-S-03): what goes on the calendar, which dates are marked, the month grid, the
 // upcoming list and the days remaining. Pure: the screens turn kinds, statuses and numbers into text.
+import { isConfirmed } from './consult.js';
 import { addDays, daysBetween, manilaDate } from './dates.js';
 
 /** The kinds of item on a calendar, in the order their marks are drawn. An appointment's kind is its type. */
@@ -48,7 +49,7 @@ export const daysRemaining = (date, today) => daysBetween(today, date);
 export function upcomingItems(items, now) {
   const today = manilaDate(now);
   return items
-    .filter((item) => (item.source === 'appointment' ? item.status === 'approved' && item.date >= today : (item.endsAt ?? item.startsAt) >= now))
+    .filter((item) => (item.source === 'appointment' ? isConfirmed(item.row) && item.date >= today : (item.endsAt ?? item.startsAt) >= now))
     .map((item) => ({ ...item, days: daysRemaining(item.date, today) }));
 }
 

@@ -4,7 +4,7 @@
 // from providers and reaches them when the connection is back (core.flushQueue). Screens reach these through the wrappers
 // in actions.js; replacing them with calls to a real backend is the only change needed to go live.
 import { manilaDate } from '../lib/dates.js';
-import { preferredRange, validateBooking } from '../lib/consult.js';
+import { isConfirmed, preferredRange, validateBooking } from '../lib/consult.js';
 import { validateBarangayChange, validateReschedule } from '../lib/profileRules.js';
 import { byId } from './ops.js';
 import { viewerOf } from './selectors.js';
@@ -78,7 +78,7 @@ export function createRequests({ store, core, now = Date.now }) {
       if (!me) return { ok: false, error: 'not_allowed' };
       const appointment = byId(state().db.appointments).get(appointment_id);
       if (!appointment || appointment.patient_id !== me.id) return { ok: false, error: 'not_found' };
-      if (appointment.status !== 'approved' || appointment.scheduled_at == null || appointment.scheduled_at <= now()) return { ok: false, error: 'not_upcoming' };
+      if (!isConfirmed(appointment) || appointment.scheduled_at == null || appointment.scheduled_at <= now()) return { ok: false, error: 'not_upcoming' };
       if (pending('reschedule', me.id, appointment_id)) return { ok: false, error: 'pending_exists' };
       const errors = validateReschedule({ reason, preferred_date }, { today: manilaDate(now()) });
       if (Object.keys(errors).length > 0) return { ok: false, error: 'form', errors };

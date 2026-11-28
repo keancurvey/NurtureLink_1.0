@@ -99,3 +99,11 @@ export const MONITOR = {
   weightKg: [25, 200],
   maxGestationDays: 301, // an LMP more than 43 weeks before today is refused
 };
+
+// Super account rules (SUP-T-03, SUP-S-01, SUP-P-01, ACC-06). Proposed values, like the other rules: where an event for all barangays
+// is held, how many accounts one list of the Profile shows before "Show more", and how long the handled requests stay in the queue.
+export const OFFICE = {
+  eventPlaceAll: 'Tingloy Municipal Health Office', // a generic place, no street names
+  handledShown: 5, // handled requests shown under the open ones, before "Show more"
+  logShown: 15, // rows of an activity log shown before "Show more"
+};

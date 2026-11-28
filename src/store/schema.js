@@ -46,6 +46,9 @@ export const NOTIFICATION_TYPES = [
   'barangay_change_request', // to super accounts (PAT-P-01): payload { request_id, patient_id }
   'appointment_proposal', // to super accounts: a barangay account proposes a time for a patient (spec 6.2): payload { request_id, patient_id, proposed_by }
   'appointment_approved',
+  'appointment_rescheduled', // to the patient: the office gave her request another time (SUP-C-01): payload { appointment_id }
+  'appointment_declined', // to the patient: payload { appointment_id }
+  'request_decided', // to the patient (a new time, a change of barangay) or the barangay account that proposed a time: payload { request_id, kind, status, patient_id }
   'appointment_reminder', // to the patient, one day and two hours before: payload { appointment_id, lead: 'day' | 'hours', kind }
   'appointment_started',
   'follow_up_open',

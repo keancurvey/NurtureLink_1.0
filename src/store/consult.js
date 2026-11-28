@@ -4,26 +4,25 @@
 // state is shared by all its accounts. A message made offline waits on the phone with a client id (syncState 'queued'), is
 // hidden from the other side and goes out with the queue (core.flushQueue). Screens reach these through the wrappers in
 // actions.js; replacing them with calls to a real backend is the only change needed to go live.
-import { canReadConversation } from '../lib/permissions.js';
 import { threadLock, validAttachment, validateMessage } from '../lib/consult.js';
 import { byId } from './ops.js';
-import { profileOf, viewerOf } from './selectors.js';
+import { canReadThread, viewerOf } from './selectors.js';
 
 export function createConsult({ store, core, now = Date.now }) {
   const state = () => store.getState();
-  /** The signed-in account that may write: a patient or a barangay account. */
+  /** The signed-in account that may write: a patient, a barangay account or a super account. */
   const account = () => {
     const viewer = viewerOf(state());
-    return viewer?.active && (viewer.role === 'patient' || viewer.role === 'barangay') ? viewer : null;
+    return viewer?.active ? viewer : null;
   };
   const threadOf = (me, conversationId) => {
     const conversation = byId(state().db.conversations).get(conversationId) ?? null;
-    return conversation && canReadConversation(me, conversation, profileOf(state(), conversation.patient_id)) ? conversation : null;
+    return conversation && canReadThread(state(), me, conversation) ? conversation : null;
   };
 
   return {
     /**
-     * Send a message as a patient or as a barangay account: { conversation_id, body, attachment_url | attachment_art, client_id }. Answers { ok, queued, message }
+     * Send a message as a patient, a barangay account or a super account: { conversation_id, body, attachment_url | attachment_art, client_id }. Answers { ok, queued, message }
      * (also for a client id already held: { ok, duplicate }) or { ok: false, error, errors? } with error one of not_allowed,
      * not_found, locked (with reason), form, photo.
      */
@@ -64,7 +63,15 @@ export function createConsult({ store, core, now = Date.now }) {
       const unseen = db.messages.filter(
         (m) => m.conversation_id === conversation.id && !m.seen_at && m.syncState !== 'queued' && (isPatient ? m.sender_id !== me.id : m.sender_id === conversation.patient_id),
       );
-      const readers = new Set(isPatient ? [me.id] : db.profiles.filter((p) => p.role === 'barangay' && p.barangay_id === conversation.barangay_id).map((p) => p.id));
+      // The read state is shared by the accounts a thread is for: the barangay's accounts, or every super account when a barangay has none (ACC-09).
+      const shared = me.role === 'barangay' ? 'barangay' : me.role === 'super' && conversation.kind === 'barangay' ? 'super' : null;
+      const readers = new Set(
+        shared === 'barangay'
+          ? db.profiles.filter((p) => p.role === 'barangay' && p.barangay_id === conversation.barangay_id).map((p) => p.id)
+          : shared === 'super'
+            ? db.profiles.filter((p) => p.role === 'super').map((p) => p.id)
+            : [me.id],
+      );
       const told = db.notifications.filter((n) => readers.has(n.profile_id) && n.type === 'message' && n.payload.conversation_id === conversation.id && !n.read_at);
       core.commit([
         { op: 'updateMany', table: 'messages', patches: unseen.map((m) => ({ id: m.id, patch: { seen_at: at } })) },

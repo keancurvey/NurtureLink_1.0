@@ -203,12 +203,16 @@ export function createCore({ store, now = Date.now }) {
   }
 
   /**
-   * Who a message is for: every active barangay account of the patient's barangay (a shared inbox, ACC-03), or the midwife
-   * assigned to the appointment. Nobody when the account is not active.
+   * Who a message is for: every active barangay account of the patient's barangay (a shared inbox, ACC-03; the super accounts when
+   * it has none, ACC-09), or the midwife assigned to the appointment. Nobody when the account is not active.
    */
   function messageRecipients(conversation) {
     const db = state().db;
-    if (conversation.kind === 'barangay') return activeBarangayAccounts(db, conversation.barangay_id).map((p) => p.id);
+    if (conversation.kind === 'barangay') {
+      // A barangay with no active account hands its chats to the super accounts (ACC-09).
+      const accounts = activeBarangayAccounts(db, conversation.barangay_id).map((p) => p.id);
+      return accounts.length > 0 ? accounts : activeSupers(db).map((p) => p.id);
+    }
     const provider = conversation.assigned_provider_id ? byId(db.profiles).get(conversation.assigned_provider_id) : null;
     return provider?.active ? [provider.id] : [];
   }

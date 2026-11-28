@@ -1,0 +1,187 @@
+/* ---------- Super account: Tracker, approvals, accounts, logs (Prompt 9) ---------- */
+.page--wide {
+  max-width: var(--content-max);
+}
+
+.tracker__filters {
+  display: grid;
+  gap: var(--space-4);
+}
+.tracker__edd {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  color: var(--primary-700);
+}
+.tracker__flags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.tracker-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft), var(--shadow-inset);
+}
+.tracker-card__main {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  color: inherit;
+  text-decoration: none;
+}
+.tracker-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+/* The table of 1024 px and wider scrolls inside its own box, never the page. */
+.table-wrap {
+  overflow-x: auto;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-caption);
+}
+.table th,
+.table td {
+  padding: var(--space-3) var(--space-2);
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--ink-300);
+}
+.table th {
+  position: sticky;
+  top: 0;
+  background: var(--surface-strong);
+  color: var(--ink-600);
+  font-family: var(--font-ui);
+  font-weight: 700;
+}
+/* The patient column stays in view while the table scrolls sideways on a narrow desktop. */
+.table th:first-child,
+.table td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--surface);
+}
+.table th:first-child {
+  background: var(--surface-strong);
+}
+.table tbody tr:hover td:first-child {
+  background: var(--surface-strong);
+}
+
+/* Numbers and dates stay on one line; names and barangays wrap. */
+.table td:nth-child(2),
+.table td:nth-child(4),
+.table td:nth-child(5),
+.table td:nth-child(6),
+.table td:nth-child(7),
+.table td:nth-child(8) {
+  white-space: nowrap;
+}
+.table tbody tr:hover {
+  background: var(--surface-strong);
+}
+.table .tracker__flags {
+  flex-wrap: nowrap;
+}
+.table__patient {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--tap);
+  color: var(--primary-700);
+  font-weight: 700;
+  text-decoration: none;
+  min-width: 8rem;
+}
+.table__patient:hover {
+  text-decoration: underline;
+}
+
+/* Cards of the super account's lists sit in two columns from 1024 px. */
+.office-grid {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 1024px) {
+  .office-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+.office-join {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-strong);
+  border-bottom: 1px solid var(--ink-300);
+}
+
+.temp-password {
+  margin: 0;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--primary-100);
+  color: var(--primary-700);
+  font-family: var(--font-ui);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-h3);
+  font-weight: 500;
+  text-align: center;
+  letter-spacing: 0.04em;
+  user-select: all;
+}
+
+.plain-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding-left: var(--space-5);
+}
+
+.log-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.log-list__row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--ink-300);
+}
+.log-list__row:last-child {
+  border-bottom: 0;
+}
+@media (min-width: 1024px) {
+  .tracker__filters {
+    grid-template-columns: repeat(2, minmax(0, 20rem));
+  }
+}
+
+.approval .booking__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}

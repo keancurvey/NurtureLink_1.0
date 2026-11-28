@@ -1,6 +1,6 @@
 // Consult rules (PAT-C-01 to PAT-C-06, ACC-03, D-01, D-02). Pure: the screens turn codes and numbers into text.
 import { CHAT, THRESHOLDS } from '../config/thresholds.js';
-import { MS_MINUTE, addDays, daysBetween, manilaTime } from './dates.js';
+import { MS_HOUR, MS_MINUTE, addDays, daysBetween, manilaTime } from './dates.js';
 import { REASON_MAX } from './profileRules.js';
 
 export const BOOKING_TYPES = ['clinic', 'teleconsult'];
@@ -10,6 +10,16 @@ export const BOOKING_WINDOWS = { any: [8, 17], morning: [8, 12], afternoon: [13,
 export const ATTACHMENT_ARTS = ['meal', 'booklet', 'crib'];
 /** The statuses a booking request shows (PAT-C-04). */
 export const BOOKING_STATUSES = ['pending', 'approved', 'declined', 'rescheduled'];
+
+/**
+ * An appointment the office has fixed a time for: approved, or given a new time by a super account (status 'rescheduled' with the
+ * account that handled it and a time). The seeded past visits that were moved have neither a handler nor a time ahead of them.
+ */
+export const isConfirmed = (appointment) =>
+  appointment.status === 'approved' || (appointment.status === 'rescheduled' && Boolean(appointment.handled_by) && appointment.scheduled_at != null);
+
+/** The midwife thread stays open through the call window and the follow-up hours after it (PAT-C-03, D-02). */
+export const followUpEnd = (appointment) => appointment.scheduled_at + THRESHOLDS.videoJoin.afterMinutes * MS_MINUTE + THRESHOLDS.followUpChatHours * MS_HOUR;
 
 // ---------- Threads (PAT-C-01, PAT-C-03) ----------
 
@@ -116,7 +126,7 @@ export function bookingRows(appointments, now) {
  * minutes after the scheduled time.
  */
 export function joinState(appointment, now, th = THRESHOLDS) {
-  if (!appointment || appointment.type !== 'teleconsult' || appointment.status !== 'approved' || appointment.scheduled_at == null) return { state: 'unavailable' };
+  if (!appointment || appointment.type !== 'teleconsult' || !isConfirmed(appointment) || appointment.scheduled_at == null) return { state: 'unavailable' };
   const opens = appointment.scheduled_at - th.videoJoin.beforeMinutes * MS_MINUTE;
   const closes = appointment.scheduled_at + th.videoJoin.afterMinutes * MS_MINUTE;
   if (now < opens) return { state: 'early', opens };

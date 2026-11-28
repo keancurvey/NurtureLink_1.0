@@ -15,6 +15,7 @@ import { createCheckBridge } from './checkBridge.js';
 import { createConsult } from './consult.js';
 import { createCore } from './core.js';
 import { createDevices } from './devices.js';
+import { createOffice } from './office.js';
 import { createProfileService } from './profile.js';
 import { createRequests } from './requests.js';
 import { createStore } from './store.js';
@@ -72,6 +73,7 @@ export function createRuntime({
   const requests = createRequests({ store, core, now });
   const consult = createConsult({ store, core, now });
   const barangay = createBarangay({ store, core, now });
+  const office = createOffice({ store, core, now });
   const engine = createEngine({ store, core, sched, bridge, link, control, scenarios: SCENARIOS, now });
   let heartbeat = null;
   let sweeper = null;
@@ -91,6 +93,7 @@ export function createRuntime({
     requests,
     consult,
     barangay,
+    office,
 
     /**
      * Start up: finish a run a reload cut short, upload what is still queued (when online), keep devices' last-seen

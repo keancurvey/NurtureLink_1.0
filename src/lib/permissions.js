@@ -89,14 +89,18 @@ export function canCreateEvent(viewer, event) {
 }
 
 /**
- * Conversations: a patient her own two threads; a barangay account the shared inbox of patients in its barangay;
- * a super account the midwife threads assigned to it.
+ * Conversations: a patient her own two threads; a barangay account the shared inbox of patients in its barangay; a super account the
+ * midwife threads assigned to it (spec 6.2). Two more stay visible to every super account so nothing is lost (ACC-08, ACC-09): a
+ * midwife thread whose assigned account was deactivated (`assignee` is that profile) and the inbox of a barangay that has no active
+ * account (`barangayActive` false).
  */
-export function canReadConversation(viewer, conversation, patientProfile) {
+export function canReadConversation(viewer, conversation, patientProfile, { assignee = null, barangayActive = true } = {}) {
   if (!viewer?.active || !conversation) return false;
   if (viewer.role === 'patient') return conversation.patient_id === viewer.id;
   if (viewer.role === 'barangay') return conversation.kind === 'barangay' && canReadPatient(viewer, patientProfile);
-  return viewer.role === 'super' && conversation.kind === 'midwife' && conversation.assigned_provider_id === viewer.id;
+  if (viewer.role !== 'super') return false;
+  if (conversation.kind === 'midwife') return conversation.assigned_provider_id === viewer.id || (assignee !== null && assignee.active === false);
+  return conversation.kind === 'barangay' && barangayActive === false;
 }
 
 /** Readings and messages made offline stay hidden from providers until they reach the server. */
